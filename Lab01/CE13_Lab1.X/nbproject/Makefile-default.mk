@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=Ascii.c BOARD.c Oled.c OledDriver.c part3.c
+SOURCEFILES_QUOTED_IF_SPACED=Ascii.c BOARD.c Oled.c OledDriver.c part1.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/Ascii.o ${OBJECTDIR}/BOARD.o ${OBJECTDIR}/Oled.o ${OBJECTDIR}/OledDriver.o ${OBJECTDIR}/part3.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/Ascii.o.d ${OBJECTDIR}/BOARD.o.d ${OBJECTDIR}/Oled.o.d ${OBJECTDIR}/OledDriver.o.d ${OBJECTDIR}/part3.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/Ascii.o ${OBJECTDIR}/BOARD.o ${OBJECTDIR}/Oled.o ${OBJECTDIR}/OledDriver.o ${OBJECTDIR}/part1.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/Ascii.o.d ${OBJECTDIR}/BOARD.o.d ${OBJECTDIR}/Oled.o.d ${OBJECTDIR}/OledDriver.o.d ${OBJECTDIR}/part1.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/Ascii.o ${OBJECTDIR}/BOARD.o ${OBJECTDIR}/Oled.o ${OBJECTDIR}/OledDriver.o ${OBJECTDIR}/part3.o
+OBJECTFILES=${OBJECTDIR}/Ascii.o ${OBJECTDIR}/BOARD.o ${OBJECTDIR}/Oled.o ${OBJECTDIR}/OledDriver.o ${OBJECTDIR}/part1.o
 
 # Source Files
-SOURCEFILES=Ascii.c BOARD.c Oled.c OledDriver.c part3.c
+SOURCEFILES=Ascii.c BOARD.c Oled.c OledDriver.c part1.c
 
 
 CFLAGS=
@@ -130,11 +130,11 @@ ${OBJECTDIR}/OledDriver.o: OledDriver.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/OledDriver.o 
 	@${FIXDEPS} "${OBJECTDIR}/OledDriver.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Wall -MMD -MF "${OBJECTDIR}/OledDriver.o.d" -o ${OBJECTDIR}/OledDriver.o OledDriver.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
 	
-${OBJECTDIR}/part3.o: part3.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/part1.o: part1.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/part3.o.d 
-	@${RM} ${OBJECTDIR}/part3.o 
-	@${FIXDEPS} "${OBJECTDIR}/part3.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Wall -MMD -MF "${OBJECTDIR}/part3.o.d" -o ${OBJECTDIR}/part3.o part3.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
+	@${RM} ${OBJECTDIR}/part1.o.d 
+	@${RM} ${OBJECTDIR}/part1.o 
+	@${FIXDEPS} "${OBJECTDIR}/part1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Wall -MMD -MF "${OBJECTDIR}/part1.o.d" -o ${OBJECTDIR}/part1.o part1.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
 	
 else
 ${OBJECTDIR}/Ascii.o: Ascii.c  nbproject/Makefile-${CND_CONF}.mk
@@ -161,11 +161,11 @@ ${OBJECTDIR}/OledDriver.o: OledDriver.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/OledDriver.o 
 	@${FIXDEPS} "${OBJECTDIR}/OledDriver.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Wall -MMD -MF "${OBJECTDIR}/OledDriver.o.d" -o ${OBJECTDIR}/OledDriver.o OledDriver.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
 	
-${OBJECTDIR}/part3.o: part3.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/part1.o: part1.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/part3.o.d 
-	@${RM} ${OBJECTDIR}/part3.o 
-	@${FIXDEPS} "${OBJECTDIR}/part3.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Wall -MMD -MF "${OBJECTDIR}/part3.o.d" -o ${OBJECTDIR}/part3.o part3.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
+	@${RM} ${OBJECTDIR}/part1.o.d 
+	@${RM} ${OBJECTDIR}/part1.o 
+	@${FIXDEPS} "${OBJECTDIR}/part1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Wall -MMD -MF "${OBJECTDIR}/part1.o.d" -o ${OBJECTDIR}/part1.o part1.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
 	
 endif
 
