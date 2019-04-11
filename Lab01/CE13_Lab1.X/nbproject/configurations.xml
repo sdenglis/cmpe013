@@ -42,7 +42,7 @@
         <targetDevice>PIC32MX320F128H</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>PICkit3PlatformTool</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.15</languageToolchainVersion>
         <platform>3</platform>
@@ -723,7 +723,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="part2.c" ex="true" overriding="false">
+      <item path="part2.c" ex="false" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -737,7 +737,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="part3.c" ex="false" overriding="false">
+      <item path="part3.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>

@@ -40,6 +40,9 @@ int main(void)
         fahr = fahr + step;
     }
 
+    // Print a new line
+    printf("\n");
+    
     // Print out column headers
     printf("    K      F\n");
 
