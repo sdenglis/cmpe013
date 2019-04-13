@@ -13,8 +13,6 @@
 //User libraries:
 #include "BOARD.h"
 
-
-// **** Declare function prototypes ****
 // Double-input function prototypes
 double Multiply(double operand1, double operand2);
 double Divide(double operand1, double operand2);
@@ -33,30 +31,21 @@ void CalculatorRun(void)
 {
     printf("\n\nWelcome to Sam's calculator program! Compiled at %s %s\n", __DATE__, __TIME__);
 
-    // Your code here
-
+    // More variable declarations
     char operation;
     double operand1;
     double operand2;
     double operand;
-    double result;
 
     printf("Please choose an operation (*, /, +, -, m, a, c, f, t, r): ");
     scanf(" %c", &operation);
-    while (getchar() != '\n')
-        continue;
-
-    printf("You input '%c'", operation);
 
     if (operation == '*') {
         printf("Enter first operand: ");
         scanf(" %lf", &operand1);
-        while (getchar() != '\n')
-            continue;
+
         printf("Enter second operand: ");
         scanf(" %lf", &operand2);
-        while (getchar() != '\n')
-            continue;
 
         double result = Multiply(operand1, operand2);
         printf("Result of (%lf * %lf): %lf\n", operand1, operand2, result);
@@ -64,12 +53,9 @@ void CalculatorRun(void)
     } else if (operation == '/') {
         printf("Enter first operand: ");
         scanf(" %lf", &operand1);
-        while (getchar() != '\n')
-            continue;
+
         printf("Enter second operand: ");
         scanf(" %lf", &operand2);
-        while (getchar() != '\n')
-            continue;
 
         double result = Divide(operand1, operand2);
         printf("Result of (%lf / %lf): %lf\n", operand1, operand2, result);
@@ -77,12 +63,9 @@ void CalculatorRun(void)
     } else if (operation == '+') {
         printf("Enter first operand: ");
         scanf(" %lf", &operand1);
-        while (getchar() != '\n')
-            continue;
+
         printf("Enter second operand: ");
         scanf(" %lf", &operand2);
-        while (getchar() != '\n')
-            continue;
 
         double result = Add(operand1, operand2);
         printf("Result of (%lf + %lf): %lf\n", operand1, operand2, result);
@@ -90,12 +73,9 @@ void CalculatorRun(void)
     } else if (operation == '-') {
         printf("Enter first operand: ");
         scanf(" %lf", &operand1);
-        while (getchar() != '\n')
-            continue;
+
         printf("Enter second operand: ");
         scanf(" %lf", &operand2);
-        while (getchar() != '\n')
-            continue;
 
         double result = Subtract(operand1, operand2);
         printf("Result of (%lf - %lf): %lf\n", operand1, operand2, result);
@@ -103,12 +83,9 @@ void CalculatorRun(void)
     } else if (operation == 'm') {
         printf("Enter first operand: ");
         scanf(" %lf", &operand1);
-        while (getchar() != '\n')
-            continue;
+
         printf("Enter second operand: ");
         scanf(" %lf", &operand2);
-        while (getchar() != '\n')
-            continue;
 
         double result = Average(operand1, operand2);
         printf("Result of AVG(%lf, %lf): %lf\n", operand1, operand2, result);
@@ -116,8 +93,6 @@ void CalculatorRun(void)
     } else if (operation == 'a') {
         printf("Enter operand: ");
         scanf(" %lf", &operand);
-        while (getchar() != '\n')
-            continue;
 
         double result = AbsoluteValue(operand);
         printf("Result of |%lf|: %lf\n", operand, result);
@@ -125,8 +100,6 @@ void CalculatorRun(void)
     } else if (operation == 'c') {
         printf("Enter operand: ");
         scanf(" %lf", &operand);
-        while (getchar() != '\n')
-            continue;
 
         double result = FahrenheitToCelsius(operand);
         printf("Result of (%lf degF->C): %lf\n", operand, result);
@@ -134,8 +107,6 @@ void CalculatorRun(void)
     } else if (operation == 'f') {
         printf("Enter operand: ");
         scanf(" %lf", &operand);
-        while (getchar() != '\n')
-            continue;
 
         double result = CelsiusToFahrenheit(operand);
         printf("Result of (%lf degC->F): %lf\n", operand, result);
@@ -143,8 +114,6 @@ void CalculatorRun(void)
     } else if (operation == 't') {
         printf("Enter operand: ");
         scanf(" %lf", &operand);
-        while (getchar() != '\n')
-            continue;
 
         double result = Tangent(operand);
         printf("Result of tan(%lf deg): %lf\n", operand, result);
@@ -153,22 +122,18 @@ void CalculatorRun(void)
         printf("Invalid input type!\n");
     }
 
-
-
     while (1);
 }
 
 double Multiply(double operand1, double operand2)
 {
-    //  Your code here
     double product = (operand1 * operand2);
     return product;
 }
 
 double Divide(double operand1, double operand2)
 {
-    //  Your code here
-    if (operand2 = 0) {
+    if (operand2 == 0) {
         // Add something here.
         printf("Divide by zero error!\n");
         return 0;
@@ -180,28 +145,24 @@ double Divide(double operand1, double operand2)
 
 double Add(double operand1, double operand2)
 {
-    //  Your code here
     double sum = (operand1 + operand2);
     return sum;
 }
 
 double Subtract(double operand1, double operand2)
 {
-    //  Your code here
     double difference = (operand1 - operand2);
     return difference;
 }
 
 double Average(double operand1, double operand2)
 {
-    //  Your code here
     double mean = ((operand1 + operand2) / 2.0f);
     return mean;
 }
 
 double AbsoluteValue(double operand)
 {
-    //  Your code here
     if (operand < 0) {
         double positive = (operand * (-1));
         return positive;
@@ -213,14 +174,12 @@ double AbsoluteValue(double operand)
 
 double FahrenheitToCelsius(double operand)
 {
-    //  Your code here
     double F2C = ((operand - 32) * (5.0 / 9.0f));
     return F2C;
 }
 
 double CelsiusToFahrenheit(double operand)
 {
-    //  Your code here
     double C2F = ((operand * (9.0 / 5.0f)) + 32);
     return C2F;
 }
