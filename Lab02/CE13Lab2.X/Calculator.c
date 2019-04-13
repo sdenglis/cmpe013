@@ -38,8 +38,7 @@ void CalculatorRun(void)
     char operation;
 
     printf("Please choose an operation (*, /, +, -, m, a, c, f, t, r): ");
-    scanf("%c", &operation);
-    while (1);
+    scanf(" %c", &operation);
     printf("You input '%c'", operation);
 
     /*
@@ -65,67 +64,68 @@ double Multiply(double operand1, double operand2)
 double Divide(double operand1, double operand2)
 {
     //  Your code here
-    if (operand2 = 0) {
+     if (operand2 = 0) {
         // Add something here.
+         printf("Divide by zero error!\n");
         return 0;
     } else {
         double quotient = (operand1 / operand2);
         return quotient;
     }
+}
 
-    double Add(double operand1, double operand2)
-    {
-        //  Your code here
-        double sum = (operand1 + operand2);
-        return sum;
-    }
+double Add(double operand1, double operand2)
+{
+    //  Your code here
+    double sum = (operand1 + operand2);
+    return sum;
+}
 
-    double Subtract(double operand1, double operand2)
-    {
-        //  Your code here
-        double difference = (operand1 - operand2);
-        return difference;
-    }
+double Subtract(double operand1, double operand2)
+{
+    //  Your code here
+    double difference = (operand1 - operand2);
+    return difference;
+}
 
-    double Average(double operand1, double operand2)
-    {
-        //  Your code here
-        double mean = ((operand1 + operand2) / 2.0f);
-        return mean;
-    }
+double Average(double operand1, double operand2)
+{
+    //  Your code here
+    double mean = ((operand1 + operand2) / 2.0f);
+    return mean;
+}
 
-    double AbsoluteValue(double operand)
-    {
-        //  Your code here
-        if (operand < 0) {
-            double positive = (operand * (-1));
-            return positive;
-        } else {
-            double positive = (operand);
-            return positive;
-        }
+double AbsoluteValue(double operand)
+{
+    //  Your code here
+    if (operand < 0) {
+        double positive = (operand * (-1));
+        return positive;
+    } else {
+        double positive = (operand);
+        return positive;
     }
+}
 
-    double FahrenheitToCelsius(double operand)
-    {
-        //  Your code here
-        double F2C = ((operand - 32) * (5.0 / 9.0f));
-        return F2C;
-    }
+double FahrenheitToCelsius(double operand)
+{
+    //  Your code here
+    double F2C = ((operand - 32) * (5.0 / 9.0f));
+    return F2C;
+}
 
-    double CelsiusToFahrenheit(double operand)
-    {
-        //  Your code here
-        double C2F = ((operand * (9.0 / 5.0f)) + 32);
-        return C2F;
-    }
+double CelsiusToFahrenheit(double operand)
+{
+    //  Your code here
+    double C2F = ((operand * (9.0 / 5.0f)) + 32);
+    return C2F;
+}
 
-    double Tangent(double operand)
-    {
-        //  Converts degree input into radians
-        double tan = tan((operand * M_PI) / 180.0f);
-        return tan;
-    }
+double Tangent(double operand)
+{
+    //  Converts degree input into radians
+    double tan = tan((operand * M_PI) / 180.0f);
+    return tan;
 }
 
 
