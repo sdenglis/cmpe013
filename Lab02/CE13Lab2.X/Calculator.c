@@ -59,6 +59,7 @@ void CalculatorRun(void)
             continue;
 
         double result = Multiply(operand1, operand2);
+        printf("Result of (%lf * %lf): %lf\n", operand1, operand2, result);
 
     } else if (operation == '/') {
         printf("Enter first operand: ");
@@ -71,6 +72,7 @@ void CalculatorRun(void)
             continue;
 
         double result = Divide(operand1, operand2);
+        printf("Result of (%lf / %lf): %lf\n", operand1, operand2, result);
 
     } else if (operation == '+') {
         printf("Enter first operand: ");
@@ -83,6 +85,7 @@ void CalculatorRun(void)
             continue;
 
         double result = Add(operand1, operand2);
+        printf("Result of (%lf + %lf): %lf\n", operand1, operand2, result);
 
     } else if (operation == '-') {
         printf("Enter first operand: ");
@@ -95,6 +98,7 @@ void CalculatorRun(void)
             continue;
 
         double result = Subtract(operand1, operand2);
+        printf("Result of (%lf - %lf): %lf\n", operand1, operand2, result);
 
     } else if (operation == 'm') {
         printf("Enter first operand: ");
@@ -107,6 +111,7 @@ void CalculatorRun(void)
             continue;
 
         double result = Average(operand1, operand2);
+        printf("Result of AVG(%lf, %lf): %lf\n", operand1, operand2, result);
 
     } else if (operation == 'a') {
         printf("Enter operand: ");
@@ -115,6 +120,7 @@ void CalculatorRun(void)
             continue;
 
         double result = AbsoluteValue(operand);
+        printf("Result of |%lf|: %lf\n", operand, result);
 
     } else if (operation == 'c') {
         printf("Enter operand: ");
@@ -123,6 +129,7 @@ void CalculatorRun(void)
             continue;
 
         double result = FahrenheitToCelsius(operand);
+        printf("Result of (%lf degF->C): %lf\n", operand, result);
 
     } else if (operation == 'f') {
         printf("Enter operand: ");
@@ -131,6 +138,7 @@ void CalculatorRun(void)
             continue;
 
         double result = CelsiusToFahrenheit(operand);
+        printf("Result of (%lf degC->F): %lf\n", operand, result);
 
     } else if (operation == 't') {
         printf("Enter operand: ");
@@ -139,6 +147,7 @@ void CalculatorRun(void)
             continue;
 
         double result = Tangent(operand);
+        printf("Result of tan(%lf deg): %lf\n", operand, result);
 
     } else {
         printf("Invalid input type!\n");
