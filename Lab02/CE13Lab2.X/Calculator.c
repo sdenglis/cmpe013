@@ -36,20 +36,115 @@ void CalculatorRun(void)
     // Your code here
 
     char operation;
+    double operand1;
+    double operand2;
+    double operand;
+    double result;
 
     printf("Please choose an operation (*, /, +, -, m, a, c, f, t, r): ");
     scanf(" %c", &operation);
+    while (getchar() != '\n')
+        continue;
+
     printf("You input '%c'", operation);
 
-    /*
-    printf("Enter first operand: ");
-    scanf();
-    printf("Enter second operand: ");
-    scanf();
+    if (operation == '*') {
+        printf("Enter first operand: ");
+        scanf(" %lf", &operand1);
+        while (getchar() != '\n')
+            continue;
+        printf("Enter second operand: ");
+        scanf(" %lf", &operand2);
+        while (getchar() != '\n')
+            continue;
 
-    printf("Enter operand: ");
-    scanf();
-     */
+        double result = Multiply(operand1, operand2);
+
+    } else if (operation == '/') {
+        printf("Enter first operand: ");
+        scanf(" %lf", &operand1);
+        while (getchar() != '\n')
+            continue;
+        printf("Enter second operand: ");
+        scanf(" %lf", &operand2);
+        while (getchar() != '\n')
+            continue;
+
+        double result = Divide(operand1, operand2);
+
+    } else if (operation == '+') {
+        printf("Enter first operand: ");
+        scanf(" %lf", &operand1);
+        while (getchar() != '\n')
+            continue;
+        printf("Enter second operand: ");
+        scanf(" %lf", &operand2);
+        while (getchar() != '\n')
+            continue;
+
+        double result = Add(operand1, operand2);
+
+    } else if (operation == '-') {
+        printf("Enter first operand: ");
+        scanf(" %lf", &operand1);
+        while (getchar() != '\n')
+            continue;
+        printf("Enter second operand: ");
+        scanf(" %lf", &operand2);
+        while (getchar() != '\n')
+            continue;
+
+        double result = Subtract(operand1, operand2);
+
+    } else if (operation == 'm') {
+        printf("Enter first operand: ");
+        scanf(" %lf", &operand1);
+        while (getchar() != '\n')
+            continue;
+        printf("Enter second operand: ");
+        scanf(" %lf", &operand2);
+        while (getchar() != '\n')
+            continue;
+
+        double result = Average(operand1, operand2);
+
+    } else if (operation == 'a') {
+        printf("Enter operand: ");
+        scanf(" %lf", &operand);
+        while (getchar() != '\n')
+            continue;
+
+        double result = AbsoluteValue(operand);
+
+    } else if (operation == 'c') {
+        printf("Enter operand: ");
+        scanf(" %lf", &operand);
+        while (getchar() != '\n')
+            continue;
+
+        double result = FahrenheitToCelsius(operand);
+
+    } else if (operation == 'f') {
+        printf("Enter operand: ");
+        scanf(" %lf", &operand);
+        while (getchar() != '\n')
+            continue;
+
+        double result = CelsiusToFahrenheit(operand);
+
+    } else if (operation == 't') {
+        printf("Enter operand: ");
+        scanf(" %lf", &operand);
+        while (getchar() != '\n')
+            continue;
+
+        double result = Tangent(operand);
+
+    } else {
+        printf("Invalid input type!\n");
+    }
+
+
 
     while (1);
 }
@@ -64,9 +159,9 @@ double Multiply(double operand1, double operand2)
 double Divide(double operand1, double operand2)
 {
     //  Your code here
-     if (operand2 = 0) {
+    if (operand2 = 0) {
         // Add something here.
-         printf("Divide by zero error!\n");
+        printf("Divide by zero error!\n");
         return 0;
     } else {
         double quotient = (operand1 / operand2);
