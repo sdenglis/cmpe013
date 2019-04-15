@@ -39,8 +39,9 @@ void CalculatorRun(void)
 
     while (1) {
 
-        printf("Please choose an operation (*, /, +, -, m, a, c, f, t, r): ");
-        scanf(" %c", &operation);
+        printf("\nPlease choose an operation (*, /, +, -, m, a, c, f, t, r): ");
+        scanf(" %1c", &operation);
+        // This is temporary, scanf() doesn't function in MPLab X
         while (getchar() != '\n')
             continue;
 
@@ -61,8 +62,13 @@ void CalculatorRun(void)
             printf("Enter second operand: ");
             scanf(" %lf", &operand2);
 
-            double result = Divide(operand1, operand2);
-            printf("Result of (%f / %f): %f\n", operand1, operand2, result);
+            if (operand2 == 0) {
+                printf("Divide by zero error!\n");
+                continue;
+            } else {
+                double result = Divide(operand1, operand2);
+                printf("Result of (%f / %f): %f\n", operand1, operand2, result);
+            }
 
         } else if (operation == '+') {
             printf("Enter first operand: ");
@@ -136,14 +142,9 @@ double Multiply(double operand1, double operand2)
 
 double Divide(double operand1, double operand2)
 {
-    if (operand2 == 0) {
-        // Add something here.
-        printf("Divide by zero error!\n");
-        return 0;
-    } else {
-        double quotient = (operand1 / operand2);
-        return quotient;
-    }
+
+    double quotient = (operand1 / operand2);
+    return quotient;
 }
 
 double Add(double operand1, double operand2)
