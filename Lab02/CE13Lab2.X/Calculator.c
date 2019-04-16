@@ -44,7 +44,7 @@ void CalculatorRun(void)
         // This is temporary, scanf() doesn't function in MPLab X
         while (getchar() != '\n')
             continue;
-
+        // Checks for multiply operation
         if (operation == '*') {
             printf("Enter first operand: ");
             scanf(" %lf", &operand1);
@@ -54,7 +54,7 @@ void CalculatorRun(void)
 
             double result = Multiply(operand1, operand2);
             printf("Result of (%f * %f): %f\n", operand1, operand2, result);
-
+            // Checks for division operation
         } else if (operation == '/') {
             printf("Enter first operand: ");
             scanf(" %lf", &operand1);
@@ -69,7 +69,7 @@ void CalculatorRun(void)
                 double result = Divide(operand1, operand2);
                 printf("Result of (%f / %f): %f\n", operand1, operand2, result);
             }
-
+            // Checks for addition operation
         } else if (operation == '+') {
             printf("Enter first operand: ");
             scanf(" %lf", &operand1);
@@ -79,7 +79,7 @@ void CalculatorRun(void)
 
             double result = Add(operand1, operand2);
             printf("Result of (%f + %f): %f\n", operand1, operand2, result);
-
+            // Checks for subtraction operation
         } else if (operation == '-') {
             printf("Enter first operand: ");
             scanf(" %lf", &operand1);
@@ -89,7 +89,7 @@ void CalculatorRun(void)
 
             double result = Subtract(operand1, operand2);
             printf("Result of (%f - %f): %f\n", operand1, operand2, result);
-
+            // Checks for average value operation
         } else if (operation == 'm') {
             printf("Enter first operand: ");
             scanf(" %lf", &operand1);
@@ -99,46 +99,48 @@ void CalculatorRun(void)
 
             double result = Average(operand1, operand2);
             printf("Result of AVG(%f, %f): %f\n", operand1, operand2, result);
-
+            // Checks for absolute value operation
         } else if (operation == 'a') {
             printf("Enter operand: ");
             scanf(" %lf", &operand);
 
             double result = AbsoluteValue(operand);
             printf("Result of |%f|: %f\n", operand, result);
-
+            // Checks for F->C conversion operation
         } else if (operation == 'c') {
             printf("Enter operand: ");
             scanf(" %lf", &operand);
 
             double result = FahrenheitToCelsius(operand);
             printf("Result of (%f degF->C): %f\n", operand, result);
-
+            // Checks for C->F conversion operation
         } else if (operation == 'f') {
             printf("Enter operand: ");
             scanf(" %lf", &operand);
 
             double result = CelsiusToFahrenheit(operand);
             printf("Result of (%f degC->F): %f\n", operand, result);
-
+            // Checks for tangent operation
         } else if (operation == 't') {
             printf("Enter operand: ");
             scanf(" %lf", &operand);
 
             double result = Tangent(operand);
             printf("Result of tan(%f deg): %f\n", operand, result);
-
+            // Else, prints an error message and repeats prompt
         } else {
             printf("Invalid input type!\n");
         }
     }
 }
+// Define multiply function
 
 double Multiply(double operand1, double operand2)
 {
     double product = (operand1 * operand2);
     return product;
 }
+// Define divide function
 
 double Divide(double operand1, double operand2)
 {
@@ -146,27 +148,31 @@ double Divide(double operand1, double operand2)
     double quotient = (operand1 / operand2);
     return quotient;
 }
+// Define add function
 
 double Add(double operand1, double operand2)
 {
     double sum = (operand1 + operand2);
     return sum;
 }
+// Define subtract function
 
 double Subtract(double operand1, double operand2)
 {
     double difference = (operand1 - operand2);
     return difference;
 }
+// Define average function
 
 double Average(double operand1, double operand2)
 {
     double mean = ((operand1 + operand2) / 2.0f);
     return mean;
 }
+// Define absolute value function
 
 double AbsoluteValue(double operand)
-{
+{ // Only deal with negative values
     if (operand < 0) {
         double positive = (operand * (-1));
         return positive;
@@ -175,22 +181,25 @@ double AbsoluteValue(double operand)
         return positive;
     }
 }
+// Define FahrenheitToCelsius function
 
 double FahrenheitToCelsius(double operand)
 {
     double F2C = ((operand - 32) * (5.0 / 9.0f));
     return F2C;
 }
+// Define CelsiusToFahrenheit function
 
 double CelsiusToFahrenheit(double operand)
 {
     double C2F = ((operand * (9.0 / 5.0f)) + 32);
     return C2F;
 }
+// Define tangent function
 
 double Tangent(double operand)
 {
-    //  Converts degree input into radians
+    //  Converts degree input into radians using M_PI constant
     double tan = tan((operand * M_PI) / 180.0f);
     return tan;
 }
