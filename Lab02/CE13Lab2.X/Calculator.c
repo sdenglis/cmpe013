@@ -41,9 +41,10 @@ void CalculatorRun(void)
 
         printf("\nPlease choose an operation (*, /, +, -, m, a, c, f, t, r): ");
         scanf(" %1c", &operation);
-        // This is temporary, scanf() doesn't function in MPLab X
+        // This is temporary, scanf() doesn't function correctly in MPLab X IDE
         while (getchar() != '\n')
             continue;
+
         // Checks for multiply operation
         if (operation == '*') {
             printf("Enter first operand: ");
@@ -54,6 +55,7 @@ void CalculatorRun(void)
 
             double result = Multiply(operand1, operand2);
             printf("Result of (%f * %f): %f\n", operand1, operand2, result);
+
             // Checks for division operation
         } else if (operation == '/') {
             printf("Enter first operand: ");
@@ -61,14 +63,16 @@ void CalculatorRun(void)
 
             printf("Enter second operand: ");
             scanf(" %lf", &operand2);
-
-            if (operand2 == 0) {
+            
+            double result = Divide(operand1, operand2);
+            
+            if (result == HUGE || operand2 == 0) {
                 printf("Divide by zero error!\n");
                 continue;
             } else {
-                double result = Divide(operand1, operand2);
                 printf("Result of (%f / %f): %f\n", operand1, operand2, result);
             }
+
             // Checks for addition operation
         } else if (operation == '+') {
             printf("Enter first operand: ");
@@ -79,6 +83,7 @@ void CalculatorRun(void)
 
             double result = Add(operand1, operand2);
             printf("Result of (%f + %f): %f\n", operand1, operand2, result);
+
             // Checks for subtraction operation
         } else if (operation == '-') {
             printf("Enter first operand: ");
@@ -89,6 +94,7 @@ void CalculatorRun(void)
 
             double result = Subtract(operand1, operand2);
             printf("Result of (%f - %f): %f\n", operand1, operand2, result);
+
             // Checks for average value operation
         } else if (operation == 'm') {
             printf("Enter first operand: ");
@@ -99,6 +105,7 @@ void CalculatorRun(void)
 
             double result = Average(operand1, operand2);
             printf("Result of AVG(%f, %f): %f\n", operand1, operand2, result);
+
             // Checks for absolute value operation
         } else if (operation == 'a') {
             printf("Enter operand: ");
@@ -106,6 +113,7 @@ void CalculatorRun(void)
 
             double result = AbsoluteValue(operand);
             printf("Result of |%f|: %f\n", operand, result);
+
             // Checks for F->C conversion operation
         } else if (operation == 'c') {
             printf("Enter operand: ");
@@ -113,6 +121,7 @@ void CalculatorRun(void)
 
             double result = FahrenheitToCelsius(operand);
             printf("Result of (%f degF->C): %f\n", operand, result);
+
             // Checks for C->F conversion operation
         } else if (operation == 'f') {
             printf("Enter operand: ");
@@ -120,6 +129,7 @@ void CalculatorRun(void)
 
             double result = CelsiusToFahrenheit(operand);
             printf("Result of (%f degC->F): %f\n", operand, result);
+
             // Checks for tangent operation
         } else if (operation == 't') {
             printf("Enter operand: ");
@@ -127,6 +137,7 @@ void CalculatorRun(void)
 
             double result = Tangent(operand);
             printf("Result of tan(%f deg): %f\n", operand, result);
+
             // Checks for round operation
         } else if (operation == 'r') {
             printf("Enter operand: ");
@@ -134,12 +145,14 @@ void CalculatorRun(void)
 
             int result = Round(operand);
             printf("Result of round(%f): %d\n", operand, result);
+
             // Else, prints an error message and repeats prompt
         } else {
             printf("Invalid input type!\n");
         }
     }
 }
+
 // Define multiply function
 
 double Multiply(double operand1, double operand2)
