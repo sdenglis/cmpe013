@@ -40,6 +40,7 @@ void CalculatorRun(void)
     while (1) {
 
         printf("\nPlease choose an operation (*, /, +, -, m, a, c, f, t, r): ");
+        scanf(" ");
         scanf(" %1c", &operation);
         // This is temporary, scanf() doesn't function correctly in MPLab X IDE
         while (getchar() != '\n')
