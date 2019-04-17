@@ -127,6 +127,13 @@ void CalculatorRun(void)
 
             double result = Tangent(operand);
             printf("Result of tan(%f deg): %f\n", operand, result);
+            // Checks for round operation
+        } else if (operation == 'r') {
+            printf("Enter operand: ");
+            scanf(" %lf", &operand);
+
+            int result = Round(operand);
+            printf("Result of round(%f): %d\n", operand, result);
             // Else, prints an error message and repeats prompt
         } else {
             printf("Invalid input type!\n");
@@ -203,18 +210,20 @@ double Tangent(double operand)
     double tan = tan((operand * M_PI) / 180.0f);
     return tan;
 }
+// Define round function
 
-
-/*********************************************************************************
- * Define the Round function here.
- * In order to receive the extra credit your calculator MUST ALSO CORRECTLY utilize
- * this function.
- *******************************************************************************
 double Round(double operand)
 {
-    //  Your code here
-    double ceiling =
-    return 0;
+    //  Takes numbers and increments by 0.5 respective to sign
+    double rounded = operand;
+    if (operand > 0) {
+        rounded += 0.5;
+        // printf("positive\n");
+    } else {
+        rounded -= 0.5;
+        // printf("negative\n");
+    }
+    // Returns double to be truncated after called
+    return rounded;
 }
- */
 

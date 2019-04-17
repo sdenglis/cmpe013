@@ -74,6 +74,10 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
+      <item path="Ascii.c" ex="true" overriding="false">
+      </item>
+      <item path="BOARD.c" ex="true" overriding="false">
+      </item>
       <C32>
         <property key="additional-warnings" value="true"/>
         <property key="addresss-attribute-use" value="false"/>
@@ -203,6 +207,10 @@
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
+      <item path="Oled.c" ex="true" overriding="false">
+      </item>
+      <item path="OledDriver.c" ex="true" overriding="false">
+      </item>
       <PICkit3PlatformTool>
         <property key="ADC 1" value="true"/>
         <property key="AutoSelectMemRanges" value="auto"/>
@@ -723,7 +731,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="part2.c" ex="false" overriding="false">
+      <item path="part2.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
