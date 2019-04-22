@@ -13,10 +13,10 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>BOARD.c</itemPath>
       <itemPath>Calculator.c</itemPath>
-      <itemPath>Lab2_main.c</itemPath>
       <itemPath>test.c</itemPath>
+      <itemPath>BOARD.c</itemPath>
+      <itemPath>Lab2_main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -35,7 +35,7 @@
         <targetDevice>PIC32MX320F128H</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>PICkit3PlatformTool</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.15</languageToolchainVersion>
         <platform>3</platform>
@@ -67,7 +67,21 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="BOARD.c" ex="false" overriding="false">
+      <item path="BOARD.c" ex="true" overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="BOARD.h" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -210,7 +224,7 @@
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
-      <item path="Calculator.c" ex="false" overriding="false">
+      <item path="Calculator.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -224,7 +238,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="Lab2_main.c" ex="false" overriding="false">
+      <item path="Lab2_main.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>

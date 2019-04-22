@@ -67,7 +67,7 @@ void CalculatorRun(void)
             
             double result = Divide(operand1, operand2);
             
-            if (result == HUGE || operand2 == 0) {
+            if (result == HUGE_VAL || operand2 == 0) {
                 printf("Divide by zero error!\n");
                 continue;
             } else {
