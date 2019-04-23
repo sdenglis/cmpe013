@@ -127,9 +127,15 @@ int main()
             MatrixTranspose(mat, result);
             MatrixPrint(result);
         }
+        float result[3][3] = {};
         printf("\nDemonstrating MatrixDeterminant():\n");
         {
             printf("Determinant value: %f\n", MatrixDeterminant(mat));
+        }
+        printf("\nDemonstrating MatrixInverse():\n");
+        {
+            MatrixInverse(mat, result);
+            MatrixPrint(result);
         }
     }
 

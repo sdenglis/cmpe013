@@ -273,5 +273,15 @@ float MatrixDeterminant(float mat[3][3])
  */
 void MatrixInverse(float mat[3][3], float result[3][3])
 {
+    float mat [3][3] = {};
+    float result [3][3] = {};
+    int r, c; // Row and column counters
 
+    for (r = 0; r < DIM; r++) {
+        for (c = 0; c < DIM; c++) {
+            result[r][c] = (mat[r][c]) / (MatrixDeterminant(mat));
+        }
+    }
+    return 0;
+}
 }

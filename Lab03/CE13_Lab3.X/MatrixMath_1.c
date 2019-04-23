@@ -109,23 +109,59 @@ void MatrixSubmatrix(int i, int j, float mat[3][3], float Result[2][2])
 {
     // Don't forget that the i, j, k positions act as coefficients for the 2x2 submatrices.
 
-    if (i == 0) {
+    if (i == 0 && j == 0) {
         Result[0][0] = mat[1][1];
         Result[1][0] = mat[2][1];
         Result[0][1] = mat[1][2];
         Result[1][1] = mat[2][2];
     }
-    if (i == 1) {
+    if (i == 1 && j == 0) {
         Result[0][0] = mat[0][1];
         Result[1][0] = mat[2][1];
         Result[0][1] = mat[0][2];
         Result[1][1] = mat[2][2];
     }
-    if (i == 2) {
+    if (i == 2 && j == 0) {
         Result[0][0] = mat[0][1];
         Result[1][0] = mat[1][1];
         Result[0][1] = mat[0][2];
         Result[1][1] = mat[1][2];
+    }
+    if (i == 0 && j == 1) {
+        Result[0][0] = mat[1][0];
+        Result[1][0] = mat[2][0];
+        Result[0][1] = mat[1][2];
+        Result[1][1] = mat[2][2];
+    }
+    if (i == 1 && j == 1) {
+        Result[0][0] = mat[0][0];
+        Result[1][0] = mat[2][0];
+        Result[0][1] = mat[0][2];
+        Result[1][1] = mat[2][2];
+    }
+    if (i == 2 && j == 1) {
+        Result[0][0] = mat[0][0];
+        Result[1][0] = mat[1][0];
+        Result[0][1] = mat[0][2];
+        Result[1][1] = mat[1][2];
+    }
+    if (i == 0 && j == 2) {
+        Result[0][0] = mat[1][0];
+        Result[1][0] = mat[2][0];
+        Result[0][1] = mat[1][1];
+        Result[1][1] = mat[2][1];
+    }
+    if (i == 1 && j == 2) {
+        Result[0][0] = mat[0][0];
+        Result[1][0] = mat[2][0];
+        Result[0][1] = mat[0][1];
+        Result[1][1] = mat[2][1];
+    }
+    if (i == 2 && j == 2) {
+        Result[0][0] = mat[0][0];
+        Result[1][0] = mat[1][0];
+        Result[0][1] = mat[0][1];
+        Result[1][1] = mat[1][1];
     }
 }
 
@@ -138,12 +174,38 @@ float MatrixDeterminant(float mat[3][3])
     MatrixSubmatrix(i = 0, j = 0, mat, Result);
     runningSum += mat[0][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
 
-    MatrixSubmatrix(i = 1, j, mat, Result);
+    MatrixSubmatrix(i = 1, j = 0, mat, Result);
     runningSum -= mat[1][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
 
-    MatrixSubmatrix(i = 2, j, mat, Result);
+    MatrixSubmatrix(i = 2, j = 0, mat, Result);
     runningSum += mat[2][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
-    
-    return 0;
+
+    return runningSum;
 }
 
+void MatrixInverse(float mat[3][3], float result[3][3])
+{
+    float runningSum = 0;
+    float Result[2][2] = {};
+    int r, c; // Row and column counters
+    MatrixTranspose(mat, result);
+
+    for (r = 0; r < DIM; r++) {
+        for (c = 0; c < DIM; c++) {
+            MatrixSubmatrix(r, c, mat, Result);
+
+            if ((r + c) % 2 == 0) {
+                runningSum += mat[2][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
+                result[r][c] = (runningSum);
+            } else {
+                runningSum -= mat[2][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
+                result[r][c] = -(runningSum);
+            }
+        }
+    }
+    for (r = 0; r < DIM; r++) {
+        for (c = 0; c < DIM; c++) {
+            result[r][c] = (result[r][c]) / (MatrixDeterminant(mat));
+        }
+    }
+}
