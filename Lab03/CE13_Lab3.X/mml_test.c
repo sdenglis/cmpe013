@@ -19,6 +19,7 @@ float x = 3.0;
 float trace = 0;
 float zero_matrix[3][3] = {};
 float result[3][3] = {};
+float Result[2][2] = {};
 float mat [3][3] = {
     {1, -2, 3},
     {1, 2, -3},
@@ -120,6 +121,15 @@ int main()
         {
             // float result[3][3] = {};
             printf("Trace value: %f\n", MatrixTrace(mat));
+        }
+        printf("\nDemonstrating MatrixTranspose():\n");
+        {
+            MatrixTranspose(mat, result);
+            MatrixPrint(result);
+        }
+        printf("\nDemonstrating MatrixDeterminant():\n");
+        {
+            printf("Determinant value: %f\n", MatrixDeterminant(mat));
         }
     }
 

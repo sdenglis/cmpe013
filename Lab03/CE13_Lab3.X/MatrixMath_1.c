@@ -52,7 +52,7 @@ void MatrixMultiply(float mat1[3][3], float mat2[3][3], float result[3][3])
     for (outer = 0; outer < DIM; outer++) {
         for (c = 0; c < DIM; c++) {
             for (r = 0; r < DIM; r++) {
-                runningSum += (mat1[r][c]) * (mat2[c][outer]);
+                runningSum += (mat1[r][outer]) * (mat2[c][r]);
             }
             result[c][outer] = runningSum;
             runningSum = 0;
@@ -92,3 +92,58 @@ float MatrixTrace(float mat[3][3])
     }
     return trace;
 }
+
+void MatrixTranspose(float mat[3][3], float result[3][3])
+{
+    int r, c; // Row and column counters
+
+    for (r = 0; r < DIM; r++) {
+        for (c = 0; c < DIM; c++) {
+            result[c][r] = mat[r][c];
+            // Reverse storage order to for resulting array
+        }
+    }
+}
+
+void MatrixSubmatrix(int i, int j, float mat[3][3], float Result[2][2])
+{
+    // Don't forget that the i, j, k positions act as coefficients for the 2x2 submatrices.
+
+    if (i == 0) {
+        Result[0][0] = mat[1][1];
+        Result[1][0] = mat[2][1];
+        Result[0][1] = mat[1][2];
+        Result[1][1] = mat[2][2];
+    }
+    if (i == 1) {
+        Result[0][0] = mat[0][1];
+        Result[1][0] = mat[2][1];
+        Result[0][1] = mat[0][2];
+        Result[1][1] = mat[2][2];
+    }
+    if (i == 2) {
+        Result[0][0] = mat[0][1];
+        Result[1][0] = mat[1][1];
+        Result[0][1] = mat[0][2];
+        Result[1][1] = mat[1][2];
+    }
+}
+
+float MatrixDeterminant(float mat[3][3])
+{
+    float runningSum = 0;
+    float Result[2][2] = {};
+    int i, j;
+
+    MatrixSubmatrix(i = 0, j = 0, mat, Result);
+    runningSum += mat[0][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
+
+    MatrixSubmatrix(i = 1, j, mat, Result);
+    runningSum -= mat[1][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
+
+    MatrixSubmatrix(i = 2, j, mat, Result);
+    runningSum += mat[2][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
+    
+    return 0;
+}
+
