@@ -1,47 +1,7 @@
-#ifndef MATRIX_MATH_H
-#define MATRIX_MATH_H
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-/**
- * @file
- *
- * @section DESCRIPTION
- *
- * This file implements a basic 3x3 matrix math library. Basic matrix operations are provided along
- * with the matrix inverse function (though that function cannot handle singular matrices).
- *
- * Matrices are defined in row-major order, so that the matrix:
- *   0 1 2
- *   3 4 5
- *   6 7 8
- * is represented by the array `float mat[3][3] = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};`.
- */
-
-/**
- * FP_DELTA defines the tolerance for testing equality for floating-point numbers. 
- * Used within MatrixEquals() 
- * Also used to compare scalar return values, such as the result of MatrixTrace().
- */
-#define FP_DELTA 0.0001
-
-/**
- * To avoid using magic numbers, use this macro to iterate over 3 dimensions:
- *  */
-#define DIM 3
-
-
-/******************************************************************************
- * Matrix Display:
- *****************************************************************************/
-
-/**
- * MatrixPrint displays a 3x3 array to standard output with clean, readable, 
- * consistent formatting.  
- * @param: mat, pointer to a 3x3 float array
- * @return: none
- * The printed matrix should be aligned in a grid when called with positive or
- *  negative numbers.  It should be able to display at least FP_DELTA precision, and
- *  should handle numbers as large as 999.0 or -999.0
- */
 void MatrixPrint(float mat[3][3])
 {
 
@@ -49,7 +9,7 @@ void MatrixPrint(float mat[3][3])
     int r, c; // Row and column counters
 
     for (r = 0; r < DIM; r++) {
-        for (c = 0; c < DIM, c++) {
+        for (c = 0; c < DIM; c++) {
             printf("%f ", mat[r][c]);
         }
         printf("\n");
@@ -57,7 +17,6 @@ void MatrixPrint(float mat[3][3])
 
     return 0;
 }
-
 
 /******************************************************************************
  * Matrix - Matrix Operations
@@ -109,7 +68,7 @@ void MatrixAdd(float mat1[3][3], float mat2[3][3], float result[3][3])
 
     for (r = 0; r < DIM; r++) {
         for (c = 0; c < DIM, c++) {
-            result[r][c] = (mat1[r][c]) * (mat2[r][c]);
+            result[r][c] = (mat1[r][c]) + (mat2[r][c]);
         }
     }
     return 0;
@@ -233,8 +192,8 @@ void MatrixTranspose(float mat[3][3], float result[3][3])
 
     for (r = 0; r < DIM; r++) {
         for (c = 0; c < DIM, c++) {
-            result[c][r] = mat[r][c]
-                    // Reverse storage order to for resulting array
+            result[c][r] = mat[r][c];
+            // Reverse storage order to for resulting array
         }
     }
 
@@ -254,6 +213,31 @@ void MatrixTranspose(float mat[3][3], float result[3][3])
  */
 void MatrixSubmatrix(int i, int j, float mat[3][3], float result[2][2])
 {
+    float mat[3][3] = {};
+    float result[2][2] = {};
+    int i, j;
+
+    // Don't forget that the i, j, k positions act as coefficients for the 2x2 submatrices.
+
+    if (i == 0) {
+        result[0][0] = mat[1][1];
+        result[1][0] = mat[2][1];
+        result[0][1] = mat[1][2];
+        result[1][1] = mat[2][2];
+    }
+    if (i == 1) {
+        result[0][0] = mat[0][1];
+        result[1][0] = mat[2][1];
+        result[0][1] = mat[0][2];
+        result[1][1] = mat[2][2];
+    }
+    if (i == 2) {
+        result[0][0] = mat[0][1];
+        result[1][0] = mat[1][1];
+        result[0][1] = mat[0][2];
+        result[1][1] = mat[1][2];
+    }
+    return 0;
 
 }
 
@@ -266,7 +250,18 @@ void MatrixSubmatrix(int i, int j, float mat[3][3], float result[2][2])
  * */
 float MatrixDeterminant(float mat[3][3])
 {
+    float mat[3][3];
+    float runningSum = 0;
+    int i, j;
 
+    MatrixSubmatrix(int i, int j, float mat[3][3], float result[2][2]);
+    runningSum += mat[0, 0] * ((result[0][0] * result[1][1]) - (result[1][0] * result[0][1]))
+
+            MatrixSubmatrix(int i, int j, float mat[3][3], float result[2][2]);
+    runningSum -= mat[1, 0] * ((result[0][0] * result[1][1]) - (result[1][0] * result[0][1]))
+
+            MatrixSubmatrix(int i, int j, float mat[3][3], float result[2][2]);
+    runningSum += mat[2, 0] * ((result[0][0] * result[1][1]) - (result[1][0] * result[0][1]))
 }
 
 /* MatrixInverse calculates the inverse of a matrix and
@@ -280,5 +275,3 @@ void MatrixInverse(float mat[3][3], float result[3][3])
 {
 
 }
-
-#endif // MATRIX_MATH_H

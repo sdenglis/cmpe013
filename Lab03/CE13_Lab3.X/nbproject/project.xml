@@ -4,8 +4,7 @@
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
             <name>CE13_Lab3</name>
-            <name>CE13Lab2</name>
-            <creation-uuid>d9e30479-d05d-4e18-acd2-8ae3d5b269dc</creation-uuid>
+            <creation-uuid>6c8730ee-3b29-44ad-96aa-90223d51431e</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>
