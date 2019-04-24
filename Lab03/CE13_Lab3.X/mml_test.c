@@ -74,10 +74,10 @@ int main()
         // Print condition runs through MatrixEquals function
         printf("Demonstrating MatrixEquals():\n");
         {
-            if (MatrixEquals(zero_matrix, mat2) == 0) {
+            if (MatrixEquals(zero_matrix, mat2) == 1) {
                 printf("The two matrices are equal!\n");
             }
-            if (MatrixEquals(zero_matrix, mat2) == 1) {
+            if (MatrixEquals(zero_matrix, mat2) == 0) {
                 printf("The two matrices are NOT equal.\n");
             }
         }
@@ -138,6 +138,86 @@ int main()
             MatrixPrint(result);
         }
     }
+
+    printf("\n\n\n");
+
+    /******************************************************************************
+     * MATRIX - Matrix Equals
+     *****************************************************************************/
+
+    int MatrixEqualsTest = 0;
+    // These two matrices should be equal!
+    if (MatrixEquals(mat1, mat2) == 1) {
+        MatrixEqualsTest += 1;
+    }
+
+    // These two matrices should NOT be equal.
+    if (MatrixEquals(zero_matrix, mat2) == 0) {
+        MatrixEqualsTest += 1;
+    }
+    // Testing block for MatrixEquals() function!
+    // Will return (2/2) if working correctly.
+
+
+
+    /******************************************************************************
+     * MATRIX - Matrix Multiply
+     *****************************************************************************/
+
+    int MatrixMultiplyTest = 0;
+    float MatrixMultiplyResult[3][3] = {
+        {-4, 0, 18},
+        {6, -4, -12},
+        {-2, 12, 0}
+    };
+    float MatrixMultiplyResult2[3][3] = {
+        {-20, 216, -288},
+        {-24, -128, 300},
+        {80, -48, -180}
+    };
+
+    // Compare MatrixMultiply() function to hard-coded array.
+    MatrixMultiply(mat1, mat2, result);
+    if (MatrixEquals(result, MatrixMultiplyResult) == 1) {
+        MatrixMultiplyTest += 1;
+    }
+
+    // Compare MatrixMultiply() function to hard-coded array.
+    MatrixMultiply(MatrixMultiplyResult, MatrixMultiplyResult, result);
+    MatrixPrint(result);
+    if (MatrixEquals(result, MatrixMultiplyResult2) == 1) {
+        MatrixMultiplyTest += 1;
+    }
+
+    // Testing block for MatrixMultiply() function!
+    // Will return (2/2) if working correctly.
+
+    
+    
+    /******************************************************************************
+     * MATRIX - Matrix Scalar Multiply
+     *****************************************************************************/
+    
+    int MatrixScalarMultiplyTest = 0;
+
+
+    int MatrixDeterminantTest, MatrixAddTest, MatrixScalarAddTest;
+    int MatrixInverseTest, MatrixTranposeTest, MatrixTraceTest;
+
+    int total;
+    float totalPercentage;
+
+    printf("PASSED (%d/2): MatrixEqualsTest()\n", MatrixEqualsTest);
+    printf("PASSED (%d/2): MatrixMultiplyTest()\n", MatrixMultiplyTest);
+    printf("PASSED (%d/2): MatrixScalarMultiplyTest()\n", MatrixScalarMultiplyTest);
+    printf("PASSED (%d/2): MatrixDeterminantTest()\n", MatrixDeterminantTest);
+    printf("PASSED (%d/2): MatrixAddTest()\n", MatrixAddTest);
+    printf("PASSED (%d/2): MatrixScalarAddTest()\n", MatrixScalarAddTest);
+    printf("PASSED (%d/2): MatrixInverseTest()\n", MatrixInverseTest);
+    printf("PASSED (%d/2): MatrixTranposeTest()\n", MatrixTranposeTest);
+    printf("PASSED (%d/2): MatrixTraceTest()\n", MatrixTraceTest);
+    printf("_______________________________________\n");
+    printf("%d out of 9 functions passed (%.2f%%).", total, totalPercentage);
 
 
     printf("\n\n\n");

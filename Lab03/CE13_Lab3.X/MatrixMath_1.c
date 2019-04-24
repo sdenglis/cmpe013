@@ -4,6 +4,9 @@
 
 #include "MatrixMath.h"
 
+#define TRUE 1
+#define FALSE 0
+
 void MatrixPrint(float mat[3][3])
 {
     int r, c; // Row and column counters
@@ -26,11 +29,11 @@ int MatrixEquals(float mat1[3][3], float mat2[3][3])
             deltaTest = mat1[r][c] - mat2[r][c];
             deltaTest = abs(deltaTest);
             if (deltaTest > FP_DELTA) {
-                return 1; // Return TRUE if any of the matrix values are unequal
+                return 0; // Return FALSE(0) if any of the matrix values are unequal
             }
         }
     }
-    return 0; // Else, return false
+    return 1; // Else, return TRUE(1)
 }
 
 void MatrixAdd(float mat1[3][3], float mat2[3][3], float result[3][3])
@@ -185,15 +188,24 @@ float MatrixDeterminant(float mat[3][3])
 
 void MatrixInverse(float mat[3][3], float result[3][3])
 {
-    float runningSum = 0;
     float Result[2][2] = {};
+    float inverseResult[3][3] = {};
     int r, c; // Row and column counters
     MatrixTranspose(mat, result);
+
+    if ((MatrixDeterminant(mat) == 0)) {
+        for (r = 0; r < DIM; r++) {
+            for (c = 0; c < DIM; c++) {
+                result[r][c] = 0;
+            }
+        }
+        return;
+    }
 
     for (r = 0; r < DIM; r++) {
         for (c = 0; c < DIM; c++) {
             MatrixSubmatrix(r, c, mat, Result);
-
+            float runningSum = 0;
             if ((r + c) % 2 == 0) {
                 runningSum += mat[2][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
                 result[r][c] = (runningSum);
@@ -206,6 +218,12 @@ void MatrixInverse(float mat[3][3], float result[3][3])
     for (r = 0; r < DIM; r++) {
         for (c = 0; c < DIM; c++) {
             result[r][c] = (result[r][c]) / (MatrixDeterminant(mat));
+        }
+    }
+    MatrixTranspose(result, inverseResult);
+    for (r = 0; r < DIM; r++) {
+        for (c = 0; c < DIM; c++) {
+            result[r][c] = ((inverseResult[r][c]));
         }
     }
 }
