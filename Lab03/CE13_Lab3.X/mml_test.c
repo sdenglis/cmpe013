@@ -184,7 +184,6 @@ int main()
 
     // Compare MatrixMultiply() function to hard-coded array.
     MatrixMultiply(MatrixMultiplyResult, MatrixMultiplyResult, result);
-    MatrixPrint(result);
     if (MatrixEquals(result, MatrixMultiplyResult2) == 1) {
         MatrixMultiplyTest += 1;
     }
@@ -192,30 +191,193 @@ int main()
     // Testing block for MatrixMultiply() function!
     // Will return (2/2) if working correctly.
 
-    
-    
+
+
     /******************************************************************************
      * MATRIX - Matrix Scalar Multiply
      *****************************************************************************/
-    
+
     int MatrixScalarMultiplyTest = 0;
+    // Arbitrary test values for scalar function
+    float scalarValue = 3;
+    float scalarSecondValue = 1.5;
+
+    float matScalarResult [3][3] = {};
+    // We'll be using this matrix for the function operations
+    float matScalar [3][3] = {
+        {1, -2, 3},
+        {1, 2, -3},
+        {-1, 2, 3}
+    };
+    // What we expect from the first calculation
+    float matScalarExpected [3][3] = {
+        {3, -6, 9},
+        {3, 6, -9},
+        {-3, 6, 9}
+    };
+    // What we expect from the second calculation
+    float matSecondScalarExpected [3][3] = {
+        {1.5, -3, 4.5},
+        {1.5, 3, -4.5},
+        {-1.5, 3, 4.5}
+    };
+
+    // (matScalar * scalarValue) should equal matScalarExpected.
+    MatrixScalarMultiply(scalarValue, matScalar, matScalarResult);
+    if (MatrixEquals(matScalarResult, matScalarExpected) == 1) {
+        MatrixScalarMultiplyTest += 1;
+    }
+
+    // (matScalar * scalarSecondValue) should equal matSecondScalarExpected.
+    MatrixScalarMultiply(scalarSecondValue, matScalar, matScalarResult);
+    if (MatrixEquals(matScalarResult, matSecondScalarExpected) == 1) {
+        MatrixScalarMultiplyTest += 1;
+    }
+
+    // Testing block for MatrixScalarMultiply() function!
+    // Will return (2/2) if working correctly.
 
 
-    int MatrixDeterminantTest, MatrixAddTest, MatrixScalarAddTest;
-    int MatrixInverseTest, MatrixTranposeTest, MatrixTraceTest;
 
-    int total;
-    float totalPercentage;
+    /******************************************************************************
+     * MATRIX - Matrix Determinant
+     *****************************************************************************/
 
-    printf("PASSED (%d/2): MatrixEqualsTest()\n", MatrixEqualsTest);
-    printf("PASSED (%d/2): MatrixMultiplyTest()\n", MatrixMultiplyTest);
-    printf("PASSED (%d/2): MatrixScalarMultiplyTest()\n", MatrixScalarMultiplyTest);
-    printf("PASSED (%d/2): MatrixDeterminantTest()\n", MatrixDeterminantTest);
-    printf("PASSED (%d/2): MatrixAddTest()\n", MatrixAddTest);
-    printf("PASSED (%d/2): MatrixScalarAddTest()\n", MatrixScalarAddTest);
-    printf("PASSED (%d/2): MatrixInverseTest()\n", MatrixInverseTest);
-    printf("PASSED (%d/2): MatrixTranposeTest()\n", MatrixTranposeTest);
-    printf("PASSED (%d/2): MatrixTraceTest()\n", MatrixTraceTest);
+    int MatrixDeterminantTest = 0;
+    float knownDeterminant = 24;
+    float anotherKnownDeterminant = 763.7;
+    
+    float knownMatrix[3][3] = {
+        {1, -2, 3},
+        {1, 2, -3},
+        {-1, 2, 3}
+    };
+    float anotherKnownMatrix[3][3] = {
+        {5, -8, 3.5},
+        {4, 6.2, -3},
+        {-4, 7.1, 9}
+    };
+    
+    float experimentalDeterminant = MatrixDeterminant(knownMatrix);
+    // Calculate the determinant of knownMatrix and compare to hard-coded value
+    if (ScalarEquals(experimentalDeterminant, knownDeterminant) == 1) {
+        MatrixDeterminantTest += 1;
+    }
+    
+    float anotherExperimentalDeterminant = MatrixDeterminant(anotherKnownMatrix);
+    // Calculate the determinant of anotherKnownMatrix and compare to hard-coded value
+    if (ScalarEquals(anotherExperimentalDeterminant, anotherKnownDeterminant) == 1) {
+        MatrixDeterminantTest += 1;
+    }
+
+    // Testing block for MatrixDeterminant() function!
+    // Will return (2/2) if working correctly.
+
+
+
+    /******************************************************************************
+     * MATRIX - Matrix Add
+     *****************************************************************************/
+
+    int MatrixAddTest = 0;
+
+    // Testing block for MatrixAdd() function!
+    // Will return (2/2) if working correctly.
+
+
+
+    /******************************************************************************
+     * MATRIX - Matrix Scalar Add
+     *****************************************************************************/
+
+    int MatrixScalarAddTest = 0;
+
+    // Testing block for MatrixScalarAdd() function!
+    // Will return (2/2) if working correctly.
+
+
+
+    /******************************************************************************
+     * MATRIX - Matrix Inverse
+     *****************************************************************************/
+
+    int MatrixInverseTest = 0;
+
+    // Testing block for MatrixInverse() function!
+    // Will return (2/2) if working correctly.
+
+
+
+    /******************************************************************************
+     * MATRIX - Matrix Transpose
+     *****************************************************************************/
+
+    int MatrixTranposeTest = 0;
+
+    // Testing block for MatrixTranspose() function!
+    // Will return (2/2) if working correctly.
+
+
+
+    /******************************************************************************
+     * MATRIX - Matrix Trace
+     *****************************************************************************/
+
+    int MatrixTraceTest = 0;
+
+    // Testing block for MatrixTrace() function!
+    // Will return (2/2) if working correctly.
+
+
+
+
+    // Declare variables used to pass through printf())
+    int total = 0;
+    float totalPercentage = 0;
+
+    // Tally the total score for the function harness
+    {
+        if (MatrixEqualsTest == 2) {
+            total += 1;
+        }
+        if (MatrixMultiplyTest == 2) {
+            total += 1;
+        }
+        if (MatrixScalarMultiplyTest == 2) {
+            total += 1;
+        }
+        if (MatrixDeterminantTest == 2) {
+            total += 1;
+        }
+        if (MatrixAddTest == 2) {
+            total += 1;
+        }
+        if (MatrixScalarAddTest == 2) {
+            total += 1;
+        }
+        if (MatrixInverseTest == 2) {
+            total += 1;
+        }
+        if (MatrixTranposeTest == 2) {
+            total += 1;
+        }
+        if (MatrixTraceTest == 2) {
+            total += 1;
+        }
+    }
+    // Calculate percentage for user interface
+    totalPercentage = ((total / 9.0f) * 100);
+
+
+    printf("PASSED (%d/2): MatrixEquals()\n", MatrixEqualsTest);
+    printf("PASSED (%d/2): MatrixMultiply()\n", MatrixMultiplyTest);
+    printf("PASSED (%d/2): MatrixScalarMultiply()\n", MatrixScalarMultiplyTest);
+    printf("PASSED (%d/2): MatrixDeterminant()\n", MatrixDeterminantTest);
+    printf("PASSED (%d/2): MatrixAdd()\n", MatrixAddTest);
+    printf("PASSED (%d/2): MatrixScalarAdd()\n", MatrixScalarAddTest);
+    printf("PASSED (%d/2): MatrixInverse()\n", MatrixInverseTest);
+    printf("PASSED (%d/2): MatrixTranpose()\n", MatrixTranposeTest);
+    printf("PASSED (%d/2): MatrixTrace()\n", MatrixTraceTest);
     printf("_______________________________________\n");
     printf("%d out of 9 functions passed (%.2f%%).", total, totalPercentage);
 

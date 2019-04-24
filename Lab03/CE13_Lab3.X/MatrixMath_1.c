@@ -36,6 +36,19 @@ int MatrixEquals(float mat1[3][3], float mat2[3][3])
     return 1; // Else, return TRUE(1)
 }
 
+int ScalarEquals(float scalar1, float scalar2)
+{
+    float deltaTest; // Stores difference of scalar1 & scalar2
+
+    deltaTest = scalar1 - scalar2;
+    deltaTest = abs(deltaTest);
+    if (deltaTest > FP_DELTA) {
+        return 0; // Return FALSE(0) if any of the matrix values are unequal
+
+        return 1; // Else, return TRUE(1)
+    }
+}
+
 void MatrixAdd(float mat1[3][3], float mat2[3][3], float result[3][3])
 {
     int r, c; // Row and column counters
