@@ -220,10 +220,10 @@ void MatrixInverse(float mat[3][3], float result[3][3])
             MatrixSubmatrix(r, c, mat, Result);
             float runningSum = 0;
             if ((r + c) % 2 == 0) {
-                runningSum += mat[2][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
+                runningSum = ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
                 result[r][c] = (runningSum);
             } else {
-                runningSum -= mat[2][0] * ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
+                runningSum = ((Result[0][0] * Result[1][1]) - (Result[1][0] * Result[0][1]));
                 result[r][c] = -(runningSum);
             }
         }
