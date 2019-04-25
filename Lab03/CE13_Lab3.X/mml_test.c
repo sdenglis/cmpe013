@@ -1,14 +1,19 @@
-// **** Include libraries here ****
-// Standard libraries
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 03         *
+ *4/22/2019      *
+ *****************/
+
+// Standard libraries:
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-//CMPE13 Support Library
+// CMPE13 Support Library:
 #include "BOARD.h"
 
-
-// Microchip libraries
+// Microchip libraries:
 #include <xc.h>
 
 // User libraries:
@@ -18,6 +23,12 @@
 float result[3][3] = {};
 float Result[2][2] = {};
 float zero_matrix[3][3] = {};
+
+// Some added helper function prototypes:
+void MatrixPrintSubmatrix(float mat[2][2]);
+int ScalarEquals(float scalar1, float scalar2);
+
+
 
 int main()
 {
@@ -256,11 +267,6 @@ int main()
 
     int MatrixInverseTest = 0;
     float inverseResult[3][3] = {};
-    float inverseDNE[3][3] = {
-        {1, 2, 3},
-        {1, 2, 3},
-        {1, 2, 3}
-    };
     float inverseMatrix[3][3] = {
         {7, 3, 6},
         {6, 3, 1},
@@ -363,7 +369,7 @@ int main()
 
     // Declare variables used to print pass rate.
     int total = 0;
-    float totalPercentage = 0;
+    double totalPercentage = 0;
 
     // Tally the total score for the function harness.
     {
@@ -408,7 +414,7 @@ int main()
     printf("PASSED (%d/2): MatrixTranspose()\n", MatrixTransposeTest);
     printf("PASSED (%d/2): MatrixTrace()\n", MatrixTraceTest);
     printf("_______________________________________\n");
-    printf("%d out of 9 functions passed (%.2f%%).\n\n", total, totalPercentage);
+    printf("%d out of 9 functions passed (%.2f%%).\n\n\n", total, totalPercentage);
 
 
 
@@ -433,21 +439,18 @@ int main()
     printf("Output of MatrixPrint():\n");
     MatrixPrint(matPrint);
     // Super rag-tag method of printing the matrix.
-    printf("Expected output of MatrixPrint():\n");
+    printf("\nExpected output of MatrixPrint():\n");
     printf("+1.000000 +2.000000 +5.000000 \n+3.000000 +1.000000 +6.000000 \n+6.000000 +5.000000 +3.000000");
 
     printf("\n\n");
 
     // First print done using the actual function created.
-    printf("Output of MatrixSubmatrix(i = 0, j = 0, aboveArray):\n");
+    printf("Output of MatrixSubmatrix(i = 0, j = 0, 'aboveArray'):\n");
     MatrixSubmatrix(0, 0, matPrint, submatrixExpected);
     MatrixPrintSubmatrix(submatrixExpected);
     // Super rag-tag method of printing the matrix.
-    printf("Expected output of MatrixSubmatrix(i = 0, j = 0, aboveArray):\n");
+    printf("\nExpected output of MatrixSubmatrix(i = 0, j = 0, 'aboveArray'):\n");
     printf("+1.000000 +6.000000\n+5.000000 +3.000000 ");
-
-
-
 
 
 

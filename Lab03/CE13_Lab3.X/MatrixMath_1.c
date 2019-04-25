@@ -1,3 +1,10 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 03         *
+ *4/22/2019      *
+ *****************/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -7,6 +14,15 @@
 #define TRUE 1
 #define FALSE 0
 
+/******************************************************************************
+ * MATRIX - FUNCTION DEFINITIONS
+ *****************************************************************************/
+// Hey, welcome to my MatrixMath.c page!
+// Feel free to snoop around, hopefully everything looks nice and tidy.
+
+/******************************************************************************
+ * MATRIX - Print Matrix
+ *****************************************************************************/
 void MatrixPrint(float mat[3][3])
 {
     int r, c; // Row and column counters
@@ -19,6 +35,9 @@ void MatrixPrint(float mat[3][3])
     }
 }
 
+/******************************************************************************
+ * MATRIX - Print Sub-matrix
+ *****************************************************************************/
 void MatrixPrintSubmatrix(float mat[2][2])
 {
     int r, c; // Row and column counters
@@ -31,6 +50,9 @@ void MatrixPrintSubmatrix(float mat[2][2])
     }
 }
 
+/******************************************************************************
+ * MATRIX - Matrix Equals
+ *****************************************************************************/
 int MatrixEquals(float mat1[3][3], float mat2[3][3])
 {
     float deltaTest; // Stores difference of mat1 & mat2
@@ -48,6 +70,9 @@ int MatrixEquals(float mat1[3][3], float mat2[3][3])
     return 1; // Else, return TRUE(1)
 }
 
+/******************************************************************************
+ * MATRIX - Scalar Equals
+ *****************************************************************************/
 int ScalarEquals(float scalar1, float scalar2)
 {
     float deltaTest; // Stores difference of scalar1 & scalar2
@@ -61,6 +86,9 @@ int ScalarEquals(float scalar1, float scalar2)
     }
 }
 
+/******************************************************************************
+ * MATRIX - Matrix Add
+ *****************************************************************************/
 void MatrixAdd(float mat1[3][3], float mat2[3][3], float result[3][3])
 {
     int r, c; // Row and column counters
@@ -72,6 +100,9 @@ void MatrixAdd(float mat1[3][3], float mat2[3][3], float result[3][3])
     }
 }
 
+/******************************************************************************
+ * MATRIX - Matrix Multiply
+ *****************************************************************************/
 void MatrixMultiply(float mat1[3][3], float mat2[3][3], float result[3][3])
 {
     float runningSum = 0;
@@ -88,6 +119,9 @@ void MatrixMultiply(float mat1[3][3], float mat2[3][3], float result[3][3])
     }
 }
 
+/******************************************************************************
+ * MATRIX - Scalar Add
+ *****************************************************************************/
 void MatrixScalarAdd(float x, float mat[3][3], float result[3][3])
 {
     int r, c; // Row and column counters
@@ -99,6 +133,9 @@ void MatrixScalarAdd(float x, float mat[3][3], float result[3][3])
     }
 }
 
+/******************************************************************************
+ * MATRIX - Scalar Multiply
+ *****************************************************************************/
 void MatrixScalarMultiply(float x, float mat[3][3], float result[3][3])
 {
     int r, c; // Row and column counters
@@ -110,6 +147,9 @@ void MatrixScalarMultiply(float x, float mat[3][3], float result[3][3])
     }
 }
 
+/******************************************************************************
+ * MATRIX - Matrix Trace
+ *****************************************************************************/
 float MatrixTrace(float mat[3][3])
 {
     float trace = 0;
@@ -121,6 +161,9 @@ float MatrixTrace(float mat[3][3])
     return trace;
 }
 
+/******************************************************************************
+ * MATRIX - Matrix Transpose
+ *****************************************************************************/
 void MatrixTranspose(float mat[3][3], float result[3][3])
 {
     int r, c; // Row and column counters
@@ -133,9 +176,13 @@ void MatrixTranspose(float mat[3][3], float result[3][3])
     }
 }
 
+/******************************************************************************
+ * MATRIX - Sub-matrix
+ *****************************************************************************/
 void MatrixSubmatrix(int i, int j, float mat[3][3], float Result[2][2])
 {
-    // Don't forget that the i, j, k positions act as coefficients for the 2x2 submatrices.
+    // Values here had to be hard-coded.
+    // Only function WITHOUT implementation of loops to expedite process.
 
     if (i == 0 && j == 0) {
         Result[0][0] = mat[1][1];
@@ -193,6 +240,9 @@ void MatrixSubmatrix(int i, int j, float mat[3][3], float Result[2][2])
     }
 }
 
+/******************************************************************************
+ * MATRIX - Matrix Determinant
+ *****************************************************************************/
 float MatrixDeterminant(float mat[3][3])
 {
     float runningSum = 0;
@@ -211,6 +261,9 @@ float MatrixDeterminant(float mat[3][3])
     return runningSum;
 }
 
+/******************************************************************************
+ * MATRIX - Inverse Matrix
+ *****************************************************************************/
 void MatrixInverse(float mat[3][3], float result[3][3])
 {
     float Result[2][2] = {};
@@ -252,3 +305,5 @@ void MatrixInverse(float mat[3][3], float result[3][3])
         }
     }
 }
+
+
