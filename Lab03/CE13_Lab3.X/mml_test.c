@@ -17,8 +17,7 @@
 // Module-level variables:
 float result[3][3] = {};
 float Result[2][2] = {};
-
-
+float zero_matrix[3][3] = {};
 
 int main()
 {
@@ -32,7 +31,6 @@ int main()
      * MATRIX - Matrix Equals
      *****************************************************************************/
 
-    float zero_matrix[3][3] = {};
     float mat1[3][3] = {
         {1, -2, 3},
         {1, 2, -3},
@@ -101,7 +99,6 @@ int main()
     // Arbitrary test values for scalar function
     float scalarValue = 3;
     float scalarSecondValue = 1.5;
-
     float matScalarResult [3][3] = {};
     // We'll be using this matrix for the function operations
     float matScalar [3][3] = {
@@ -146,7 +143,6 @@ int main()
     int MatrixDeterminantTest = 0;
     float knownDeterminant = 24;
     float anotherKnownDeterminant = 763.7;
-
     float knownMatrix[3][3] = {
         {1, -2, 3},
         {1, 2, -3},
@@ -180,6 +176,34 @@ int main()
      *****************************************************************************/
 
     int MatrixAddTest = 0;
+    float matAddResult[3][3] = {};
+    float matAddAnotherResult[3][3] = {};
+    float matAdd1 [3][3] = {
+        {3, 5, 2},
+        {1, 2, 7},
+        {3, 4, 3}
+    };
+    float matAdd2 [3][3] = {
+        {6, -2, 5},
+        {0, 1, -2},
+        {5, -3, 3}
+    };
+    float matAddExpected [3][3] = {
+        {9, 3, 7},
+        {1, 3, 5},
+        {8, 1, 6}
+    };
+    // Test for equality between MatrixAdd(matAdd1, matAdd2) and known output.
+    MatrixAdd(matAdd1, matAdd2, matAddResult);
+    if (MatrixEquals(matAddResult, matAddExpected) == 1) {
+        MatrixAddTest += 1;
+    }
+    // Switch the order of addition to test for commutativity.
+    // If this works, everything else within reason should as well.
+    MatrixAdd(matAdd2, matAdd1, matAddAnotherResult);
+    if (MatrixEquals(matAddAnotherResult, matAddExpected) == 1) {
+        MatrixAddTest += 1;
+    }
 
     // Testing block for MatrixAdd() function!
     // Will return (2/2) if working correctly.
@@ -191,6 +215,35 @@ int main()
      *****************************************************************************/
 
     int MatrixScalarAddTest = 0;
+    float scalarAdd = 3.5;
+    float scalarAddOutput[3][3] = {};
+    float scalarAddInput[3][3] = {
+        {0, 0, 0},
+        {0, 0, 0},
+        {0, 0, 0}
+    };
+    float anotherScalarAddInput[3][3] = {
+        {-3.5, -3.5, -3.5},
+        {-3.5, -3.5, -3.5},
+        {-3.5, -3.5, -3.5}
+    };
+    float scalarAddExpected[3][3] = {
+        {3.5, 3.5, 3.5},
+        {3.5, 3.5, 3.5},
+        {3.5, 3.5, 3.5}
+    };
+
+    // Add zero matrix input and 3.5 scalar value. (0 + 3.5).
+    MatrixScalarAdd(scalarAdd, scalarAddInput, scalarAddOutput);
+    if (MatrixEquals(scalarAddOutput, scalarAddExpected) == 1) {
+        MatrixScalarAddTest += 1;
+    }
+    // Compare the resulting matrix to a zero matrix. Should be equal (-3.5 + 3.5).
+    // Test if subtraction functions as it should!
+    MatrixScalarAdd(scalarAdd, anotherScalarAddInput, scalarAddOutput);
+    if (MatrixEquals(scalarAddOutput, scalarAddInput) == 1) {
+        MatrixScalarAddTest += 1;
+    }
 
     // Testing block for MatrixScalarAdd() function!
     // Will return (2/2) if working correctly.
@@ -202,6 +255,33 @@ int main()
      *****************************************************************************/
 
     int MatrixInverseTest = 0;
+    float inverseResult[3][3] = {};
+    float inverseDNE[3][3] = {
+        {1, 2, 3},
+        {1, 2, 3},
+        {1, 2, 3}
+    };
+    float inverseMatrix[3][3] = {
+        {7, 3, 6},
+        {6, 3, 1},
+        {2, 3, 1}
+    };
+    float inverseExpected[3][3] = {
+        {0.0000, 0.2500, -0.2500},
+        {-0.0667, -0.0833, 0.4833},
+        {0.2000, -0.2500, 0.0500}
+    };
+
+    // This should yield the disgusting set of floating point numbers above.
+    MatrixInverse(inverseMatrix, inverseResult);
+    if (MatrixEquals(inverseResult, inverseExpected) == 1) {
+        MatrixInverseTest += 1;
+    }
+    // Since the matrix input doesn't have a determinant, the function should ERROR.
+    // It is set to return an all zero matrix, so here we check for that.
+    if (MatrixEquals(inverseResult, zero_matrix) == 1) {
+        MatrixInverseTest += 1;
+    }
 
     // Testing block for MatrixInverse() function!
     // Will return (2/2) if working correctly.
@@ -212,7 +292,30 @@ int main()
      * MATRIX - Matrix Transpose
      *****************************************************************************/
 
-    int MatrixTranposeTest = 0;
+    int MatrixTransposeTest = 0;
+    float matTransposeResult[3][3] = {};
+    float matTranspose[3][3] = {
+        {1, 2, 3},
+        {1, 2, 3},
+        {1, 2, 3}
+    };
+    float matTransposeExpected[3][3] = {
+        {1, 1, 1},
+        {2, 2, 2},
+        {3, 3, 3}
+    };
+    // We see that with a simple case such as this,
+    // all of the elements have flipped across the main diagonal.
+    MatrixTranspose(matTranspose, matTransposeResult);
+    if (MatrixEquals(matTransposeResult, matTransposeExpected) == 1) {
+        MatrixTransposeTest += 1;
+    }
+    // Testing if invertible, whether it would work both directions.
+    // SPOILERS** it does.
+    MatrixTranspose(matTransposeExpected, matTransposeResult);
+    if (MatrixEquals(matTransposeResult, matTranspose) == 1) {
+        MatrixTransposeTest += 1;
+    }
 
     // Testing block for MatrixTranspose() function!
     // Will return (2/2) if working correctly.
@@ -224,6 +327,26 @@ int main()
      *****************************************************************************/
 
     int MatrixTraceTest = 0;
+    float scalarTraceExpected = 0;
+    float matTrace[3][3] = {
+        {0, 1, 1},
+        {1, 0, 1},
+        {1, 1, 0}
+    };
+    float anotherMatTrace[3][3] = {
+        {-5, 1, 7},
+        {3, 3, -9},
+        {0, -5, 2}
+    };
+
+    // Should be equal to zero, since the main diagonal sums up to zero.
+    if (ScalarEquals(MatrixTrace(matTrace), scalarTraceExpected) == 1) {
+        MatrixTraceTest += 1;
+    }
+    // Should STILL == zero, since ((-5) + 3 + 2) = 0.
+    if (ScalarEquals(MatrixTrace(anotherMatTrace), scalarTraceExpected) == 1) {
+        MatrixTraceTest += 1;
+    }
 
     // Testing block for MatrixTrace() function!
     // Will return (2/2) if working correctly.
@@ -231,11 +354,18 @@ int main()
 
 
 
-    // Declare variables used to pass through printf())
+
+
+
+    /******************************************************************************
+     * MATRIX - Print Results
+     *****************************************************************************/
+
+    // Declare variables used to print pass rate.
     int total = 0;
     float totalPercentage = 0;
 
-    // Tally the total score for the function harness
+    // Tally the total score for the function harness.
     {
         if (MatrixEqualsTest == 2) {
             total += 1;
@@ -258,14 +388,14 @@ int main()
         if (MatrixInverseTest == 2) {
             total += 1;
         }
-        if (MatrixTranposeTest == 2) {
+        if (MatrixTransposeTest == 2) {
             total += 1;
         }
         if (MatrixTraceTest == 2) {
             total += 1;
         }
     }
-    // Calculate percentage for user interface
+    // Calculate percentage for user interface.
     totalPercentage = ((total / 9.0f) * 100);
 
 
@@ -276,7 +406,7 @@ int main()
     printf("PASSED (%d/2): MatrixAdd()\n", MatrixAddTest);
     printf("PASSED (%d/2): MatrixScalarAdd()\n", MatrixScalarAddTest);
     printf("PASSED (%d/2): MatrixInverse()\n", MatrixInverseTest);
-    printf("PASSED (%d/2): MatrixTranpose()\n", MatrixTranposeTest);
+    printf("PASSED (%d/2): MatrixTranspose()\n", MatrixTransposeTest);
     printf("PASSED (%d/2): MatrixTrace()\n", MatrixTraceTest);
     printf("_______________________________________\n");
     printf("%d out of 9 functions passed (%.2f%%).", total, totalPercentage);
