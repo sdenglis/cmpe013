@@ -28,8 +28,6 @@ float zero_matrix[3][3] = {};
 void MatrixPrintSubmatrix(float mat[2][2]);
 int ScalarEquals(float scalar1, float scalar2);
 
-
-
 int main()
 {
     BOARD_Init();
@@ -74,26 +72,31 @@ int main()
      *****************************************************************************/
 
     int MatrixMultiplyTest = 0;
-    float MatrixMultiplyResult[3][3] = {
-        {-4, 0, 18},
-        {6, -4, -12},
-        {-2, 12, 0}
+    float matMult1[3][3] = {
+        {1, 2, 3},
+        {1, 2, 3},
+        {1, 2, 3}
     };
-    float MatrixMultiplyResult2[3][3] = {
-        {-20, 216, -72},
-        {-24, -128, 156},
-        {80, -48, -180}
+    float matMult2[3][3] = {
+        {1, 1, 1},
+        {2, 2, 2},
+        {3, 3, 3}
+    };
+    float MatrixMultiplyExpected[3][3] = {
+        {3, 6, 9},
+        {6, 12, 18},
+        {9, 18, 27}
     };
 
-    // Compare MatrixMultiply() function to hard-coded array.
-    MatrixMultiply(mat1, mat2, result);
-    if (MatrixEquals(result, MatrixMultiplyResult) == 1) {
+    // matMult1 * matMult2 == matrixMultiplyExpected (A*B = C[matrix]).
+    MatrixMultiply(matMult1, matMult2, result);
+    if (MatrixEquals(result, MatrixMultiplyExpected) == 1) {
         MatrixMultiplyTest += 1;
     }
 
-    // Compare MatrixMultiply() function to hard-coded array.
-    MatrixMultiply(MatrixMultiplyResult, MatrixMultiplyResult, result);
-    if (MatrixEquals(result, MatrixMultiplyResult2) == 1) {
+    // However, (A*B != B*A != C[matrix]). Testing for them to not be equal when reversed.
+    MatrixMultiply(matMult2, matMult1, result);
+    if (MatrixEquals(result, MatrixMultiplyExpected) == 0) {
         MatrixMultiplyTest += 1;
     }
 
@@ -427,7 +430,7 @@ int main()
     // As I see it, the only way for the determinant to be correct is for the sub-matrix 
     // to also function properly. Thus, since the determinant test was successful,
     // The sub-matrices had to have been correct, equal to their respective expected values.
-    
+
     float submatrixExpected[2][2] = {};
     float matPrint[3][3] = {
         {1, 2, 5},

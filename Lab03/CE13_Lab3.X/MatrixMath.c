@@ -21,6 +21,10 @@
  *****************************************************************************/
 // Hey, welcome to my MatrixMath.c page!
 // Feel free to snoop around, hopefully everything looks nice and tidy.
+//
+// LAST COMPILED: Apr 24 2019   20:30:46
+// BUILD SUCCESSFUL  (total time: 125ms)
+// NO additional errors (this acts iffy sometimes, without cause).
 
 /******************************************************************************
  * MATRIX - Print Matrix
