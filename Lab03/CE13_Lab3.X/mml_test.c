@@ -397,8 +397,7 @@ int main()
     }
     // Calculate percentage for user interface.
     totalPercentage = ((total / 9.0f) * 100);
-
-
+    // Print nice list of functions and their respective pass rates.
     printf("PASSED (%d/2): MatrixEquals()\n", MatrixEqualsTest);
     printf("PASSED (%d/2): MatrixMultiply()\n", MatrixMultiplyTest);
     printf("PASSED (%d/2): MatrixScalarMultiply()\n", MatrixScalarMultiplyTest);
@@ -409,10 +408,51 @@ int main()
     printf("PASSED (%d/2): MatrixTranspose()\n", MatrixTransposeTest);
     printf("PASSED (%d/2): MatrixTrace()\n", MatrixTraceTest);
     printf("_______________________________________\n");
-    printf("%d out of 9 functions passed (%.2f%%).", total, totalPercentage);
+    printf("%d out of 9 functions passed (%.2f%%).\n\n", total, totalPercentage);
+
+
+
+
+
+    /******************************************************************************
+     * MATRIX - Print Matrix / Sub-matrix
+     *****************************************************************************/
+    // Quick note** I'm not bothering with an equals() test for the sub-matrix function.
+    // As I see it, the only way for the determinant to be correct is for the sub-matrix 
+    // to also function properly. Thus, since the determinant test was successful,
+    // The sub-matrices had to have been correct, equal to their respective expected values.
+    
+    float submatrixExpected[2][2] = {};
+    float matPrint[3][3] = {
+        {1, 2, 5},
+        {3, 1, 6},
+        {6, 5, 3}
+    };
+
+    // First print done using the actual function created.
+    printf("Output of MatrixPrint():\n");
+    MatrixPrint(matPrint);
+    // Super rag-tag method of printing the matrix.
+    printf("Expected output of MatrixPrint():\n");
+    printf("+1.000000 +2.000000 +5.000000 \n+3.000000 +1.000000 +6.000000 \n+6.000000 +5.000000 +3.000000");
+
+    printf("\n\n");
+
+    // First print done using the actual function created.
+    printf("Output of MatrixSubmatrix(i = 0, j = 0, aboveArray):\n");
+    MatrixSubmatrix(0, 0, matPrint, submatrixExpected);
+    MatrixPrintSubmatrix(submatrixExpected);
+    // Super rag-tag method of printing the matrix.
+    printf("Expected output of MatrixSubmatrix(i = 0, j = 0, aboveArray):\n");
+    printf("+1.000000 +6.000000\n+5.000000 +3.000000 ");
+
+
+
+
+
+
 
 
     printf("\n\n\n");
     while (1);
 }
-

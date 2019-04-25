@@ -19,6 +19,18 @@ void MatrixPrint(float mat[3][3])
     }
 }
 
+void MatrixPrintSubmatrix(float mat[2][2])
+{
+    int r, c; // Row and column counters
+
+    for (r = 0; r < (DIM - 1); r++) {
+        for (c = 0; c < (DIM - 1); c++) {
+            printf("%+f ", mat[r][c]);
+        }
+        printf("\n");
+    }
+}
+
 int MatrixEquals(float mat1[3][3], float mat2[3][3])
 {
     float deltaTest; // Stores difference of mat1 & mat2
