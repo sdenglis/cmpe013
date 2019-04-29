@@ -17,8 +17,6 @@
 // The lab calls for 60 characters of user input
 #define MAX_INPUT_LENGTH 60
 
-#ifndef STACK_H
-#define STACK_H
 
 // Include BOARD.h so we can use the return values and the boolean defines.
 #include "BOARD.h"
@@ -29,6 +27,7 @@
 // instead of
 //   stack.stackItems[19]
 #define STACK_SIZE 20
+#define EMPTY -1
 #define TRUE 1
 #define FALSE 0
 
@@ -58,14 +57,16 @@ struct Stack {
  * initialized to TRUE.
  * @param:  *stack, a pointer to a stack which is modified in place.
  */
-void StackInit(struct Stack *stack);
+void StackInit(struct Stack *stack)
+{
 
-struct Stack myStack;
-struct Stack *stack = &myStack;
-myStack.currentItemIndex = -1;
-// Yo what the fuck is this
-myStack.initialized = TRUE;
-stack->initialized = TRUE;
+    struct Stack myStack;
+    struct Stack *stack = &myStack;
+    myStack.currentItemIndex = -1;
+    // Yo what the frick 
+    myStack.initialized = TRUE;
+    stack->initialized = TRUE;
+}
 
 /**
  * Pushes a value onto the stack.  The stack index is incremented, and the passed value
@@ -76,10 +77,20 @@ stack->initialized = TRUE;
  *          STANDARD_ERROR if the stack isn't initialized, or is full.
  * Note that SUCCESS and STANDARD_ERROR are defined in BOARD.h.
  */
-int StackPush(struct Stack *stack, double value);
+int StackPush(struct Stack *stack, double value)
+{
 
-struct Stack myStack;
-struct  
+    struct Stack myStack;
+    myStack.currentItemIndex += 1;
+    &myStack = value;
+
+    if (stack->initialized = FALSE) {
+        return STANDARD_ERROR;
+    } else {
+        return SUCCESS;
+    }
+
+}
 
 /**
  * Pop an element off of a stack.   The popped value is passed out by reference, and the 
@@ -94,7 +105,19 @@ struct
  *   *value = 7.0;
  * This is because "value" is a pointer. K&R 5.1-5.2 should explain this practice of "passing by reference". 
  */
-int StackPop(struct Stack *stack, double *value);
+int StackPop(struct Stack *stack, double *value)
+{
+
+    struct Stack myStack;
+    myStack.currentItemIndex -= 1;
+    &myStack = *value;
+
+    if (stack->initialized == FALSE || StackIsEmpty(&myStack)) {
+        return STANDARD_ERROR;
+    } else {
+        return SUCCESS;
+    }
+}
 
 /**
  * This function checks for whether the stack is empty or not. In this simple
@@ -104,7 +127,17 @@ int StackPop(struct Stack *stack, double *value);
  *          FALSE if the stack isn't initialized, or is not empty.
  * Note that TRUE and FALSE are defined in BOARD.h.
  */
-int StackIsEmpty(const struct Stack *stack);
+int StackIsEmpty(const struct Stack *stack)
+{
+
+    struct Stack myStack;
+    if (myStack.currentItemIndex == EMPTY) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
 /**
  * This function checks for whether the stack is empty or not. For this simple
  * implementation that is merely if the currentItemIndex == STACK_SIZE - 1. 
@@ -112,7 +145,15 @@ int StackIsEmpty(const struct Stack *stack);
  * @return: TRUE if the stack is full and FALSE if not.
  *          Also returns FALSE if the stack isn't initialized.
  */
-int StackIsFull(const struct Stack *stack);
+int StackIsFull(const struct Stack *stack)
+{
+    struct Stack myStack;
+    if (myStack.currentItemIndex == STACK_SIZE - 1 && stack->initialized == TRUE) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
 
 /**
  * Returns the current size of the stack in terms of how many active elements
@@ -122,6 +163,15 @@ int StackIsFull(const struct Stack *stack);
  *          the number of elements in the stack for initialized stacks, otherwise. 
  *          Note that SIZE_ERROR is declared in the BOARD.h header file.
  */
-int StackGetSize(const struct Stack *stack);
+int StackGetSize(const struct Stack *stack)
+{
+    struct Stack myStack;
+    int currentSize = 0;
 
-#endif // STACK_H
+    if (stack->initialized == FALSE) {
+        return SIZE_ERROR;
+    } else {
+        currentSize = myStack.currentItemIndex
+        return currentSize;
+    }
+}
