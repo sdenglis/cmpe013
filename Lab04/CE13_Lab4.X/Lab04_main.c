@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 //CMPE13 Support Library
 #include "BOARD.h"
@@ -17,7 +18,8 @@
 // The lab calls for 60 characters of user input
 #define MAX_INPUT_LENGTH 60
 
-int main() {
+int main()
+{
     BOARD_Init();
 
     //What follows is starter code.  You will need to modify it!

@@ -13,7 +13,7 @@
 // User libraries
 #include "rpn.h"
 
-int main()
+/*int main()
 {
     BOARD_Init();
     int error;
@@ -45,3 +45,4 @@ int main()
 }
 
 
+*/

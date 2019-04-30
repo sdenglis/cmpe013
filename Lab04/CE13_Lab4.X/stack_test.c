@@ -10,7 +10,7 @@
 // User libraries
 #include "stack.h"
 
-int main()
+/*int main()
 {
     BOARD_Init();
 
@@ -33,3 +33,4 @@ int main()
 }
 
 
+*/

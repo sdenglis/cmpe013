@@ -1,6 +1,7 @@
 
 // Include BOARD.h so we can use the return values and the boolean defines.
 #include "BOARD.h"
+#define STACK_SIZE 20
 
 //Define RPN errors that could occur during execution:
 
@@ -13,6 +14,14 @@ enum rpn_error {
     RPN_ERROR_TOO_FEW_ITEMS_REMAIN,
     RPN_ERROR_TOO_MANY_ITEMS_REMAIN
 };
+
+struct Stack {
+    double stackItems[STACK_SIZE];
+    int currentItemIndex;
+    uint8_t initialized;
+};
+// Declare new instance of struct Stack.
+struct Stack *stack;
 
 /* RPN_Evaluate() parses and evaluates a string that contains 
  * a valid Reverse Polish Notation string (no newlines!)  
@@ -34,7 +43,7 @@ enum rpn_error {
  * */
 int RPN_Evaluate(char * rpn_string, double * result)
 {
-    StackInit(Stack * stack);
+    StackInit(stack);
 
     int counter = 0;
     // Contains the return pointer found in strtok().
@@ -45,7 +54,7 @@ int RPN_Evaluate(char * rpn_string, double * result)
     double secondStorage;
 
     // Run through at least once.
-    holder = strtok(rpn_string, " ");
+    *holder = strtok(rpn_string, " ");
     // Keep track of how many strings were parsed.
     counter++;
     while (holder != NULL) {
@@ -55,58 +64,58 @@ int RPN_Evaluate(char * rpn_string, double * result)
 
         if (holder == "+") {
             // Pop previous two operands on stack.
-            StackPop(Stack *stack, *firstStored);
-            StackPop(Stack *stack, *secondStored);
+            StackPop(stack, firstStored);
+            StackPop(stack, secondStored);
 
             // Perform operation based on input string.
-            numberPushed = (*firstStored) + (*secondStored);
+            numberPushed = (firstStored) + (secondStored);
 
             // Push result back onto the stack.
-            StackPush(Stack *stack, numberPushed);
+            StackPush(stack, numberPushed);
 
         } else if (holder == "-") {
             // Pop previous two operands on stack.
-            StackPop(Stack *stack, *firstStored);
-            StackPop(Stack *stack, *secondStored);
+            StackPop(stack, firstStored);
+            StackPop(stack, secondStored);
 
             // Perform operation based on input string.
-            numberPushed = (*firstStored) - (*secondStored);
+            numberPushed = (firstStored) - (secondStored);
 
             // Push result back onto the stack.
-            StackPush(Stack *stack, numberPushed);
+            StackPush(stack, numberPushed);
 
         } else if (holder == "*") {
             // Pop previous two operands on stack.
-            StackPop(Stack *stack, *firstStored);
-            StackPop(Stack *stack, *secondStored);
+            StackPop(stack, firstStored);
+            StackPop(stack, secondStored);
 
             // Perform operation based on input string.
-            numberPushed = (*firstStored) * (*secondStored);
+            numberPushed = (firstStored) * (secondStored);
 
             // Push result back onto the stack.
-            StackPush(Stack *stack, numberPushed);
+            StackPush(stack, numberPushed);
 
         } else if (holder == "/") {
             // Pop previous two operands on stack.
-            StackPop(Stack *stack, *firstStored);
-            StackPop(Stack *stack, *secondStored);
+            StackPop(stack, firstStored);
+            StackPop(stack, secondStored);
 
             // Perform operation based on input string.
-            numberPushed = (*firstStored) / (*secondStored);
+            numberPushed = (firstStored) / (secondStored);
 
             // Push result back onto the stack.
-            StackPush(Stack *stack, numberPushed);
+            StackPush(stack, numberPushed);
 
-        } else if (isdigit) {
-            numberInput = atof(holder);
-            StackPush(Stack *stack, numberPushed);
-        } else (error) {
+        } else if (isdigit(atof(holder))) {
+            numberPushed = atof(holder);
+            StackPush(stack, numberPushed);
+        } else {
             return STANDARD_ERROR;
         }
 
 
 
-        holder = strtok(NULL, " ");
+        *holder = strtok(NULL, " ");
         counter++;
     }
 

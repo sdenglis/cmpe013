@@ -103,7 +103,7 @@ int StackPop(struct Stack *stack, double *value)
         return STANDARD_ERROR;
     } else {
         *value = stack->stackItems[stack->currentItemIndex];
-        stack.currentItemIndex--;
+        stack->currentItemIndex--;
         return SUCCESS;
     }
 }
