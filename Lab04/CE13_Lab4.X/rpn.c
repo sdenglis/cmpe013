@@ -1,11 +1,10 @@
-#ifndef RPN_H
-#define RPN_H
 
 // Include BOARD.h so we can use the return values and the boolean defines.
 #include "BOARD.h"
 
 //Define RPN errors that could occur during execution:
-enum rpn_error{
+
+enum rpn_error {
     RPN_NO_ERROR = 0,
     RPN_ERROR_STACK_OVERFLOW,
     RPN_ERROR_STACK_UNDERFLOW,
@@ -33,8 +32,86 @@ enum rpn_error{
  * decimal floats.  RPN_Evaluate should be able to handle strings of 
  * at least 255 length.
  * */
-int RPN_Evaluate(char * rpn_string, double * result);
+int RPN_Evaluate(char * rpn_string, double * result)
+{
+    StackInit(Stack * stack);
 
+    int counter = 0;
+    // Contains the return pointer found in strtok().
+    char *holder;
+    // Stores converted number string as a floating point.
+    double numberPushed;
+    double firstStorage;
+    double secondStorage;
+
+    // Run through at least once.
+    holder = strtok(rpn_string, " ");
+    // Keep track of how many strings were parsed.
+    counter++;
+    while (holder != NULL) {
+        double numberPushed = 0;
+        double firstStored = 0;
+        double secondStored = 0;
+
+        if (holder == "+") {
+            // Pop previous two operands on stack.
+            StackPop(Stack *stack, *firstStored);
+            StackPop(Stack *stack, *secondStored);
+
+            // Perform operation based on input string.
+            numberPushed = (*firstStored) + (*secondStored);
+
+            // Push result back onto the stack.
+            StackPush(Stack *stack, numberPushed);
+
+        } else if (holder == "-") {
+            // Pop previous two operands on stack.
+            StackPop(Stack *stack, *firstStored);
+            StackPop(Stack *stack, *secondStored);
+
+            // Perform operation based on input string.
+            numberPushed = (*firstStored) - (*secondStored);
+
+            // Push result back onto the stack.
+            StackPush(Stack *stack, numberPushed);
+
+        } else if (holder == "*") {
+            // Pop previous two operands on stack.
+            StackPop(Stack *stack, *firstStored);
+            StackPop(Stack *stack, *secondStored);
+
+            // Perform operation based on input string.
+            numberPushed = (*firstStored) * (*secondStored);
+
+            // Push result back onto the stack.
+            StackPush(Stack *stack, numberPushed);
+
+        } else if (holder == "/") {
+            // Pop previous two operands on stack.
+            StackPop(Stack *stack, *firstStored);
+            StackPop(Stack *stack, *secondStored);
+
+            // Perform operation based on input string.
+            numberPushed = (*firstStored) / (*secondStored);
+
+            // Push result back onto the stack.
+            StackPush(Stack *stack, numberPushed);
+
+        } else if (isdigit) {
+            numberInput = atof(holder);
+            StackPush(Stack *stack, numberPushed);
+        } else (error) {
+            return STANDARD_ERROR;
+        }
+
+
+
+        holder = strtok(NULL, " ");
+        counter++;
+    }
+
+
+}
 
 /**
  * This function should read through an array of characters, checking for backspace characters. 
@@ -48,6 +125,8 @@ int RPN_Evaluate(char * rpn_string, double * result);
  * strings with more backspaces than characters. It should be able to handle strings of at least 255 length.
  * 
  * */
-int ProcessBackspaces(char *rpn_sentence);
+int ProcessBackspaces(char *rpn_sentence)
+{
 
-#endif // STACK_H
+}
+

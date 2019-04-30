@@ -25,7 +25,7 @@ int main() {
     char rpn_sentence[MAX_INPUT_LENGTH + 2];
     double result;
 
-    printf("Welcome to CRUZID'S RPN calculator.  Compiled on %s %s", __DATE__, __TIME__);
+    printf("Welcome to sdenglis's RPN calculator.  Compiled on %s %s", __DATE__, __TIME__);
     while (1) {
 
         printf("Enter floats and + - / * in RPN format:\n");

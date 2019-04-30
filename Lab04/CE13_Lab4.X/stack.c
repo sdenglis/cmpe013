@@ -59,12 +59,7 @@ struct Stack {
  */
 void StackInit(struct Stack *stack)
 {
-
-    struct Stack myStack;
-    struct Stack *stack = &myStack;
-    myStack.currentItemIndex = -1;
-    // Yo what the frick 
-    myStack.initialized = TRUE;
+    stack->currentItemIndex = -1;
     stack->initialized = TRUE;
 }
 
@@ -79,14 +74,11 @@ void StackInit(struct Stack *stack)
  */
 int StackPush(struct Stack *stack, double value)
 {
-
-    struct Stack myStack;
-    myStack.currentItemIndex += 1;
-    &myStack = value;
-
-    if (stack->initialized = FALSE) {
+    if (stack->initialized == FALSE || StackIsFull(stack)) {
         return STANDARD_ERROR;
     } else {
+        stack->currentItemIndex++;
+        stack->stackItems[stack->currentItemIndex] = value;
         return SUCCESS;
     }
 
@@ -107,14 +99,11 @@ int StackPush(struct Stack *stack, double value)
  */
 int StackPop(struct Stack *stack, double *value)
 {
-
-    struct Stack myStack;
-    myStack.currentItemIndex -= 1;
-    &myStack = *value;
-
-    if (stack->initialized == FALSE || StackIsEmpty(&myStack)) {
+    if (stack->initialized == FALSE || StackIsEmpty(stack)) {
         return STANDARD_ERROR;
     } else {
+        *value = stack->stackItems[stack->currentItemIndex];
+        stack.currentItemIndex--;
         return SUCCESS;
     }
 }
@@ -129,9 +118,7 @@ int StackPop(struct Stack *stack, double *value)
  */
 int StackIsEmpty(const struct Stack *stack)
 {
-
-    struct Stack myStack;
-    if (myStack.currentItemIndex == EMPTY) {
+    if (stack->currentItemIndex == EMPTY && stack->initialized == TRUE) {
         return TRUE;
     } else {
         return FALSE;
@@ -147,8 +134,7 @@ int StackIsEmpty(const struct Stack *stack)
  */
 int StackIsFull(const struct Stack *stack)
 {
-    struct Stack myStack;
-    if (myStack.currentItemIndex == STACK_SIZE - 1 && stack->initialized == TRUE) {
+    if (stack->currentItemIndex == (STACK_SIZE - 1) && stack->initialized == TRUE) {
         return TRUE;
     } else {
         return FALSE;
@@ -165,13 +151,12 @@ int StackIsFull(const struct Stack *stack)
  */
 int StackGetSize(const struct Stack *stack)
 {
-    struct Stack myStack;
     int currentSize = 0;
 
     if (stack->initialized == FALSE) {
         return SIZE_ERROR;
     } else {
-        currentSize = myStack.currentItemIndex
+        currentSize = stack->currentItemIndex;
         return currentSize;
     }
 }
