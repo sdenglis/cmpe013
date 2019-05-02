@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=BOARD.c rpn_test.c stack_test.c stack.c rpn.c
+SOURCEFILES_QUOTED_IF_SPACED=BOARD.c rpn_test.c stack.c rpn.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/BOARD.o ${OBJECTDIR}/rpn_test.o ${OBJECTDIR}/stack_test.o ${OBJECTDIR}/stack.o ${OBJECTDIR}/rpn.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/BOARD.o.d ${OBJECTDIR}/rpn_test.o.d ${OBJECTDIR}/stack_test.o.d ${OBJECTDIR}/stack.o.d ${OBJECTDIR}/rpn.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/BOARD.o ${OBJECTDIR}/rpn_test.o ${OBJECTDIR}/stack.o ${OBJECTDIR}/rpn.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/BOARD.o.d ${OBJECTDIR}/rpn_test.o.d ${OBJECTDIR}/stack.o.d ${OBJECTDIR}/rpn.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/BOARD.o ${OBJECTDIR}/rpn_test.o ${OBJECTDIR}/stack_test.o ${OBJECTDIR}/stack.o ${OBJECTDIR}/rpn.o
+OBJECTFILES=${OBJECTDIR}/BOARD.o ${OBJECTDIR}/rpn_test.o ${OBJECTDIR}/stack.o ${OBJECTDIR}/rpn.o
 
 # Source Files
-SOURCEFILES=BOARD.c rpn_test.c stack_test.c stack.c rpn.c
+SOURCEFILES=BOARD.c rpn_test.c stack.c rpn.c
 
 
 CFLAGS=
@@ -118,12 +118,6 @@ ${OBJECTDIR}/rpn_test.o: rpn_test.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/rpn_test.o 
 	@${FIXDEPS} "${OBJECTDIR}/rpn_test.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/rpn_test.o.d" -o ${OBJECTDIR}/rpn_test.o rpn_test.c    -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD) 
 	
-${OBJECTDIR}/stack_test.o: stack_test.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/stack_test.o.d 
-	@${RM} ${OBJECTDIR}/stack_test.o 
-	@${FIXDEPS} "${OBJECTDIR}/stack_test.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/stack_test.o.d" -o ${OBJECTDIR}/stack_test.o stack_test.c    -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD) 
-	
 ${OBJECTDIR}/stack.o: stack.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/stack.o.d 
@@ -148,12 +142,6 @@ ${OBJECTDIR}/rpn_test.o: rpn_test.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/rpn_test.o.d 
 	@${RM} ${OBJECTDIR}/rpn_test.o 
 	@${FIXDEPS} "${OBJECTDIR}/rpn_test.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/rpn_test.o.d" -o ${OBJECTDIR}/rpn_test.o rpn_test.c    -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD) 
-	
-${OBJECTDIR}/stack_test.o: stack_test.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/stack_test.o.d 
-	@${RM} ${OBJECTDIR}/stack_test.o 
-	@${FIXDEPS} "${OBJECTDIR}/stack_test.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/stack_test.o.d" -o ${OBJECTDIR}/stack_test.o stack_test.c    -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/stack.o: stack.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 

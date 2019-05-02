@@ -1,3 +1,12 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 04         *
+ *5/01/2019      *
+ *****************/
+
+
+
 // **** Include libraries here ****
 // Standard libraries
 #include <stdio.h>
@@ -13,15 +22,15 @@
 // User libraries
 #include "rpn.h"
 
-/*int main()
+int main()
 {
     BOARD_Init();
     int error;
 
-    printf("\n###### Beginning CRUZID's rpn test harness: ####\n\n");
+    printf("\n###### Beginning sdenglis's rpn test harness: ######\n\n");
 
     //What follows is starter code.  You will need to modify it!
-    
+
     char test0[] = "1 1 +";
     double result0;
     double expected0 = 2;
@@ -43,6 +52,3 @@
 
     while (1);
 }
-
-
-*/
