@@ -41,14 +41,14 @@ int RPN_Evaluate(char * rpn_string, double * result)
     // Run through at least once.
     // Contains the return pointer found in strtok().
     char *holder = strtok(rpn_string, " ");
+
     while (holder != NULL) {
         printf("%s\n", holder);
-        printf("\ncurrentStack: %f\n", stack.stackItems[stack.currentItemIndex]);
-        double numberPushed;
-        double firstStored;
-        double secondStored;
-        if (strcmp(holder, "+") == 0) {
-            printf("add together!!!");
+        printf("currentStack: %f\n", stack.stackItems[stack.currentItemIndex]);
+        double numberPushed = 0;
+        double firstStored = 0;
+        double secondStored = 0;
+        if (holder == "+") {
             // Pop previous two operands on stack.
             StackPop(&stack, &firstStored);
             StackPop(&stack, &secondStored);
@@ -73,7 +73,6 @@ int RPN_Evaluate(char * rpn_string, double * result)
             // Push result back onto the stack.
             StackPush(&stack, numberPushed);
 
-            holder = strtok(NULL, " ");
             break;
 
         }
@@ -88,7 +87,6 @@ int RPN_Evaluate(char * rpn_string, double * result)
             // Push result back onto the stack.
             StackPush(&stack, numberPushed);
 
-            holder = strtok(NULL, " ");
             break;
 
         }
@@ -107,25 +105,21 @@ int RPN_Evaluate(char * rpn_string, double * result)
             // Push result back onto the stack.
             StackPush(&stack, numberPushed);
 
-            holder = strtok(NULL, " ");
             break;
 
         }
         if (atof(holder)) {
-            printf("numberrr");
             numberPushed = atof(holder);
             StackPush(&stack, numberPushed);
 
-            continue;
-
-        } //else {
-        //return RPN_ERROR_INVALID_TOKEN;
-        //}
-        printf("outside");
-        holder = strtok(NULL, " ");
-        if (holder == '\n'){
             break;
+
+        } else {
+            return RPN_ERROR_INVALID_TOKEN;
         }
+
+
+        holder = strtok(NULL, " ");
     }
     // If only one item left on the stack, we're good to go.
     if (StackGetSize(&stack) == 1) {
