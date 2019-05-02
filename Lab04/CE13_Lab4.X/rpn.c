@@ -3,25 +3,16 @@
 #include "BOARD.h"
 #define STACK_SIZE 20
 
-//Define RPN errors that could occur during execution:
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
 
-enum rpn_error {
-    RPN_NO_ERROR = 0,
-    RPN_ERROR_STACK_OVERFLOW,
-    RPN_ERROR_STACK_UNDERFLOW,
-    RPN_ERROR_INVALID_TOKEN,
-    RPN_ERROR_DIVIDE_BY_ZERO,
-    RPN_ERROR_TOO_FEW_ITEMS_REMAIN,
-    RPN_ERROR_TOO_MANY_ITEMS_REMAIN
-};
+#include <xc.h>
 
-struct Stack {
-    double stackItems[STACK_SIZE];
-    int currentItemIndex;
-    uint8_t initialized;
-};
-// Declare new instance of struct Stack.
-struct Stack *stack;
+#include "rpn.h"
+#include "stack.h"
+
 
 /* RPN_Evaluate() parses and evaluates a string that contains 
  * a valid Reverse Polish Notation string (no newlines!)  
@@ -43,14 +34,23 @@ struct Stack *stack;
  * */
 int RPN_Evaluate(char * rpn_string, double * result)
 {
-    StackInit(stack);
+
+    struct Stack {
+        double stackItems[STACK_SIZE];
+        int currentItemIndex;
+        uint8_t initialized;
+    };
+    // Declare new instance of struct Stack.
+    struct Stack *stack = NULL;
+
+    StackInit(&stack);
 
     // Contains the return pointer found in strtok().
-    char *holder;
+    char *holder = NULL;
     // Stores converted number string as a floating point.
 
     // Run through at least once.
-    *holder = strtok(rpn_string, " ");
+    holder = strtok(rpn_string, " ");
 
     while (holder != NULL) {
         double numberPushed = 0;
@@ -59,14 +59,14 @@ int RPN_Evaluate(char * rpn_string, double * result)
 
         if (strcmp(holder, "+")) {
             // Pop previous two operands on stack.
-            StackPop(stack, firstStored);
-            StackPop(stack, secondStored);
+            StackPop(stack, &firstStored);
+            StackPop(stack, &secondStored);
 
             // Perform operation based on input string.
             numberPushed = (firstStored) + (secondStored);
 
             // Push result back onto the stack.
-            StackPush(stack, numberPushed);
+            StackPush(&stack, numberPushed);
 
             continue;
 
@@ -74,14 +74,14 @@ int RPN_Evaluate(char * rpn_string, double * result)
 
             if (strcmp(holder, "-")) {
             // Pop previous two operands on stack.
-            StackPop(stack, firstStored);
-            StackPop(stack, secondStored);
+            StackPop(stack, &firstStored);
+            StackPop(stack, &secondStored);
 
             // Perform operation based on input string.
             numberPushed = (firstStored) - (secondStored);
 
             // Push result back onto the stack.
-            StackPush(stack, numberPushed);
+            StackPush(&stack, numberPushed);
 
             continue;
 
@@ -89,14 +89,14 @@ int RPN_Evaluate(char * rpn_string, double * result)
 
             if (strcmp(holder, "*")) {
             // Pop previous two operands on stack.
-            StackPop(stack, firstStored);
-            StackPop(stack, secondStored);
+            StackPop(stack, &firstStored);
+            StackPop(stack, &secondStored);
 
             // Perform operation based on input string.
             numberPushed = (firstStored) * (secondStored);
 
             // Push result back onto the stack.
-            StackPush(stack, numberPushed);
+            StackPush(&stack, numberPushed);
 
             continue;
 
@@ -104,8 +104,8 @@ int RPN_Evaluate(char * rpn_string, double * result)
 
             if (strcmp(holder, "/")) {
             // Pop previous two operands on stack.
-            StackPop(stack, firstStored);
-            StackPop(stack, secondStored);
+            StackPop(stack, &firstStored);
+            StackPop(stack, &secondStored);
 
             if (firstStored == 0) {
                 return RPN_ERROR_DIVIDE_BY_ZERO;
@@ -115,14 +115,14 @@ int RPN_Evaluate(char * rpn_string, double * result)
             numberPushed = (firstStored) / (secondStored);
 
             // Push result back onto the stack.
-            StackPush(stack, numberPushed);
+            StackPush(&stack, numberPushed);
 
             continue;
 
         } else if (isdigit(atof(holder))) {
             printf("\ndigit!!!\n\n");
             numberPushed = atof(holder);
-            StackPush(stack, numberPushed);
+            StackPush(&stack, numberPushed);
 
             continue;
 
@@ -132,14 +132,14 @@ int RPN_Evaluate(char * rpn_string, double * result)
 
 
 
-        *holder = strtok(NULL, " ");
+        holder = strtok(NULL, " ");
     }
     // If only one item left on the stack, we're good to go.
-    if (StackGetSize(stack) == 1) {
+    if (StackGetSize(&stack) == 1) {
         *result = stack->stackItems[stack->currentItemIndex];
         return RPN_NO_ERROR;
     }// Else, the stack may be EMPTY.
-    else if (StackIsEmpty(stack)) {
+    else if (StackIsEmpty(&stack)) {
         return RPN_ERROR_TOO_FEW_ITEMS_REMAIN;
     }// Else, the stack may be FULL.
     else {

@@ -13,6 +13,7 @@
 
 // User libraries
 #include "rpn.h"
+#include "stack.h"
 
 // **** Set macros and preprocessor directives ****
 // The lab calls for 60 characters of user input
@@ -34,6 +35,10 @@ int main()
 
         fgets(rpn_sentence, sizeof (rpn_sentence), stdin);
 
+        if (RPN_Evaluate(rpn_sentence, &result) == RPN_NO_ERROR) {
+            printf("Result = %f\n", result);
+        }
+        
         if (RPN_Evaluate(rpn_sentence, &result) == RPN_ERROR_STACK_OVERFLOW) {
             printf("Too many items in the stack: overflow!\n");
         } else if (RPN_Evaluate(rpn_sentence, &result) == RPN_ERROR_STACK_UNDERFLOW) {

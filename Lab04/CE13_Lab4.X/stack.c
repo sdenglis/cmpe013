@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 //CMPE13 Support Library
 #include "BOARD.h"
@@ -59,7 +60,6 @@ struct Stack {
  */
 void StackInit(struct Stack *stack)
 {
-    printf("INITIALIZED\n");
     stack->currentItemIndex = -1;
     stack->initialized = TRUE;
 }
@@ -158,6 +158,6 @@ int StackGetSize(const struct Stack *stack)
         return SIZE_ERROR;
     } else {
         currentSize = stack->currentItemIndex;
-        return currentSize;
+        return (currentSize + 1);
     }
 }
