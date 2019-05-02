@@ -9,26 +9,22 @@
 
 1.) Synopsis:
 
->> The lab was fairly straightforward. From my own perspective, 
->> I saw that the objective of the lab was to become comfortable 
->> with arrays, functions, as well as looping controls.
->> Each function was just another way to learn how to manipulate 
->> data within array structures. Very cool.
+>> We were to reinvent the original calculator which we created, but using RPN. This forced us
+>> to learn and investigate the use and implementation of the stack, arrays as well as pointers
+>> in order to properly have our program function.
 
 2.) Approach:
 
->> My approach, having some knowledge with respect to matrices, 
->> was to map out the different functions and how they could be 
->> implemented with logic. I believe that I jumped the gun,
->> and ended up biting off more than I could chew initially.
->> My workspace was very cluttered at first, which made it
->> much harder to iteratively test each matrix operation.
+>> Unfortunately, I was unable to start the lab as early as I would have liked. Thus, 
+>> after finally starting, I was a bit behind. It was difficult to get everything started.
+>> However, after gathering everything I needed, the rest was fairly trivial. Except, 
+>> my RPN.c had troubles with infinite looping and the tokenization of the strings.
+>> It was a simple fix, but took me way longer than it should have to figure out.
 
 3.) Feedback:
 
->> Honestly, I'm loving the lab manuals. They are super helpful
->> when starting off with each project. I'd say that I'm a better
->> programmer after having finished this lab! Anyways, lectures are
->> also very nice. Only thing that seemed a bit iffy to me: the 
->> grading criteria. This lab is interesting because a good portion
->> of it has to be graded subjectively by the TA's. 
+>> In the end, the stack portion of the lab was very straight-forward. As for the RPN,
+>> I had more troubles than I wanted. It was fun, difficult, interesting, and I believe
+>> that I've learned alot regarding pointers and structs. The lab manual could have been
+>> a bit more explicit in detailing how to go about certain parts of the lab.
+>> Lectures were also very helpful; I like attending.
