@@ -59,6 +59,7 @@ struct Stack {
  */
 void StackInit(struct Stack *stack)
 {
+    printf("INITIALIZED\n");
     stack->currentItemIndex = -1;
     stack->initialized = TRUE;
 }

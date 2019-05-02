@@ -30,13 +30,27 @@ int main()
     printf("Welcome to sdenglis's RPN calculator.  Compiled on %s %s", __DATE__, __TIME__);
     while (1) {
 
-        printf("Enter floats and + - / * in RPN format:\n");
+        printf("\nPlease enter floats and + - / * in RPN format:\n");
 
         fgets(rpn_sentence, sizeof (rpn_sentence), stdin);
 
-        RPN_Evaluate(rpn_sentence, &result);
+        if (RPN_Evaluate(rpn_sentence, &result) == RPN_ERROR_STACK_OVERFLOW) {
+            printf("Too many items in the stack: overflow!\n");
+        } else if (RPN_Evaluate(rpn_sentence, &result) == RPN_ERROR_STACK_UNDERFLOW) {
+            printf("Too few items in the stack.\n");
+        } else if (RPN_Evaluate(rpn_sentence, &result) == RPN_ERROR_INVALID_TOKEN) {
+            printf("Invalid character!\n");
+        } else if (RPN_Evaluate(rpn_sentence, &result) == RPN_ERROR_DIVIDE_BY_ZERO) {
+            printf("Divide by zero error!\n");
+        } else if (RPN_Evaluate(rpn_sentence, &result) == RPN_ERROR_TOO_FEW_ITEMS_REMAIN) {
+            printf("Not enough operators left to interact with operand.\n");
+        } else if (RPN_Evaluate(rpn_sentence, &result) == RPN_ERROR_TOO_MANY_ITEMS_REMAIN) {
+            printf("Too many operators left with no operands.\n");
+        } else if (RPN_Evaluate(rpn_sentence, &result) == RPN_NO_ERROR) {
+            printf("Result = %f\n", result);
+        }
 
-        printf("result = %f\n", result);
+
 
     }
 
