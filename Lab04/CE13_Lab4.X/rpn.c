@@ -43,54 +43,71 @@ int RPN_Evaluate(char * rpn_string, double * result)
     char *holder = strtok(rpn_string, " ");
 
     while (holder != NULL) {
-        printf("%s\n", holder);
-        printf("currentStack: %f\n", stack.stackItems[stack.currentItemIndex]);
-        double numberPushed = 0;
-        double firstStored = 0;
-        double secondStored = 0;
-        if (holder == "+") {
+        //printf("%s\n", holder);
+        //printf("currentStack: %f\n", stack.stackItems[stack.currentItemIndex]);
+        double numberPushed;
+        double firstStored;
+        double secondStored;
+
+        // Check for zero case, as well as bar any invalid elements from entering!
+        if (atof(holder) || (holder == "0")) {
+            numberPushed = atof(holder);
+            // check for overflow and underflow
+            if (StackIsFull(&stack) == TRUE) {
+                return RPN_ERROR_STACK_OVERFLOW;
+            } else {
+                StackPush(&stack, numberPushed);
+            }
+
+        } else if (strcmp(holder, "+") == 0) {
+            if (StackIsEmpty(&stack) == TRUE) {
+                return RPN_ERROR_STACK_UNDERFLOW;
+            }
             // Pop previous two operands on stack.
             StackPop(&stack, &firstStored);
             StackPop(&stack, &secondStored);
 
             // Perform operation based on input string.
-            numberPushed = (firstStored) + (secondStored);
+            numberPushed = (secondStored) + (firstStored);
 
             // Push result back onto the stack.
             StackPush(&stack, numberPushed);
 
-            break;
 
-        }
-        if (holder == "-") {
+        } else if (strcmp(holder, "-") == 0) {
+            if (StackIsEmpty(&stack) == TRUE) {
+                return RPN_ERROR_STACK_UNDERFLOW;
+            }
             // Pop previous two operands on stack.
             StackPop(&stack, &firstStored);
             StackPop(&stack, &secondStored);
 
             // Perform operation based on input string.
-            numberPushed = (firstStored) - (secondStored);
+            numberPushed = (secondStored) - (firstStored);
 
             // Push result back onto the stack.
             StackPush(&stack, numberPushed);
 
-            break;
 
-        }
-        if (holder == "*") {
+        } else if (strcmp(holder, "*") == 0) {
+            if (StackIsEmpty(&stack) == TRUE) {
+                return RPN_ERROR_STACK_UNDERFLOW;
+            }
             // Pop previous two operands on stack.
             StackPop(&stack, &firstStored);
             StackPop(&stack, &secondStored);
 
             // Perform operation based on input string.
-            numberPushed = (firstStored) * (secondStored);
+            numberPushed = (secondStored) * (firstStored);
 
             // Push result back onto the stack.
             StackPush(&stack, numberPushed);
 
-            break;
 
-        }
-        if (holder == "/") {
+        } else if (strcmp(holder, "/") == 0) {
+            if (StackIsEmpty(&stack) == TRUE) {
+                return RPN_ERROR_STACK_UNDERFLOW;
+            }
             // Pop previous two operands on stack.
             StackPop(&stack, &firstStored);
             StackPop(&stack, &secondStored);
@@ -100,27 +117,21 @@ int RPN_Evaluate(char * rpn_string, double * result)
             }
 
             // Perform operation based on input string.
-            numberPushed = (firstStored) / (secondStored);
+            numberPushed = (secondStored) / (firstStored);
 
             // Push result back onto the stack.
             StackPush(&stack, numberPushed);
 
-            break;
-
-        }
-        if (atof(holder)) {
-            numberPushed = atof(holder);
-            StackPush(&stack, numberPushed);
-
-            break;
 
         } else {
             return RPN_ERROR_INVALID_TOKEN;
         }
+        // continue / break controls break entire thing
 
 
         holder = strtok(NULL, " ");
     }
+
     // If only one item left on the stack, we're good to go.
     if (StackGetSize(&stack) == 1) {
         *result = stack.stackItems[stack.currentItemIndex];
