@@ -49,10 +49,6 @@ int RPN_Evaluate(char * rpn_string, double * result)
         double firstStored;
         double secondStored;
 
-        char *pointer;
-        double ret;
-        ret = strtod(holder, &pointer);
-
         // Check for zero case, as well as bar any invalid elements from entering!
         if (strlen(holder) == strspn(holder, ".0123456789")) {
             numberPushed = atof(holder);

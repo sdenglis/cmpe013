@@ -27,6 +27,7 @@ int main()
 
     char rpn_sentence[MAX_INPUT_LENGTH + 2];
     double result;
+    int error;
 
     printf("Welcome to sdenglis's RPN calculator.  Compiled on %s %s", __DATE__, __TIME__);
     while (1) {
@@ -34,6 +35,8 @@ int main()
         printf("\nPlease enter floats and + - / * in RPN format:\n");
 
         fgets(rpn_sentence, sizeof (rpn_sentence), stdin);
+        strtok(rpn_sentence, "\n");
+        
 
         // Store output from RPN_Evaluate to check for any errors.
         error = RPN_Evaluate(rpn_sentence, &result);
