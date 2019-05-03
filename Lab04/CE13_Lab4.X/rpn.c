@@ -65,6 +65,9 @@ int RPN_Evaluate(char * rpn_string, double * result)
             }
             // Pop previous two operands on stack.
             StackPop(&stack, &firstStored);
+            if (StackIsEmpty(&stack) == TRUE) {
+                return RPN_ERROR_TOO_FEW_ITEMS_REMAIN;
+            }
             StackPop(&stack, &secondStored);
 
             // Perform operation based on input string.
@@ -80,6 +83,9 @@ int RPN_Evaluate(char * rpn_string, double * result)
             }
             // Pop previous two operands on stack.
             StackPop(&stack, &firstStored);
+            if (StackIsEmpty(&stack) == TRUE) {
+                return RPN_ERROR_TOO_FEW_ITEMS_REMAIN;
+            }
             StackPop(&stack, &secondStored);
 
             // Perform operation based on input string.
@@ -95,6 +101,9 @@ int RPN_Evaluate(char * rpn_string, double * result)
             }
             // Pop previous two operands on stack.
             StackPop(&stack, &firstStored);
+            if (StackIsEmpty(&stack) == TRUE) {
+                return RPN_ERROR_TOO_FEW_ITEMS_REMAIN;
+            }
             StackPop(&stack, &secondStored);
 
             // Perform operation based on input string.
@@ -110,6 +119,9 @@ int RPN_Evaluate(char * rpn_string, double * result)
             }
             // Pop previous two operands on stack.
             StackPop(&stack, &firstStored);
+            if (StackIsEmpty(&stack) == TRUE) {
+                return RPN_ERROR_TOO_FEW_ITEMS_REMAIN;
+            }
             StackPop(&stack, &secondStored);
 
             if (firstStored == 0) {
