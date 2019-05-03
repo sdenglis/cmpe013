@@ -29,20 +29,21 @@ int main()
     double result;
     int error;
 
-    printf("Welcome to sdenglis's RPN calculator.  Compiled on %s %s", __DATE__, __TIME__);
+    printf("\n\n\nWelcome to sdenglis's RPN calculator.  Compiled on %s %s", __DATE__, __TIME__);
     while (1) {
 
         printf("\nPlease enter floats and + - / * in RPN format:\n");
 
         fgets(rpn_sentence, sizeof (rpn_sentence), stdin);
+        ProcessBackspaces(rpn_sentence);
         strtok(rpn_sentence, "\n");
-        
+
 
         // Store output from RPN_Evaluate to check for any errors.
         error = RPN_Evaluate(rpn_sentence, &result);
 
         if (error) {
-            printf("   Failed, RPN_Evaluate produced an error\n");
+            printf("   Failed, RPN_Evaluate produced an error:\n");
             if (error == RPN_ERROR_STACK_OVERFLOW) {
                 printf("Too many items in the stack: overflow!\n");
             } else if (error == RPN_ERROR_STACK_UNDERFLOW) {
