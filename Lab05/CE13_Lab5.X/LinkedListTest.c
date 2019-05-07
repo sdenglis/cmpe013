@@ -69,4 +69,7 @@ int main(void)
 
     printf("\nPass Rate: %.3f%%\n", ((percentageCorrect / 16.0) * 100));
 
+
+    while (1);
+    return 0;
 }

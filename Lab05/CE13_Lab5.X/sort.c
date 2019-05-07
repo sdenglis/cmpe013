@@ -70,16 +70,28 @@ int main(void)
  */
 ListItem *SelectionSort(ListItem* list)
 {
-    int i, j;
+    int i, j; // Create counter variables.
+    // Turn list into pointer of first element in LinkedList.
+    list = LinkedListGetFirst(list);
+
+    // Create two Item variables to compare iterative data values.
+    ListItem * firstItem->data = list->data;
+    firstItem->nextItem = list->nextItem;
+
+    ListItem * secondItem->data = list->data;
+    secondItem->nextItem = list->nextItem;
+
     int length = LinkedListSize(list); // Get list size, set equal to length variable.
 
     for (i = 0; i < (length - 2); i++) {
         for (j = i + 1; j < (length - 1); j++) {
-            // Need to compare two strings if list[i] and list [j]!!!
-            if (strcmp(firstItem, secondItem) < 0) { // If first < second, execute block.
+
+            if (strcmp(firstItem->data, secondItem->data) < 0) { // If first < second, execute block.
                 LinkedListSwapData(firstItem, secondItem); // swap first and second.
+                secondItem = secondItem->nextItem; // Increment secondItem++
             }
         }
+        firstItem = firstItem->nextItem; // Increment firstItem++
     }
 
     return LinkedListGetFirst(list);
@@ -103,13 +115,16 @@ ListItem *InsertionSort(ListItem* list)
     int i, j;
     int length = LinkedListSize(list); // Get list size, set equal to length variable.
 
-    // Still mostly pseudo-code...
-    firstSortedItem = tail of list;
-    while (firstSortedItem != head of list) {
-        lastUnsortedItem = firstSortedItem previous item;
-        if (lastUnsortedItem < firstSortedItem) {
-            firstSortedItem = lastUnsortedItem;
+    ListItem * firstSortedItem = LinkedListGetLast(list);
+
+    while (firstSortedItem->previousItem != NULL) {
+        ListItem * lastUnsortedItem = firstSortedItem->previousItem;
+        if (strcmp(lastUnsortedItem, firstSortedItem) < 0) {
+            // Only set data? Or all attributes?
+            LinkedListSwapData(firstSortedItem, lastUnsortedItem);
         } else {
+            F
+            // What does this mean?
             insertAfter = firstSortedItem;
             while (insertAfter != tail of list || insertHere > lastUnsortedItem) {
                 insertAfter = insertAfter next item;
