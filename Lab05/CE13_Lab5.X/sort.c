@@ -32,7 +32,7 @@ int main(void)
 {
     BOARD_Init();
 
-    printf("\n\nWelcome to CRUZID's sort.c, compiled on %s %s.\n", __DATE__, __TIME__);
+    printf("\n\nWelcome to sdenglis's sort.c, compiled on %s %s.\n", __DATE__, __TIME__);
 
     ListItem* listToSort;
 
@@ -100,7 +100,23 @@ ListItem *SelectionSort(ListItem* list)
  */
 ListItem *InsertionSort(ListItem* list)
 {
-    //YOUR CODE GOES HERE!!!
+    int i, j;
+    int length = LinkedListSize(list); // Get list size, set equal to length variable.
+
+    // Still mostly pseudo-code...
+    firstSortedItem = tail of list;
+    while (firstSortedItem != head of list) {
+        lastUnsortedItem = firstSortedItem previous item;
+        if (lastUnsortedItem < firstSortedItem) {
+            firstSortedItem = lastUnsortedItem;
+        } else {
+            insertAfter = firstSortedItem;
+            while (insertAfter != tail of list || insertHere > lastUnsortedItem) {
+                insertAfter = insertAfter next item;
+                insert lastUnsortedItem after insertAfter;
+            }
+        }
+    }
 
 
 }
