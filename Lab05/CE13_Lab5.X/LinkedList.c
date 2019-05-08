@@ -19,6 +19,9 @@
 // User libraries
 #include "LinkedList.h"
 
+#define SUCCESS 1
+#define STANDARD_ERROR 0
+
 /**
  * This function starts a new linked list. Given an allocated pointer to data it will return a
  * pointer for a malloc()ed ListItem struct. If malloc() fails for any reason, then this function
@@ -34,7 +37,7 @@ ListItem * LinkedListNew(char *data)
     ListItem *newItem = malloc(sizeof (ListItem));
 
     if (newItem) { // Only executes if the malloc() executed without error.
-        newItem->data = *data; // Set data sub-member of item to char *data input.
+        newItem->data = data; // Set data sub-member of item to char *data input.
         newItem->nextItem = NULL; // When initialized, single-item list should point head and tail to NULL.
         newItem->previousItem = NULL;
         return newItem; // Return the pointer to newly-created ListItem.
@@ -101,11 +104,16 @@ char *LinkedListRemove(ListItem * item)
 {
     if (item) {
         // Stitch gap in attributes of previous and next items.
-        item->previousItem->nextItem = item->nextItem;
-        item->nextItem->previousItem = item->previousItem;
+        if (item->previousItem) {
+            item->previousItem->nextItem = item->nextItem;
+        }
+        if (item->nextItem) {
+            item->nextItem->previousItem = item->previousItem;
+        }
 
         // Free up previously allocated space for ListItem element.
         free(item);
+        return item->data; // Return data pointer from removed item.
 
     } else { // Signal ERROR if passed NULL value.
         return NULL;
@@ -123,7 +131,7 @@ char *LinkedListRemove(ListItem * item)
  */
 int LinkedListSize(ListItem * list)
 {
-    int ListItemCounter = 0;
+    int ListItemCounter = 1;
     // Create a ListItem variable to store FirstListItem into.
     ListItem *first = LinkedListGetFirst(list);
 
@@ -229,10 +237,10 @@ int LinkedListPrint(ListItem * list)
     if (first) {
         ListSize = LinkedListSize(first);
         for (i = 0; i < (ListSize - 1); i++) {
-            printf("%c, ", first->data); // Print data of current ListItem.
+            printf("%s, ", first->data); // Print data of current ListItem.
             first = first->nextItem; // Increment ListItem to the next data value holder.
         }
-        printf("%c", first->data); // Print data of LAST ListItem with formatting.
+        printf("%s", first->data); // Print data of LAST ListItem with formatting.
 
         return SUCCESS;
 
