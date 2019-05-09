@@ -48,7 +48,9 @@ int main(void)
     printf("\nStarting stopwatch for insertion sort...\n");
     listToSort = CreateUnsortedList();
     __asm("nop"); //put a breakpoint on this line
-    InsertionSort(listToSort);
+    // Updated to FIXED version on piazza.
+    // Please don't break; this was working before.
+    listToSort = InsertionSort(listToSort);
     __asm("nop"); //put a breakpoint on this line, and record the stopwatch time
     LinkedListPrint(listToSort);
 
