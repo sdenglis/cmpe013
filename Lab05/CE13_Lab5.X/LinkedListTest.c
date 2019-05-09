@@ -23,7 +23,7 @@ int main(void)
 {
     BOARD_Init();
 
-    printf("\n\n\n###### Beginning sdenglis's LinkedList.c test harness: ######\n\n\n");
+    printf("\n\n\n\a###### Beginning sdenglis's LinkedList.c test harness: ######\a\n\n\n");
 
     float percentageCorrect = 0;
     //char* wordList[] = {"decide", "toothpaste", "lowly", "robin", "reign", NULL};

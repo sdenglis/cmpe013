@@ -70,32 +70,21 @@ int main(void)
  */
 ListItem *SelectionSort(ListItem* list)
 {
-    int i, j; // Create counter variables.
-    // Turn list into pointer of first element in LinkedList.
     list = LinkedListGetFirst(list);
+    ListItem *firstUnsorted = list;
+    ListItem *compare;
 
-    // Create two Item variables to compare iterative data values.
-    ListItem * firstItem->data = list->data;
-    firstItem->nextItem = list->nextItem;
-
-    ListItem * secondItem->data = list->data;
-    secondItem->nextItem = list->nextItem;
-
-    int length = LinkedListSize(list); // Get list size, set equal to length variable.
-
-    for (i = 0; i < (length - 2); i++) {
-        for (j = i + 1; j < (length - 1); j++) {
-
-            if (strcmp(firstItem->data, secondItem->data) < 0) { // If first < second, execute block.
-                LinkedListSwapData(firstItem, secondItem); // swap first and second.
-                secondItem = secondItem->nextItem; // Increment secondItem++
+    while (firstUnsorted->nextItem != NULL) {
+        compare = firstUnsorted->nextItem;
+        while (compare != NULL) {
+            if (strcmp(firstUnsorted->data, compare->data) > 0) {
+                LinkedListSwapData(firstUnsorted, compare);
             }
+            compare = compare->nextItem;
         }
-        firstItem = firstItem->nextItem; // Increment firstItem++
+        firstUnsorted = firstUnsorted->nextItem;
     }
-
     return LinkedListGetFirst(list);
-
 }
 
 /**
@@ -112,27 +101,39 @@ ListItem *SelectionSort(ListItem* list)
  */
 ListItem *InsertionSort(ListItem* list)
 {
-    int i, j;
-    int length = LinkedListSize(list); // Get list size, set equal to length variable.
+    // Set list to the head of the list.
+    list = LinkedListGetFirst(list);
+    // Set firstSortedItem to the tail of the list.
+    ListItem *firstSortedItem = LinkedListGetLast(list);
+    // Declare lastUnsortedItem struct variable.
+    ListItem *lastUnsortedItem;
+    // Declare insertAfter struct variable.
+    ListItem *insertAfter;
+    // Declare tempData struct variable.
+    char *tempData;
 
-    ListItem * firstSortedItem = LinkedListGetLast(list);
 
-    while (firstSortedItem->previousItem != NULL) {
-        ListItem * lastUnsortedItem = firstSortedItem->previousItem;
-        if (strcmp(lastUnsortedItem, firstSortedItem) < 0) {
-            // Only set data? Or all attributes?
-            LinkedListSwapData(firstSortedItem, lastUnsortedItem);
+    while (firstSortedItem->previousItem != NULL) { // While NOT head of list...
+        lastUnsortedItem = firstSortedItem->previousItem;
+        if (strcmp(lastUnsortedItem->data, firstSortedItem->data) < 0) {
+            firstSortedItem = lastUnsortedItem;
         } else {
-            F
-            // What does this mean?
             insertAfter = firstSortedItem;
-            while (insertAfter != tail of list || insertHere > lastUnsortedItem) {
-                insertAfter = insertAfter next item;
-                insert lastUnsortedItem after insertAfter;
+            while (insertAfter->nextItem != NULL) { // While NOT tail of list...
+                if (strcmp(insertAfter->nextItem->data, lastUnsortedItem->data) > 0) {
+                    break;
+                } else {
+                    insertAfter = insertAfter->nextItem;
+                }
             }
+            // Declare tempData struct variable.
+            tempData = lastUnsortedItem->data;
+            LinkedListRemove(lastUnsortedItem);
+            lastUnsortedItem = LinkedListCreateAfter(insertAfter, tempData);
         }
     }
 
+    return LinkedListGetFirst(list);
 
 }
 
@@ -149,7 +150,7 @@ ListItem *CreateUnsortedList(void)
 /// <editor-fold defaultstate="collapsed" desc="CreateUnsortedList definition">
 {
     char* wordList[] = {"decide", "toothpaste", "lowly", "robin", "reign", "crowd", "pies", "reduce", "tendency", "surround", "finger", "rake", "alleged", "hug", "nest", "punishment", "eggnog", "side", "beef", "exuberant", "sort", "scream", "zip", "hair", "ragged", "damage", "thought", "jump", "frequent", "substance", "head", "step", "faithful", "sidewalk", "pig", "raspy", "juggle", "shut", "maddening", "rock", "telephone", "selective", NULL};
-    //  char* wordList[] = {"D", "A", "C", "E", "B", NULL};
+    //char* wordList[] = {"D", "A", "C", "E", "B", NULL};
 
     int i = 0;
     ListItem* head = LinkedListNew(wordList[i]);
