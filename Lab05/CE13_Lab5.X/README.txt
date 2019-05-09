@@ -17,7 +17,8 @@ Target halted. Stopwatch cycle count = 24809 (24.809 ms)     // Insertion Sort
 >> While it took over 110 ms for SS, IS deftly beat it with a solid 25 ms -> more than 4x faster!
 >> The reason for this time discrepancy being that insertion sort's inner loop deals with previously-sorted elements.
 >> Thus, it gives itself leniency to find the correct location through comparisons rather than the brute-force iteration
->> techniques associated with selection sort.
+>> techniques associated with selection sort. In other words, selection sort has to search the entire unsorted list,
+>> whereas insertion sort acts by searching the already sorted section to find where to place the next element.
 
 2.) Summary:
 
