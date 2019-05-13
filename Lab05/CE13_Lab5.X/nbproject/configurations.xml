@@ -68,6 +68,10 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
+      <item path="BOARD.c" ex="true" overriding="false">
+      </item>
+      <item path="BOARD.h" ex="true" overriding="false">
+      </item>
       <C32>
         <property key="additional-warnings" value="true"/>
         <property key="addresss-attribute-use" value="false"/>
@@ -197,7 +201,23 @@
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
+      <item path="LinkedList.c" ex="true" overriding="false">
+      </item>
+      <item path="LinkedList.h" ex="true" overriding="false">
+      </item>
       <item path="LinkedListTest.c" ex="true" overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
       </item>
       <Simulator>
         <property key="codecoverage.enabled" value="Disable"/>
@@ -622,7 +642,7 @@
                   value=""/>
         <property key="warningmessagebreakoptions.warningmessages" value="holdstate"/>
       </Simulator>
-      <item path="sort.c" ex="false" overriding="false">
+      <item path="sort.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>

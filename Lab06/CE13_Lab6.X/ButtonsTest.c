@@ -40,11 +40,11 @@ int main(void)
     /***************************************************************************************************
      * Your code goes in between this comment and the following one with asterisks.
      **************************************************************************************************/
-    printf("Welcome to CRUZID's lab6 part4 (ButtonsTest).  Compiled on %s %s.\n", __TIME__, __DATE__);
+    printf("Welcome to sdenglis's lab6 part4 (ButtonsTest).  Compiled on %s %s.\n", __TIME__, __DATE__);
 
-    
+
     printf("Please press some buttons!\n");
-    
+
 
     /***************************************************************************************************
      * Your code goes in between this comment and the preceding one with asterisks
@@ -64,13 +64,5 @@ void __ISR(_TIMER_1_VECTOR, ipl4auto) Timer1Handler(void)
     // Clear the interrupt flag.
     IFS0bits.T1IF = 0;
 
-    /***************************************************************************************************
-     * Your code goes in between this comment and the following one with asterisks.
-     **************************************************************************************************/
-
-
-    /***************************************************************************************************
-     * Your code goes in between this comment and the preceding one with asterisks
-     **************************************************************************************************/
-
+    buttonEvents = ButtonsCheckEvents();
 }
