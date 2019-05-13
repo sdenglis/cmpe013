@@ -75,12 +75,13 @@ int main(void)
      * Your code goes in between this comment and the following one with asterisks.
      **************************************************************************************************/
     printf("Welcome to sdenglis's lab6 part3 (bounce_adc).  Compiled on %s %s.\n", __TIME__, __DATE__);
-
+    printf("test\n");
     AdcResult.voltage = WINDOW_SIZE;
 
     if (AdcResult.event) {
         OledInit();
-        OledDrawString("Potentiometer value:\n %d mA\n %%%d", AdcAverage, AdcPercentage);
+        printf("Potentiometer value:\n %d mA\n %%d", AdcAverage, AdcPercentage);
+        OledDrawString("Potentiometer value:\n %d mA\n %%d", AdcAverage, AdcPercentage);
         OledUpdate();
 
         AdcResult.event = FALSE;
@@ -114,7 +115,7 @@ void __ISR(_ADC_VECTOR, ipl2auto) AdcHandler(void)
     AdcPercentage = (AdcAverage / POTENTIOMETER_MAX) * 100;
 
     //what about when AdcAverage == 0 || POTENTIOMETER_MAX???
-    
+
     if (abs(AdcAverage - AdcPrevious) > WINDOW_SIZE) {
         AdcPrevious = AdcAverage; //now, update AdcPrevious at the end of AdcHandler().
 

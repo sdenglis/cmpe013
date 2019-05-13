@@ -23,7 +23,7 @@
 #define FALSE 0
 
 // 38 [tick/sec] * 5 [sec/event]
-#define TICK_RATE 190
+#define TICK_RATE 38
 // defined tick amount for switch manipulation
 #define TICK_CHANGE 38
 
@@ -37,6 +37,8 @@ struct Timer {
 
 // **** Define global, module-level, or external variables here ****
 struct Timer TimerSwitch; // Declare module-level instance of timer.
+unsigned char returnPattern = '0x01'; // Stores hexadecimal output from LEDS_GET().
+int previousState = 0; // Tracks the previous state of RIGHT or LEFT.
 
 // **** Declare function prototypes ****
 
@@ -47,7 +49,7 @@ int main(void)
     // Configure Timer 1 using PBCLK as input. This default period will make the LEDs blink at a
     // pretty reasonable rate to start.
     T1CON = 0; // everything should be off
-    T1CONbits.TCKPS = 1; // 1:8 prescaler
+    T1CONbits.TCKPS = 8; // 1:8 prescaler
     PR1 = 0xFFFF; // interrupt at max interval
     T1CONbits.ON = 1; // turn the timer on
 
@@ -64,8 +66,6 @@ int main(void)
 
     LEDS_INIT(); // Initialize LEDS!
     TimerSwitch.timeRemaining = TICK_RATE; // Initialize tick count of TimerSwitch to 190.
-    char returnPattern; // Stores hexadecimal output from LEDS_GET().
-    int previousState = 0; // Tracks the previous state of RIGHT or LEFT.
 
     LEDS_SET(0x01); // Start by setting pin configuration to 0000 0001.
 
@@ -78,22 +78,26 @@ int main(void)
                 //reverse direction
                 previousState = LEFT_PREVIOUS; //keep track of orientation.
                 //trigger next LED
-                returnPattern >> 1; //shift LED configuration RIGHT 1.
+                returnPattern >>= 1; //shift LED configuration RIGHT 1.
+                LEDS_SET(returnPattern);
 
             } else if (returnPattern == RIGHT) { //if reached RIGHT END.
                 //reverse direction
                 previousState = RIGHT_PREVIOUS; //keep track of orientation.
                 //trigger next LED
-                returnPattern << 1; //shift LED configuration LEFT 1.
+                returnPattern <<= 1; //shift LED configuration LEFT 1.
+                LEDS_SET(returnPattern);
 
 
             } else if (previousState == RIGHT_PREVIOUS) {
                 // trigger next LED
-                returnPattern << 1; //continue shifting LEFT.
+                returnPattern <<= 1; //continue shifting LEFT.
+                LEDS_SET(returnPattern);
 
             } else if (previousState == LEFT_PREVIOUS) {
                 // trigger next LED
-                returnPattern >> 1; //continue shifting RIGHT.
+                returnPattern >>= 1; //continue shifting RIGHT.
+                LEDS_SET(returnPattern);
 
             } else {
                 return STANDARD_ERROR;
@@ -126,35 +130,34 @@ void __ISR(_TIMER_1_VECTOR, ipl4auto) Timer1Handler(void)
      * Your code goes in between this comment and the following one with asterisks.
      **************************************************************************************************/
     TimerSwitch.timeRemaining--; //update TimerSwitch every clock cycle.
+    int alteredTime = TICK_RATE;
+    uint8_t switchesState = SWITCH_STATES();
 
-    //how to alter the speed of the blinking LED's with the switches?
-    T1CONbits.TCKPS = 1; // reset before exiting __ISR
-
-    if (SWITCH_STATES(SW1)) {
+    if (switchesState && SWITCH_STATE_SW1) {
         //adjust speed of LED blink depending on switch configuration
-        TimerSwitch.timeRemaining -= TICK_CHANGE;
-        T1CONbits.TCKPS += 1; // 1:8 prescaler
+        //TimerSwitch.timeRemaining -= TICK_CHANGE;
+        alteredTime += TICK_CHANGE;
     }
-    if (SWITCH_STATES(SW2)) {
+    if (switchesState && SWITCH_STATE_SW2) {
         //adjust speed of LED blink depending on switch configuration
-        TimerSwitch.timeRemaining -= TICK_CHANGE;
-        T1CONbits.TCKPS += 1; // 1:8 prescaler
+        //TimerSwitch.timeRemaining -= TICK_CHANGE;
+        alteredTime += TICK_CHANGE;
     }
-    if (SWITCH_STATES(SW3)) {
+    if (switchesState && SWITCH_STATE_SW3) {
         //adjust speed of LED blink depending on switch configuration
-        TimerSwitch.timeRemaining -= TICK_CHANGE;
-        T1CONbits.TCKPS += 1; // 1:8 prescaler
+        //TimerSwitch.timeRemaining -= TICK_CHANGE;
+        alteredTime += TICK_CHANGE;
     }
-    if (SWITCH_STATES(SW4)) {
+    if (switchesState && SWITCH_STATE_SW4) {
         //adjust speed of LED blink depending on switch configuration
-        TimerSwitch.timeRemaining -= TICK_CHANGE;
-        T1CONbits.TCKPS += 1; // 1:8 prescaler
+        //TimerSwitch.timeRemaining -= TICK_CHANGE;
+        alteredTime += TICK_CHANGE;
     }
 
     if (TimerSwitch.timeRemaining == 0) { //once countdown ends:
         TimerSwitch.event = TRUE; //set TimerSwitch event flag,
 
-        TimerSwitch.timeRemaining = TICK_RATE; //re-initialize TimerSwitch.timeRemaining.
+        TimerSwitch.timeRemaining = alteredTime; //re-initialize TimerSwitch.timeRemaining.
     }
 
 
