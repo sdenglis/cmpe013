@@ -66,7 +66,7 @@ void LEDS_SET(char newPattern)
  */
 char LEDS_GET(void)
 {
-    char returnPattern;
+    static char returnPattern;
 
     // Convert LATE current state from binary int to hexadecimal char???
 

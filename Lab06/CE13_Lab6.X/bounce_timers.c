@@ -6,6 +6,8 @@
 
 //CMPE13 Support Library
 #include "BOARD.h"
+#include "Oled.h"
+#include 'OledDriver.h'
 
 // Microchip libraries
 #include <xc.h>
@@ -37,9 +39,9 @@ struct Timer {
 };
 
 // **** Define global, module-level, or external variables here ****
-struct Timer TimerA; // Define three module-level instances of Timer.
-struct Timer TimerB;
-struct Timer TimerC;
+static struct Timer TimerA; // Define three module-level instances of Timer.
+static struct Timer TimerB;
+static struct Timer TimerC;
 
 // **** Declare function prototypes ****
 
@@ -72,7 +74,7 @@ int main(void)
     TimerC.timeRemaining = TIME_REMAINING_C;
     // Initialize Timer.timeRemaining to respective values.
 
-    char returnPattern; // Stores hexadecimal output from LEDS_GET().
+    static char returnPattern; // Stores hexadecimal output from LEDS_GET().
 
     while (1) {
         //poll timer A

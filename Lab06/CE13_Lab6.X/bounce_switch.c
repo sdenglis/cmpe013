@@ -24,9 +24,9 @@
 #define FALSE 0
 
 // 38 [tick/sec] * 5 [sec/event]
-#define TICK_RATE 3
+#define TICK_RATE 2
 // defined tick amount for switch manipulation
-#define TICK_CHANGE 3
+#define TICK_CHANGE 2
 
 
 // **** Declare any datatypes here ****
@@ -37,10 +37,10 @@ struct Timer {
 };
 
 // **** Define global, module-level, or external variables here ****
-struct Timer TimerSwitch; // Declare module-level instance of timer.
-unsigned char returnPattern = 0x01; // Stores hexadecimal output from LEDS_GET().
-int previousState = 0; // Tracks the previous state of RIGHT or LEFT.
-unsigned int alteredTime = TICK_RATE;
+static struct Timer TimerSwitch; // Declare module-level instance of timer.
+static unsigned char returnPattern = 0x01; // Stores hexadecimal output from LEDS_GET().
+static int previousState = 0; // Tracks the previous state of RIGHT or LEFT.
+static unsigned int alteredTime = TICK_RATE;
 
 // **** Declare function prototypes ****
 
