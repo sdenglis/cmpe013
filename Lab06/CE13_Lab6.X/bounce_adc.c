@@ -22,7 +22,7 @@
 // defined tick amount for switch manipulation
 #define TICK_CHANGE 38
 
-#define POTENTIOMETER_MAX 1023
+#define POTENTIOMETER_MAX 1023.0
 
 // **** Declare any data-types here ****
 
@@ -33,11 +33,13 @@ struct AdcResult {
 
 
 // **** Define global, module-level, or external variables here ****
-struct AdcResult AdcResult; //declare module-level instance of AdcResult.
+static struct AdcResult AdcResult; //declare module-level instance of AdcResult.
 
-float AdcAverage = 0; //variable to store average of 8 buffered ADC values.
-float AdcPrevious = 0; //variable to store previous AdcAverage value.
-float AdcPercentage = 0; //variable to hold percentage value of AdcAverage.
+static struct AdcResult Average; //variable to store average of 8 buffered ADC values.
+static struct AdcResult Previous; //variable to store previous AdcAverage value.
+
+static float AdcPercentage = 0; //variable to hold percentage value of AdcAverage.
+static char holder[100];
 
 // **** Declare function prototypes ****
 
@@ -75,18 +77,24 @@ int main(void)
      * Your code goes in between this comment and the following one with asterisks.
      **************************************************************************************************/
     printf("Welcome to sdenglis's lab6 part3 (bounce_adc).  Compiled on %s %s.\n", __TIME__, __DATE__);
-    printf("test\n");
     AdcResult.voltage = WINDOW_SIZE;
+    Previous.voltage = 0; // initialize
+    OledInit();
 
-    if (AdcResult.event) {
-        OledInit();
-        printf("Potentiometer value:\n %d mA\n %%d", AdcAverage, AdcPercentage);
-        OledDrawString("Potentiometer value:\n %d mA\n %%d", AdcAverage, AdcPercentage);
-        OledUpdate();
+    while (1) {
+        if (AdcResult.event) {
+            OledClear();
+            printf("Potentiometer value:\n %d mV\n %6.2f%%", Average.voltage, AdcPercentage);
+            //sscanf(holder, "Potentiometer value:\n %d mV\n", Average.voltage);
+            sprintf(holder, "Potentiometer value:\n %d mV\n %6.2f%%", Average.voltage, AdcPercentage);
+            OledDrawString(holder);
+            OledUpdate();
+            
+            //sscanf()
 
-        AdcResult.event = FALSE;
+            AdcResult.event = FALSE;
+        }
     }
-
 
 
 
@@ -110,16 +118,23 @@ void __ISR(_ADC_VECTOR, ipl2auto) AdcHandler(void)
     // Clear the interrupt flag.
     IFS1bits.AD1IF = 0;
 
-    AdcAverage = (ADC1BUF0 + ADC1BUF1 + ADC1BUF2 + ADC1BUF3 + ADC1BUF3 + ADC1BUF4 + ADC1BUF5 + ADC1BUF6 + ADC1BUF7) / 8;
+    Average.voltage = (ADC1BUF0 + ADC1BUF1 + ADC1BUF2 + ADC1BUF3 + ADC1BUF3 + ADC1BUF4 + ADC1BUF5 + ADC1BUF6 + ADC1BUF7) / 8;
+
     //takes all 8 potentiometer readings and obtains their average.
-    AdcPercentage = (AdcAverage / POTENTIOMETER_MAX) * 100;
+    AdcPercentage = (Average.voltage / POTENTIOMETER_MAX) * 100;
 
     //what about when AdcAverage == 0 || POTENTIOMETER_MAX???
 
-    if (abs(AdcAverage - AdcPrevious) > WINDOW_SIZE) {
-        AdcPrevious = AdcAverage; //now, update AdcPrevious at the end of AdcHandler().
+    if (abs(Average.voltage - Previous.voltage) > WINDOW_SIZE) {
+        Previous.voltage = Average.voltage; //now, update AdcPrevious at the end of AdcHandler().
 
         AdcResult.event = TRUE;
+    }
+        if (Average.voltage == 0) {
+        Previous.voltage = 5;
+    }
+    if (Average.voltage == 1023) {
+        Previous.voltage = 1018;
     }
 
 }

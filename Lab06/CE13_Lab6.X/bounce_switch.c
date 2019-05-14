@@ -8,6 +8,7 @@
 
 //CMPE13 Support Library
 #include "BOARD.h"
+#include "Leds_Lab06.h"
 
 // Microchip libraries
 #include <xc.h>
@@ -23,9 +24,9 @@
 #define FALSE 0
 
 // 38 [tick/sec] * 5 [sec/event]
-#define TICK_RATE 38
+#define TICK_RATE 3
 // defined tick amount for switch manipulation
-#define TICK_CHANGE 38
+#define TICK_CHANGE 3
 
 
 // **** Declare any datatypes here ****
@@ -37,8 +38,9 @@ struct Timer {
 
 // **** Define global, module-level, or external variables here ****
 struct Timer TimerSwitch; // Declare module-level instance of timer.
-unsigned char returnPattern = '0x01'; // Stores hexadecimal output from LEDS_GET().
+unsigned char returnPattern = 0x01; // Stores hexadecimal output from LEDS_GET().
 int previousState = 0; // Tracks the previous state of RIGHT or LEFT.
+unsigned int alteredTime = TICK_RATE;
 
 // **** Declare function prototypes ****
 
@@ -49,7 +51,7 @@ int main(void)
     // Configure Timer 1 using PBCLK as input. This default period will make the LEDs blink at a
     // pretty reasonable rate to start.
     T1CON = 0; // everything should be off
-    T1CONbits.TCKPS = 8; // 1:8 prescaler
+    T1CONbits.TCKPS = 1; // 1:8 prescaler
     PR1 = 0xFFFF; // interrupt at max interval
     T1CONbits.ON = 1; // turn the timer on
 
@@ -65,7 +67,7 @@ int main(void)
     printf("Welcome to sdenglis's lab6 part2 (bounce_switch).  Compiled on %s %s.\n", __TIME__, __DATE__);
 
     LEDS_INIT(); // Initialize LEDS!
-    TimerSwitch.timeRemaining = TICK_RATE; // Initialize tick count of TimerSwitch to 190.
+    TimerSwitch.timeRemaining = alteredTime; // Initialize tick count of TimerSwitch to 190.
 
     LEDS_SET(0x01); // Start by setting pin configuration to 0000 0001.
 
@@ -130,25 +132,25 @@ void __ISR(_TIMER_1_VECTOR, ipl4auto) Timer1Handler(void)
      * Your code goes in between this comment and the following one with asterisks.
      **************************************************************************************************/
     TimerSwitch.timeRemaining--; //update TimerSwitch every clock cycle.
-    int alteredTime = TICK_RATE;
     uint8_t switchesState = SWITCH_STATES();
-
-    if (switchesState && SWITCH_STATE_SW1) {
+    alteredTime = TICK_RATE;
+    
+    if (switchesState & SWITCH_STATE_SW1) {
         //adjust speed of LED blink depending on switch configuration
         //TimerSwitch.timeRemaining -= TICK_CHANGE;
         alteredTime += TICK_CHANGE;
     }
-    if (switchesState && SWITCH_STATE_SW2) {
+    if (switchesState & SWITCH_STATE_SW2) {
         //adjust speed of LED blink depending on switch configuration
         //TimerSwitch.timeRemaining -= TICK_CHANGE;
         alteredTime += TICK_CHANGE;
     }
-    if (switchesState && SWITCH_STATE_SW3) {
+    if (switchesState & SWITCH_STATE_SW3) {
         //adjust speed of LED blink depending on switch configuration
         //TimerSwitch.timeRemaining -= TICK_CHANGE;
         alteredTime += TICK_CHANGE;
     }
-    if (switchesState && SWITCH_STATE_SW4) {
+    if (switchesState & SWITCH_STATE_SW4) {
         //adjust speed of LED blink depending on switch configuration
         //TimerSwitch.timeRemaining -= TICK_CHANGE;
         alteredTime += TICK_CHANGE;

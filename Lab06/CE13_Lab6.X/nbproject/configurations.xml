@@ -176,7 +176,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value=""/>
+        <property key="heap-size" value="1024"/>
         <property key="input-libraries" value=""/>
         <property key="kseg-length" value=""/>
         <property key="kseg-origin" value=""/>
@@ -729,7 +729,19 @@
                   value=""/>
         <property key="warningmessagebreakoptions.warningmessages" value="holdstate"/>
       </Simulator>
-      <item path="bounce_adc.c" ex="true" overriding="false">
+      <item path="bounce_adc.c" ex="false" overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
       </item>
       <item path="bounce_buttons.c" ex="true" overriding="false">
         <C32>
@@ -745,7 +757,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="bounce_switch.c" ex="false" overriding="false">
+      <item path="bounce_switch.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
