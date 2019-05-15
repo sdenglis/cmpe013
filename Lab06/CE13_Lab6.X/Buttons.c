@@ -1,24 +1,22 @@
-/**
- * This enum{} lists all of the possible button events that could occur. Each event constants were
- * chosen so that multiple button events can be recorded in a single call to ButtonsCheckEvents().
- * 
- * All possible event flags will also fit into a char datatype.  This is to handle the rare situation
- * where two buttons change state simultaneously (or at least, within the frequency of the timer
- * interrupt).  So, a single char could indicate that button 1 was released at the same time that
- * while button 2 was pressed with (BUTTON_EVENT_1UP | BUTTON_EVENT_2DOWN)
- *
- */
-typedef enum {
-    BUTTON_EVENT_NONE = 0x00,
-    BUTTON_EVENT_1UP = 0x01,
-    BUTTON_EVENT_1DOWN = 0x02,
-    BUTTON_EVENT_2UP = 0x04,
-    BUTTON_EVENT_2DOWN = 0x08,
-    BUTTON_EVENT_3UP = 0x10,
-    BUTTON_EVENT_3DOWN = 0x20,
-    BUTTON_EVENT_4UP = 0x40,
-    BUTTON_EVENT_4DOWN = 0x80
-} ButtonEventFlags;
+// **** Include libraries here ****
+// old bounce
+// Standard libraries
+#include <stdio.h>
+
+//CMPE13 Support Library
+#include "BOARD.h"
+#include "Buttons.h"
+
+// Microchip libraries
+#include <xc.h>
+#include <sys/attribs.h>
+
+// User libraries
+#include "LEDS_Lab06.h"
+
+// **** Declare any datatypes here ****
+#define TRUE 1
+#define FALSE 0
 
 /**
  * This function initializes the proper pins such that the buttons 1-4 may be used by modifying
@@ -27,7 +25,8 @@ typedef enum {
  */
 void ButtonsInit(void)
 {
-
+    TRISD |= 0x00E0;
+    TRISF |= 0x0002;
 
 }
 
@@ -53,8 +52,47 @@ void ButtonsInit(void)
  * this function should return (BUTTON_EVENT_1UP | BUTTON_EVENT_2DOWN) 
  * 
  */
+unsigned int debounceTimer = 0;
+
 uint8_t ButtonsCheckEvents(void)
 {
+    uint8_t buttonsState = BUTTON_STATES();
+    int bitMask = 0x00;
+    
 
+    if (buttonsState) { // If BUTTON_STATES()
+        if (debounceTimer > 0) {
 
+            debounceTimer--; // Decrement debounceTimer only when active.
+            printf("don't come in here!");
+            return BUTTON_EVENT_NONE;
+        }
+
+        if ((buttonsState & BUTTON_STATE_1) && (debounceTimer == 0)) {
+            // Buttons 1 is pressed down.
+            bitMask |= BUTTON_EVENT_1DOWN;
+            debounceTimer = 0;
+
+        }
+        if ((buttonsState & BUTTON_STATE_2) && (debounceTimer == 0)) {
+            // Buttons 2 is pressed down.
+            bitMask |= BUTTON_EVENT_2DOWN;
+            debounceTimer = 0;
+
+        }
+        if ((buttonsState & BUTTON_STATE_3) && (debounceTimer == 0)) {
+            // Buttons 3 is pressed down.
+            bitMask |= BUTTON_EVENT_3DOWN;
+            debounceTimer = 0;
+
+        }
+        if ((buttonsState & BUTTON_STATE_4) && (debounceTimer == 0)) {
+            // Buttons 4 is pressed down.
+            bitMask |= BUTTON_EVENT_4DOWN;
+            debounceTimer = 0;
+
+        } else {
+            return bitMask; // Return OR'd combination of button events.
+        }
+    }
 }

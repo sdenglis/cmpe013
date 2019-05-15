@@ -3,10 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ENG/Desktop/CMPE13L/sdenglis/Lab06/CE13_Lab6.X/bounce_timers.c</file>
-            <file>file:/C:/Users/ENG/Desktop/CMPE13L/sdenglis/Lab06/CE13_Lab6.X/bounce_adc.c</file>
-            <file>file:/C:/Users/ENG/Desktop/CMPE13L/sdenglis/Lab06/CE13_Lab6.X/Leds_Lab06.c</file>
-            <file>file:/C:/Users/ENG/Desktop/CMPE13L/sdenglis/Lab06/CE13_Lab6.X/bounce_switch.c</file>
+            <file>file:/C:/Users/ENG/Desktop/CMPE13L/sdenglis/Lab06/CE13_Lab6.X/BOARD.h</file>
+            <file>file:/C:/Users/ENG/Desktop/CMPE13L/sdenglis/Lab06/CE13_Lab6.X/Buttons.c</file>
+            <file>file:/C:/Users/ENG/Desktop/CMPE13L/sdenglis/Lab06/CE13_Lab6.X/Buttons.h</file>
+            <file>file:/C:/Users/ENG/Desktop/CMPE13L/sdenglis/Lab06/CE13_Lab6.X/ButtonsTest.c</file>
         </group>
     </open-files>
 </project-private>

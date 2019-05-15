@@ -17,6 +17,8 @@
 // **** Declare any datatypes here ****
 
 // **** Define global, module-level, or external variables here ****
+//unsigned int debounceTimer = 150;
+static unsigned int buttonEvents;
 
 // **** Declare function prototypes ****
 
@@ -40,11 +42,37 @@ int main(void)
     /***************************************************************************************************
      * Your code goes in between this comment and the following one with asterisks.
      **************************************************************************************************/
-    printf("Welcome to sdenglis's lab6 part4 (ButtonsTest).  Compiled on %s %s.\n", __TIME__, __DATE__);
+    printf("\nWelcome to sdenglis's lab6 part4 (ButtonsTest).  Compiled on %s %s.\n", __TIME__, __DATE__);
 
 
     printf("Please press some buttons!\n");
 
+
+    while (1) {
+        if (buttonEvents) {
+            if (buttonEvents == BUTTON_EVENT_1DOWN) {
+                //printf("%X\n", buttonEvents);
+                printf("BUTTON_EVENT_1DOWN\n");
+                buttonEvents = 0;
+
+            }
+            if (buttonEvents == BUTTON_EVENT_2DOWN) {
+                printf("BUTTON_EVENT_2DOWN\n");
+                buttonEvents = 0;
+
+            }
+            if (buttonEvents == BUTTON_EVENT_3DOWN) {
+                printf("BUTTON_EVENT_3DOWN\n");
+                buttonEvents = 0;
+
+            }
+            if (buttonEvents == BUTTON_EVENT_4DOWN) {
+                printf("BUTTON_EVENT_4DOWN\n");
+                buttonEvents = 0;
+
+            }
+        }
+    }
 
     /***************************************************************************************************
      * Your code goes in between this comment and the preceding one with asterisks

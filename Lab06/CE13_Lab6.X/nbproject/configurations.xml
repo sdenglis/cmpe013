@@ -79,7 +79,7 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="Buttons.c" ex="true" overriding="false">
+      <item path="Buttons.c" ex="false" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -93,7 +93,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="ButtonsTest.c" ex="true" overriding="false">
+      <item path="ButtonsTest.c" ex="false" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -729,7 +729,7 @@
                   value=""/>
         <property key="warningmessagebreakoptions.warningmessages" value="holdstate"/>
       </Simulator>
-      <item path="bounce_adc.c" ex="false" overriding="false">
+      <item path="bounce_adc.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
