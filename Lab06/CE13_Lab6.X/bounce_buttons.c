@@ -4,6 +4,8 @@
 
 //CMPE13 Support Library
 #include "BOARD.h"
+#include "Buttons.h"
+#include "Leds_Lab06.h"
 
 // Microchip libraries
 #include <xc.h>
@@ -17,6 +19,18 @@
 
 // **** Define global, module-level, or external variables here ****
 static int caseHolder = 0;
+static unsigned int buttonEvents;
+static unsigned int LEDMask = 0x00;
+
+#define TOGGLE_LED1 0x01
+#define TOGGLE_LED2 0x02
+#define TOGGLE_LED3 0x04
+#define TOGGLE_LED4 0x08
+#define TOGGLE_LED5 0x10
+#define TOGGLE_LED6 0x20
+#define TOGGLE_LED7 0x40
+#define TOGGLE_LED8 0x80
+
 // **** Declare function prototypes ****
 
 int main(void)
@@ -39,16 +53,112 @@ int main(void)
     /***************************************************************************************************
      * Your code goes in between this comment and the following one with asterisks.
      **************************************************************************************************/
-    printf("Welcome to CRUZID's lab6 part5 (bounce_buttons).  Compiled on %s %s.\n", __TIME__, __DATE__);
+    printf("Welcome to sdenglis's lab6 part5 (bounce_buttons).  Compiled on %s %s.\n", __TIME__, __DATE__);
+    
+    LEDS_INIT();
+    
+    while (1) {
+        if (buttonEvents) {
+            if (caseHolder % 2 == 0) {
+                if (buttonEvents == (BUTTON_EVENT_1DOWN)) {
+                    LEDMask = LEDS_GET();
+                    LEDMask ^= TOGGLE_LED1;
+                    LEDMask ^= TOGGLE_LED2;
+                    LEDS_SET(LEDMask);
 
-    if (caseHolder % 2 == 0) { //EVEN amount of switches set ON.
-        // BUTTON DOWN should toggle LED registers.
+                    printf("EVENT:   4:---- 3:---- 2:---- 1:DOWN\n");
+                    buttonEvents = 0;
+                }
+            }
 
+            if (caseHolder % 2 == 1) {
+                if (buttonEvents == BUTTON_EVENT_1UP) {
+                    LEDMask = LEDS_GET();
+                    LEDMask ^= TOGGLE_LED1;
+                    LEDMask ^= TOGGLE_LED2;
+                    LEDS_SET(LEDMask);
+
+                    printf("EVENT:   4:---- 3:---- 2:---- 1:  UP\n");
+                    buttonEvents = 0;
+                }
+            }
+
+            if (caseHolder % 2 == 0) {
+                if (buttonEvents == BUTTON_EVENT_2DOWN) {
+                    LEDMask = LEDS_GET();
+                    LEDMask ^= TOGGLE_LED3;
+                    LEDMask ^= TOGGLE_LED4;
+                    LEDS_SET(LEDMask);
+
+                    printf("EVENT:   4:---- 3:---- 2:DOWN 1:----\n");
+                    buttonEvents = 0;
+                }
+            }
+
+            if (caseHolder % 2 == 1) {
+                if (buttonEvents == BUTTON_EVENT_2UP) {
+                    LEDMask = LEDS_GET();
+                    LEDMask ^= TOGGLE_LED3;
+                    LEDMask ^= TOGGLE_LED4;
+                    LEDS_SET(LEDMask);
+
+                    printf("EVENT:   4:---- 3:---- 2:  UP 1:----\n");
+                    buttonEvents = 0;
+                }
+            }
+
+            if (caseHolder % 2 == 0) {
+                if (buttonEvents == BUTTON_EVENT_3DOWN) {
+                    LEDMask = LEDS_GET();
+                    LEDMask ^= TOGGLE_LED5;
+                    LEDMask ^= TOGGLE_LED6;
+                    LEDS_SET(LEDMask);
+
+                    printf("EVENT:   4:---- 3:DOWN 2:---- 1:----\n");
+                    buttonEvents = 0;
+                }
+            }
+
+            if (caseHolder % 2 == 1) {
+                if (buttonEvents == BUTTON_EVENT_3UP) {
+                    LEDMask = LEDS_GET();
+                    LEDMask ^= TOGGLE_LED5;
+                    LEDMask ^= TOGGLE_LED6;
+                    LEDS_SET(LEDMask);
+
+                    printf("EVENT:   4:---- 3:  UP 2:---- 1:----\n");
+                    buttonEvents = 0;
+                }
+            }
+
+            if (caseHolder % 2 == 0) {
+                if (buttonEvents == BUTTON_EVENT_4DOWN) {
+                    LEDMask = LEDS_GET();
+                    LEDMask ^= TOGGLE_LED7;
+                    LEDMask ^= TOGGLE_LED8;
+                    LEDS_SET(LEDMask);
+
+                    printf("EVENT:   4:DOWN 3:---- 2:---- 1:----\n");
+                    buttonEvents = 0;
+                }
+            }
+
+            if (caseHolder % 2 == 1) {
+                if (buttonEvents == BUTTON_EVENT_4UP) {
+                    LEDMask = LEDS_GET();
+                    LEDMask ^= TOGGLE_LED7;
+                    LEDMask ^= TOGGLE_LED8;
+                    LEDS_SET(LEDMask);
+
+                    printf("EVENT:   4:  UP 3:---- 2:---- 1:----\n");
+                    buttonEvents = 0;
+                }
+            }
+
+        }
     }
-    if (casHolder % 2 == 1) { //ODD number of switches set ON.
-        // BUTTON UP should toggle LED registers instead.
 
-    }
+
 
 
     /***************************************************************************************************
@@ -74,27 +184,25 @@ void __ISR(_TIMER_1_VECTOR, ipl4auto) Timer1Handler(void)
      **************************************************************************************************/
     uint8_t switchesState = SWITCH_STATES();
     caseHolder = 0; // reset this variable each cycle __ISR call.
-    
+
     if (switchesState & SWITCH_STATE_SW1) {
-        //adjust speed of LED blink depending on switch configuration
-        //TimerSwitch.timeRemaining -= TICK_CHANGE;
+        //add to module variable which checks if ODD vs EVEN amount of switches enabled.
         caseHolder++;
     }
     if (switchesState & SWITCH_STATE_SW2) {
-        //adjust speed of LED blink depending on switch configuration
-        //TimerSwitch.timeRemaining -= TICK_CHANGE;
+        //add to module variable which checks if ODD vs EVEN amount of switches enabled.
         caseHolder++;
     }
     if (switchesState & SWITCH_STATE_SW3) {
-        //adjust speed of LED blink depending on switch configuration
-        //TimerSwitch.timeRemaining -= TICK_CHANGE;
+        //add to module variable which checks if ODD vs EVEN amount of switches enabled.
         caseHolder++;
     }
     if (switchesState & SWITCH_STATE_SW4) {
-        //adjust speed of LED blink depending on switch configuration
-        //TimerSwitch.timeRemaining -= TICK_CHANGE;
+        //add to module variable which checks if ODD vs EVEN amount of switches enabled.
         caseHolder++;
     }
+
+    buttonEvents = ButtonsCheckEvents();
 
 
     /***************************************************************************************************

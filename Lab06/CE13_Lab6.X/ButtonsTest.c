@@ -69,7 +69,7 @@ int main(void)
                 LEDMask ^= TOGGLE_LED2;
                 LEDS_SET(LEDMask);
 
-                printf("BUTTON_EVENT_1DOWN\n");
+                printf("EVENT:   4:---- 3:---- 2:---- 1:DOWN\n");
                 buttonEvents = 0;
             }
 
@@ -79,7 +79,7 @@ int main(void)
                 LEDMask ^= TOGGLE_LED2;
                 LEDS_SET(LEDMask);
 
-                printf("BUTTON_EVENT_1UP\n");
+                printf("EVENT:   4:---- 3:---- 2:---- 1:  UP\n");
                 buttonEvents = 0;
             }
 
@@ -89,7 +89,7 @@ int main(void)
                 LEDMask ^= TOGGLE_LED4;
                 LEDS_SET(LEDMask);
 
-                printf("BUTTON_EVENT_2DOWN\n");
+                printf("EVENT:   4:---- 3:---- 2:DOWN 1:----\n");
                 buttonEvents = 0;
 
             }
@@ -99,7 +99,7 @@ int main(void)
                 LEDMask ^= TOGGLE_LED4;
                 LEDS_SET(LEDMask);
 
-                printf("BUTTON_EVENT_2UP\n");
+                printf("EVENT:   4:---- 3:---- 2:  UP 1:----\n");
                 buttonEvents = 0;
             }
 
@@ -109,7 +109,7 @@ int main(void)
                 LEDMask ^= TOGGLE_LED6;
                 LEDS_SET(LEDMask);
 
-                printf("BUTTON_EVENT_3DOWN\n");
+                printf("EVENT:   4:---- 3:DOWN 2:---- 1:----\n");
                 buttonEvents = 0;
 
             }
@@ -119,7 +119,7 @@ int main(void)
                 LEDMask ^= TOGGLE_LED6;
                 LEDS_SET(LEDMask);
 
-                printf("BUTTON_EVENT_3UP\n");
+                printf("EVENT:   4:---- 3:  UP 2:---- 1:----\n");
                 buttonEvents = 0;
             }
 
@@ -129,7 +129,7 @@ int main(void)
                 LEDMask ^= TOGGLE_LED8;
                 LEDS_SET(LEDMask);
 
-                printf("BUTTON_EVENT_4DOWN\n");
+                printf("EVENT:   4:DOWN 3:---- 2:---- 1:----\n");
                 buttonEvents = 0;
 
             }
@@ -139,7 +139,7 @@ int main(void)
                 LEDMask ^= TOGGLE_LED8;
                 LEDS_SET(LEDMask);
 
-                printf("BUTTON_EVENT_4UP\n");
+                printf("EVENT:   4:  UP 3:---- 2:---- 1:----\n");
                 buttonEvents = 0;
             }
 
