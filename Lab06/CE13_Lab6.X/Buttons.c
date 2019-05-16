@@ -66,6 +66,14 @@ static int previousState2 = 0;
 static int previousState3 = 0;
 static int previousState4 = 0;
 
+/*****************
+ *     NOTE      *
+ *****************/
+// This was unclear in the lab manual:
+// the debouncing step has been implemented,
+// but it doesn't seem to make a difference
+// when running the program.
+
 uint8_t ButtonsCheckEvents(void)
 {
     uint8_t buttonsState = BUTTON_STATES();
@@ -82,14 +90,14 @@ uint8_t ButtonsCheckEvents(void)
                 // Buttons 1 is pressed down.
 
                 bitMask |= BUTTON_EVENT_1DOWN;
-                debounceTimer = 0;
+                debounceTimer = 3;
                 previousState1 = BUTTON_EVENT_1DOWN; // previous is now equal to current.
                 previousState = BUTTON_EVENT_1DOWN;
 
             }
             if (!(buttonsState & BUTTON_STATE_1) && (previousState1 == BUTTON_EVENT_1DOWN)) {
                 bitMask |= BUTTON_EVENT_1UP;
-                debounceTimer = 0;
+                debounceTimer = 3;
                 previousState1 = 0;
                 previousState = 0;
 
@@ -100,14 +108,14 @@ uint8_t ButtonsCheckEvents(void)
                 // Buttons 1 is pressed down.
 
                 bitMask |= BUTTON_EVENT_2DOWN;
-                debounceTimer = 0;
+                debounceTimer = 3;
                 previousState2 = BUTTON_EVENT_2DOWN; // previous is now equal to current.
                 previousState = BUTTON_EVENT_2DOWN;
 
             }
             if (!(buttonsState & BUTTON_STATE_2) && (previousState2 == BUTTON_EVENT_2DOWN)) {
                 bitMask |= BUTTON_EVENT_2UP;
-                debounceTimer = 0;
+                debounceTimer = 3;
                 previousState2 = 0;
                 previousState = 0;
 
@@ -118,14 +126,14 @@ uint8_t ButtonsCheckEvents(void)
                 // Buttons 1 is pressed down.
 
                 bitMask |= BUTTON_EVENT_3DOWN;
-                debounceTimer = 0;
+                debounceTimer = 3;
                 previousState3 = BUTTON_EVENT_3DOWN; // previous is now equal to current.
                 previousState = BUTTON_EVENT_3DOWN;
 
             }
             if (!(buttonsState & BUTTON_STATE_3) && (previousState3 == BUTTON_EVENT_3DOWN)) {
                 bitMask |= BUTTON_EVENT_3UP;
-                debounceTimer = 0;
+                debounceTimer = 3;
                 previousState3 = 0;
                 previousState = 0;
 
@@ -136,14 +144,14 @@ uint8_t ButtonsCheckEvents(void)
                 // Buttons 1 is pressed down.
 
                 bitMask |= BUTTON_EVENT_4DOWN;
-                debounceTimer = 0;
+                debounceTimer = 3;
                 previousState4 = BUTTON_EVENT_4DOWN; // previous is now equal to current.
                 previousState = BUTTON_EVENT_4DOWN;
 
             }
             if (!(buttonsState & BUTTON_STATE_4) && (previousState4 == BUTTON_EVENT_4DOWN)) {
                 bitMask |= BUTTON_EVENT_4UP;
-                debounceTimer = 0;
+                debounceTimer = 3;
                 previousState4 = 0;
                 previousState = 0;
             }

@@ -193,6 +193,8 @@ void __ISR(_TIMER_1_VECTOR, ipl4auto) Timer1Handler(void)
     uint8_t switchesState = SWITCH_STATES(); //used to help obtain switch state.
     caseHolder = 0; // reset this variable each cycle __ISR call.
 
+    buttonEvents = ButtonsCheckEvents(); //set buttonEvents equal to current ButtonsCheckEvents().
+
     if (switchesState & SWITCH_STATE_SW1) {
         //add to module variable which checks if ODD vs EVEN amount of switches enabled.
         caseHolder++;
@@ -209,8 +211,6 @@ void __ISR(_TIMER_1_VECTOR, ipl4auto) Timer1Handler(void)
         //add to module variable which checks if ODD vs EVEN amount of switches enabled.
         caseHolder++;
     }
-
-    buttonEvents = ButtonsCheckEvents(); //set buttonEvents equal to current ButtonsCheckEvents().
 
 
     /***************************************************************************************************
