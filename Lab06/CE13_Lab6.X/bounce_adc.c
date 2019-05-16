@@ -1,3 +1,10 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 06         *
+ *5/15/2019      *
+ *****************/
+
 // **** Include libraries here ****
 // Standard libraries
 #include <stdio.h>
@@ -5,6 +12,8 @@
 
 //CMPE13 Support Library
 #include "BOARD.h"
+#include "Leds_Lab06.h"
+#include "Oled.h"
 
 // Microchip libraries
 #include <xc.h>
@@ -22,6 +31,13 @@
 // defined tick amount for switch manipulation
 #define TICK_CHANGE 38
 
+/*****************
+ *     NOTE      *
+ *****************/
+// My board was strange, and the voltage capped at around 1150 mV.
+// I ignored this, and pretended that the cap was 1023, assuming
+// that whoever uses this code has a properly-functioning machine.
+
 #define POTENTIOMETER_MAX 1023.0
 
 // **** Declare any data-types here ****
@@ -38,8 +54,8 @@ static struct AdcResult AdcResult; //declare module-level instance of AdcResult.
 static struct AdcResult Average; //variable to store average of 8 buffered ADC values.
 static struct AdcResult Previous; //variable to store previous AdcAverage value.
 
-static float AdcPercentage = 0; //variable to hold percentage value of AdcAverage.
-static char holder[100];
+static double AdcPercentage = 0; //variable to hold percentage value of AdcAverage.
+static char holder[100]; //used to store formatted sprintf() string
 
 // **** Declare function prototypes ****
 
@@ -83,14 +99,11 @@ int main(void)
 
     while (1) {
         if (AdcResult.event) {
-            OledClear();
-            printf("Potentiometer value:\n %d mV\n %6.2f%%", Average.voltage, AdcPercentage);
-            //sscanf(holder, "Potentiometer value:\n %d mV\n", Average.voltage);
-            sprintf(holder, "Potentiometer value:\n %d mV\n %6.2f%%", Average.voltage, AdcPercentage);
+            OledClear(0);
+            //printf("Potentiometer value:\n %d mV\n %6.2f%%", Average.voltage, AdcPercentage);
+            sprintf(holder, "Potentiometer value:\n %d mV\n %3.0f%%", Average.voltage, AdcPercentage);
             OledDrawString(holder);
             OledUpdate();
-            
-            //sscanf()
 
             AdcResult.event = FALSE;
         }
@@ -130,10 +143,12 @@ void __ISR(_ADC_VECTOR, ipl2auto) AdcHandler(void)
 
         AdcResult.event = TRUE;
     }
-        if (Average.voltage == 0) {
+    if (Average.voltage == 0) {
+        //if Average.voltage ever equals 0, create a new event to update the screen to zero as well.
         Previous.voltage = 5;
     }
     if (Average.voltage == 1023) {
+        //if Average.voltage ever equals MAX, create a new event to update the screen to MAX as well.
         Previous.voltage = 1018;
     }
 

@@ -1,3 +1,10 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 06         *
+ *5/15/2019      *
+ *****************/
+
 // **** Include libraries here ****
 // Standard libraries
 #include <stdio.h>
@@ -18,9 +25,10 @@
 // **** Declare any datatypes here ****
 
 // **** Define global, module-level, or external variables here ****
-static int caseHolder = 0;
-static unsigned int buttonEvents;
-static unsigned int LEDMask = 0x00;
+
+static int caseHolder = 0; //keeps track of switch number.
+static unsigned int buttonEvents; //tracks the output of ButtonsCheckEvents().
+static unsigned int LEDMask = 0x00; //holds the bitmask for LED registers.
 
 #define TOGGLE_LED1 0x01
 #define TOGGLE_LED2 0x02
@@ -54,24 +62,24 @@ int main(void)
      * Your code goes in between this comment and the following one with asterisks.
      **************************************************************************************************/
     printf("Welcome to sdenglis's lab6 part5 (bounce_buttons).  Compiled on %s %s.\n", __TIME__, __DATE__);
-    
-    LEDS_INIT();
-    
+
+    LEDS_INIT(); // Initialize LEDS!
+
     while (1) {
         if (buttonEvents) {
-            if (caseHolder % 2 == 0) {
+            if (caseHolder % 2 == 0) { //check if number of flipped switches is EVEN.
                 if (buttonEvents == (BUTTON_EVENT_1DOWN)) {
-                    LEDMask = LEDS_GET();
-                    LEDMask ^= TOGGLE_LED1;
-                    LEDMask ^= TOGGLE_LED2;
-                    LEDS_SET(LEDMask);
+                    LEDMask = LEDS_GET(); // Get current LED configuration
+                    LEDMask ^= TOGGLE_LED1; // Toggle LED1 bits
+                    LEDMask ^= TOGGLE_LED2; // Toggle LED2 bits
+                    LEDS_SET(LEDMask); // Set updated configuration to board.
 
                     printf("EVENT:   4:---- 3:---- 2:---- 1:DOWN\n");
-                    buttonEvents = 0;
+                    buttonEvents = 0; //reset buttonEvents.
                 }
             }
 
-            if (caseHolder % 2 == 1) {
+            if (caseHolder % 2 == 1) { //check if number of flipped switches is ODD.
                 if (buttonEvents == BUTTON_EVENT_1UP) {
                     LEDMask = LEDS_GET();
                     LEDMask ^= TOGGLE_LED1;
@@ -182,7 +190,7 @@ void __ISR(_TIMER_1_VECTOR, ipl4auto) Timer1Handler(void)
     /***************************************************************************************************
      * Your code goes in between this comment and the following one with asterisks.
      **************************************************************************************************/
-    uint8_t switchesState = SWITCH_STATES();
+    uint8_t switchesState = SWITCH_STATES(); //used to help obtain switch state.
     caseHolder = 0; // reset this variable each cycle __ISR call.
 
     if (switchesState & SWITCH_STATE_SW1) {
@@ -202,7 +210,7 @@ void __ISR(_TIMER_1_VECTOR, ipl4auto) Timer1Handler(void)
         caseHolder++;
     }
 
-    buttonEvents = ButtonsCheckEvents();
+    buttonEvents = ButtonsCheckEvents(); //set buttonEvents equal to current ButtonsCheckEvents().
 
 
     /***************************************************************************************************

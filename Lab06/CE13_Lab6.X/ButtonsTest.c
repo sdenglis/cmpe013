@@ -1,3 +1,10 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 06         *
+ *5/15/2019      *
+ *****************/
+
 // **** Include libraries here ****
 // Standard libraries
 #include <stdio.h>
@@ -55,90 +62,56 @@ int main(void)
      **************************************************************************************************/
     printf("\nWelcome to sdenglis's lab6 part4 (ButtonsTest).  Compiled on %s %s.\n", __TIME__, __DATE__);
 
-    LEDS_INIT();
+    LEDS_INIT(); // Initialize LEDS!
 
     printf("Please press some buttons!\n");
+
+    /*****************
+     *     NOTE      *
+     *****************/
+    // Here, we test qualitatively for the success of each button press.
+    // This will require USER INPUT for it to function.
+    // Output is printed to the SERIAL CONSOLE.
 
 
     while (1) {
         if (buttonEvents) {
             if (buttonEvents == (BUTTON_EVENT_1DOWN)) {
-                //printf("%X\n", buttonEvents);
-                LEDMask = LEDS_GET();
-                LEDMask ^= TOGGLE_LED1;
-                LEDMask ^= TOGGLE_LED2;
-                LEDS_SET(LEDMask);
-
                 printf("EVENT:   4:---- 3:---- 2:---- 1:DOWN\n");
                 buttonEvents = 0;
             }
 
             if (buttonEvents == BUTTON_EVENT_1UP) {
-                LEDMask = LEDS_GET();
-                LEDMask ^= TOGGLE_LED1;
-                LEDMask ^= TOGGLE_LED2;
-                LEDS_SET(LEDMask);
-
                 printf("EVENT:   4:---- 3:---- 2:---- 1:  UP\n");
                 buttonEvents = 0;
             }
 
             if (buttonEvents == BUTTON_EVENT_2DOWN) {
-                LEDMask = LEDS_GET();
-                LEDMask ^= TOGGLE_LED3;
-                LEDMask ^= TOGGLE_LED4;
-                LEDS_SET(LEDMask);
-
                 printf("EVENT:   4:---- 3:---- 2:DOWN 1:----\n");
                 buttonEvents = 0;
 
             }
             if (buttonEvents == BUTTON_EVENT_2UP) {
-                LEDMask = LEDS_GET();
-                LEDMask ^= TOGGLE_LED3;
-                LEDMask ^= TOGGLE_LED4;
-                LEDS_SET(LEDMask);
-
                 printf("EVENT:   4:---- 3:---- 2:  UP 1:----\n");
                 buttonEvents = 0;
             }
 
             if (buttonEvents == BUTTON_EVENT_3DOWN) {
-                LEDMask = LEDS_GET();
-                LEDMask ^= TOGGLE_LED5;
-                LEDMask ^= TOGGLE_LED6;
-                LEDS_SET(LEDMask);
-
                 printf("EVENT:   4:---- 3:DOWN 2:---- 1:----\n");
                 buttonEvents = 0;
 
             }
             if (buttonEvents == BUTTON_EVENT_3UP) {
-                LEDMask = LEDS_GET();
-                LEDMask ^= TOGGLE_LED5;
-                LEDMask ^= TOGGLE_LED6;
-                LEDS_SET(LEDMask);
-
                 printf("EVENT:   4:---- 3:  UP 2:---- 1:----\n");
                 buttonEvents = 0;
             }
 
             if (buttonEvents == BUTTON_EVENT_4DOWN) {
-                LEDMask = LEDS_GET();
-                LEDMask ^= TOGGLE_LED7;
-                LEDMask ^= TOGGLE_LED8;
-                LEDS_SET(LEDMask);
-
                 printf("EVENT:   4:DOWN 3:---- 2:---- 1:----\n");
                 buttonEvents = 0;
 
             }
             if (buttonEvents == BUTTON_EVENT_4UP) {
-                LEDMask = LEDS_GET();
-                LEDMask ^= TOGGLE_LED7;
-                LEDMask ^= TOGGLE_LED8;
-                LEDS_SET(LEDMask);
-
                 printf("EVENT:   4:  UP 3:---- 2:---- 1:----\n");
                 buttonEvents = 0;
             }

@@ -1,3 +1,9 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 06         *
+ *5/15/2019      *
+ *****************/
 
 // **** Include libraries here ****
 // old bounce

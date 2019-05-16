@@ -1,3 +1,10 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 06         *
+ *5/15/2019      *
+ *****************/
+
 // **** Include libraries here ****
 // old bounce
 // Standard libraries
@@ -6,8 +13,6 @@
 
 //CMPE13 Support Library
 #include "BOARD.h"
-#include "Oled.h"
-#include 'OledDriver.h'
 
 // Microchip libraries
 #include <xc.h>
