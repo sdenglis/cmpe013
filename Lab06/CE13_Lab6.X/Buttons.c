@@ -82,7 +82,7 @@ uint8_t ButtonsCheckEvents(void)
             }
             if (!(buttonsState & BUTTON_STATE_1) && (previousState1 == BUTTON_EVENT_1DOWN)) {
                 bitMask |= BUTTON_EVENT_1UP;
-                debounceTimer = 3;
+                debounceTimer = 0;
                 previousState1 = 0;
                 previousState = 0;
 
@@ -100,7 +100,7 @@ uint8_t ButtonsCheckEvents(void)
             }
             if (!(buttonsState & BUTTON_STATE_2) && (previousState2 == BUTTON_EVENT_2DOWN)) {
                 bitMask |= BUTTON_EVENT_2UP;
-                debounceTimer = 3;
+                debounceTimer = 0;
                 previousState2 = 0;
                 previousState = 0;
 
@@ -118,7 +118,7 @@ uint8_t ButtonsCheckEvents(void)
             }
             if (!(buttonsState & BUTTON_STATE_3) && (previousState3 == BUTTON_EVENT_3DOWN)) {
                 bitMask |= BUTTON_EVENT_3UP;
-                debounceTimer = 3;
+                debounceTimer = 0;
                 previousState3 = 0;
                 previousState = 0;
 
@@ -136,7 +136,7 @@ uint8_t ButtonsCheckEvents(void)
             }
             if (!(buttonsState & BUTTON_STATE_4) && (previousState4 == BUTTON_EVENT_4DOWN)) {
                 bitMask |= BUTTON_EVENT_4UP;
-                debounceTimer = 3;
+                debounceTimer = 0;
                 previousState4 = 0;
                 previousState = 0;
             }
