@@ -53,46 +53,75 @@ void ButtonsInit(void)
  * 
  */
 unsigned int debounceTimer = 0;
+int previousState = 0;
 
 uint8_t ButtonsCheckEvents(void)
 {
     uint8_t buttonsState = BUTTON_STATES();
     int bitMask = 0x00;
-    
 
-    if (buttonsState) { // If BUTTON_STATES()
-        if (debounceTimer > 0) {
+    if (debounceTimer > 0) {
 
-            debounceTimer--; // Decrement debounceTimer only when active.
-            printf("don't come in here!");
-            return BUTTON_EVENT_NONE;
-        }
-
-        if ((buttonsState & BUTTON_STATE_1) && (debounceTimer == 0)) {
-            // Buttons 1 is pressed down.
-            bitMask |= BUTTON_EVENT_1DOWN;
-            debounceTimer = 0;
-
-        }
-        if ((buttonsState & BUTTON_STATE_2) && (debounceTimer == 0)) {
-            // Buttons 2 is pressed down.
-            bitMask |= BUTTON_EVENT_2DOWN;
-            debounceTimer = 0;
-
-        }
-        if ((buttonsState & BUTTON_STATE_3) && (debounceTimer == 0)) {
-            // Buttons 3 is pressed down.
-            bitMask |= BUTTON_EVENT_3DOWN;
-            debounceTimer = 0;
-
-        }
-        if ((buttonsState & BUTTON_STATE_4) && (debounceTimer == 0)) {
-            // Buttons 4 is pressed down.
-            bitMask |= BUTTON_EVENT_4DOWN;
-            debounceTimer = 0;
-
-        } else {
-            return bitMask; // Return OR'd combination of button events.
-        }
+        debounceTimer--; // Decrement debounceTimer only when active.
+        //printf("don't come in here!");
+        return BUTTON_EVENT_NONE;
     }
+    if (buttonsState != previousState) {
+        if ((buttonsState & BUTTON_STATE_1) && previousState == 0) {
+            // Buttons 1 is pressed down.
+            //printf("REEE\n");
+            bitMask ^= BUTTON_EVENT_1DOWN;
+            debounceTimer = 0;
+            previousState = BUTTON_EVENT_1DOWN; // previous is now equal to current.
+
+        } else if (!(buttonsState & BUTTON_STATE_1) && (previousState == BUTTON_EVENT_1DOWN)) {
+            bitMask ^= BUTTON_EVENT_1UP;
+            debounceTimer = 0;
+            previousState = 0;
+
+        } else if ((buttonsState & BUTTON_STATE_2) && previousState == 0) {
+            // Buttons 1 is pressed down.
+            //printf("REEE\n");
+            bitMask ^= BUTTON_EVENT_2DOWN;
+            debounceTimer = 0;
+            previousState = BUTTON_EVENT_2DOWN; // previous is now equal to current.
+
+        } else if (!(buttonsState & BUTTON_STATE_2) && (previousState == BUTTON_EVENT_2DOWN)) {
+            bitMask ^= BUTTON_EVENT_2UP;
+            debounceTimer = 0;
+            previousState = 0;
+
+        } else if ((buttonsState & BUTTON_STATE_3) && previousState == 0) {
+            // Buttons 1 is pressed down.
+            //printf("REEE\n");
+            bitMask ^= BUTTON_EVENT_3DOWN;
+            debounceTimer = 0;
+            previousState = BUTTON_EVENT_3DOWN; // previous is now equal to current.
+
+        } else if (!(buttonsState & BUTTON_STATE_3) && (previousState == BUTTON_EVENT_3DOWN)) {
+            bitMask ^= BUTTON_EVENT_3UP;
+            debounceTimer = 0;
+            previousState = 0;
+
+        } else if ((buttonsState & BUTTON_STATE_4) && previousState == 0) {
+            // Buttons 1 is pressed down.
+            //printf("REEE\n");
+            bitMask ^= BUTTON_EVENT_4DOWN;
+            debounceTimer = 0;
+            previousState = BUTTON_EVENT_4DOWN; // previous is now equal to current.
+
+        } else if (!(buttonsState & BUTTON_STATE_4) && (previousState == BUTTON_EVENT_4DOWN)) {
+            bitMask ^= BUTTON_EVENT_4UP;
+            debounceTimer = 0;
+            previousState = 0;
+        }
+
+
+        //previousState = buttonsState; // previous is now equal to current.
+        return bitMask; // Return OR'd combination of button events.
+    }
+
+    //previousState = buttonsState; // previous is now equal to current.
+    return BUTTON_EVENT_NONE; // Return OR'd combination of button events.
+
 }

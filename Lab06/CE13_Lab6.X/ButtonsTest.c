@@ -5,6 +5,7 @@
 //CMPE13 Support Library
 #include "BOARD.h"
 #include "Buttons.h"
+#include "Leds_Lab06.h"
 
 // Microchip libraries
 #include <xc.h>
@@ -19,6 +20,16 @@
 // **** Define global, module-level, or external variables here ****
 //unsigned int debounceTimer = 150;
 static unsigned int buttonEvents;
+static unsigned int LEDMask = 0x00;
+
+#define TOGGLE_LED1 0x01
+#define TOGGLE_LED2 0x02
+#define TOGGLE_LED3 0x04
+#define TOGGLE_LED4 0x08
+#define TOGGLE_LED5 0x10
+#define TOGGLE_LED6 0x20
+#define TOGGLE_LED7 0x40
+#define TOGGLE_LED8 0x80
 
 // **** Declare function prototypes ****
 
@@ -44,33 +55,94 @@ int main(void)
      **************************************************************************************************/
     printf("\nWelcome to sdenglis's lab6 part4 (ButtonsTest).  Compiled on %s %s.\n", __TIME__, __DATE__);
 
+    LEDS_INIT();
 
     printf("Please press some buttons!\n");
 
 
     while (1) {
         if (buttonEvents) {
-            if (buttonEvents == BUTTON_EVENT_1DOWN) {
+            if (buttonEvents == (BUTTON_EVENT_1DOWN)) {
                 //printf("%X\n", buttonEvents);
+                LEDMask = LEDS_GET();
+                LEDMask ^= TOGGLE_LED1;
+                LEDMask ^= TOGGLE_LED2;
+                LEDS_SET(LEDMask);
+
                 printf("BUTTON_EVENT_1DOWN\n");
                 buttonEvents = 0;
-
             }
+
+            if (buttonEvents == BUTTON_EVENT_1UP) {
+                LEDMask = LEDS_GET();
+                LEDMask ^= TOGGLE_LED1;
+                LEDMask ^= TOGGLE_LED2;
+                LEDS_SET(LEDMask);
+
+                printf("BUTTON_EVENT_1UP\n");
+                buttonEvents = 0;
+            }
+
             if (buttonEvents == BUTTON_EVENT_2DOWN) {
+                LEDMask = LEDS_GET();
+                LEDMask ^= TOGGLE_LED3;
+                LEDMask ^= TOGGLE_LED4;
+                LEDS_SET(LEDMask);
+
                 printf("BUTTON_EVENT_2DOWN\n");
                 buttonEvents = 0;
 
             }
+            if (buttonEvents == BUTTON_EVENT_2UP) {
+                LEDMask = LEDS_GET();
+                LEDMask ^= TOGGLE_LED3;
+                LEDMask ^= TOGGLE_LED4;
+                LEDS_SET(LEDMask);
+
+                printf("BUTTON_EVENT_2UP\n");
+                buttonEvents = 0;
+            }
+
             if (buttonEvents == BUTTON_EVENT_3DOWN) {
+                LEDMask = LEDS_GET();
+                LEDMask ^= TOGGLE_LED5;
+                LEDMask ^= TOGGLE_LED6;
+                LEDS_SET(LEDMask);
+
                 printf("BUTTON_EVENT_3DOWN\n");
                 buttonEvents = 0;
 
             }
+            if (buttonEvents == BUTTON_EVENT_3UP) {
+                LEDMask = LEDS_GET();
+                LEDMask ^= TOGGLE_LED5;
+                LEDMask ^= TOGGLE_LED6;
+                LEDS_SET(LEDMask);
+
+                printf("BUTTON_EVENT_3UP\n");
+                buttonEvents = 0;
+            }
+
             if (buttonEvents == BUTTON_EVENT_4DOWN) {
+                LEDMask = LEDS_GET();
+                LEDMask ^= TOGGLE_LED7;
+                LEDMask ^= TOGGLE_LED8;
+                LEDS_SET(LEDMask);
+
                 printf("BUTTON_EVENT_4DOWN\n");
                 buttonEvents = 0;
 
             }
+            if (buttonEvents == BUTTON_EVENT_4UP) {
+                LEDMask = LEDS_GET();
+                LEDMask ^= TOGGLE_LED7;
+                LEDMask ^= TOGGLE_LED8;
+                LEDS_SET(LEDMask);
+
+                printf("BUTTON_EVENT_4UP\n");
+                buttonEvents = 0;
+            }
+
         }
     }
 
