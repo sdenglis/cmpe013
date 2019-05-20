@@ -4,7 +4,7 @@
 
 //CMPE13 Support Library
 #include "BOARD.h"
-//#include "Oled.h"
+#include "Oled.h"
 #include "Leds.h"
 #include "Ascii.h"
 #include "Adc.h"
