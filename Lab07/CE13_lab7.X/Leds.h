@@ -34,8 +34,8 @@
  * 
  * LEDS_SET should not change any LED pins to inputs.
  */
-#define LEDS_SET(char newPattern)
-    LATE = (newPattern); \
+#define LEDS_SET(newPattern) \
+    LATE = (newPattern);     \
 
 /**
  * LEDS_GET() evaluates to the current state of the LED bar.  "Return" values are 8-bit patterns,
