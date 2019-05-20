@@ -79,7 +79,15 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="Buttons.c" ex="false" overriding="false">
+      <item path="Ascii.c" ex="true" overriding="false">
+      </item>
+      <item path="Ascii.h" ex="true" overriding="false">
+      </item>
+      <item path="BOARD.c" ex="true" overriding="false">
+      </item>
+      <item path="BOARD.h" ex="true" overriding="false">
+      </item>
+      <item path="Buttons.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -92,6 +100,8 @@
         </C32CPP>
         <C32Global>
         </C32Global>
+      </item>
+      <item path="Buttons.h" ex="true" overriding="false">
       </item>
       <item path="ButtonsTest.c" ex="true" overriding="false">
         <C32>
@@ -236,6 +246,18 @@
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
+      <item path="Leds_Lab06.c" ex="true" overriding="false">
+      </item>
+      <item path="Leds_Lab06.h" ex="true" overriding="false">
+      </item>
+      <item path="Oled.c" ex="true" overriding="false">
+      </item>
+      <item path="Oled.h" ex="true" overriding="false">
+      </item>
+      <item path="OledDriver.c" ex="true" overriding="false">
+      </item>
+      <item path="OledDriver.h" ex="true" overriding="false">
+      </item>
       <PICkit3PlatformTool>
         <property key="ADC 1" value="true"/>
         <property key="AutoSelectMemRanges" value="auto"/>
@@ -743,7 +765,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="bounce_buttons.c" ex="false" overriding="false">
+      <item path="bounce_buttons.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
