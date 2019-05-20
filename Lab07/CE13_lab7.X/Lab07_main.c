@@ -24,8 +24,9 @@
 #define LONG_PRESS 1
 
 //set default values for OLED display.
-#define DEFAULT_TEMP 300
-#define DEFAULT_TIME 1
+#define DEFAULT_TEMP  300
+#define DEFAULT_TIME  1
+#define STARTING_TEMP 350
 
 //comparison values for boolean expressions.
 #define TRUE  1
@@ -373,7 +374,7 @@ int main()
 
     ovenData.state = SETUP; //initialize ovenData.state
     ovenData.cooking_mode = BAKE;
-    ovenData.temperature = DEFAULT_TEMP;
+    ovenData.temperature = STARTING_TEMP;
     ovenData.cooking_remaining_time = DEFAULT_TIME;
     ovenData.input_selector = TEMP;
     updateOvenOLED(ovenData);
