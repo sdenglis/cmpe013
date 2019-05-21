@@ -53,6 +53,15 @@
 #define TOGGLE_LED7 0x40
 #define TOGGLE_LED8 0x80
 
+#define ONE 1 //don't judge me
+#define TWO 2
+#define THREE 3
+#define FOUR 4
+#define FIVE 5
+#define SIX 6
+#define SEVEN 7
+#define EIGHT 8
+
 // **** Set any local typedefs here ****
 
 typedef enum {
@@ -102,6 +111,9 @@ static unsigned int time_converted; //converted into actual things from ticks
 
 static unsigned int blinkWait;
 static unsigned int delay;
+
+static unsigned int time;
+static unsigned int lightsOn;
 
 static unsigned char ledConfig;
 static unsigned int timePartition;
@@ -246,6 +258,7 @@ void runOvenSM(void)
 
                 ovenData.state = COOKING;
                 LEDS_SET(0xFF);
+                lightsOn = 8;
                 updateOvenOLED(ovenData);
             }
             break;
@@ -303,34 +316,14 @@ void runOvenSM(void)
             timePartition = (ovenData.cooking_initial_time / 8);
             if (TickEvent) { //not yet defined!
                 //update LED bar countdown.
-                if (ovenData.cooking_remaining_time == timePartition * 1) {
-                    ledConfig = 0x80;
-                    LEDS_SET(ledConfig);
+                if (time == timePartition) {
+                    ledConfig = LEDS_GET();
+                    LEDS_SET(ledConfig << 1);
+                    time = 0;
+                    lightsOn--;
+
                 }
-                if (ovenData.cooking_remaining_time == timePartition * 2) {
-                    ledConfig = 0xC0;
-                    LEDS_SET(ledConfig);
-                }
-                if (ovenData.cooking_remaining_time == timePartition * 3) {
-                    ledConfig = 0xE0;
-                    LEDS_SET(ledConfig);
-                }
-                if (ovenData.cooking_remaining_time == timePartition * 4) {
-                    ledConfig = 0xF0;
-                    LEDS_SET(ledConfig);
-                }
-                if (ovenData.cooking_remaining_time == timePartition * 5) {
-                    ledConfig = 0xF8;
-                    LEDS_SET(ledConfig);
-                }
-                if (ovenData.cooking_remaining_time == timePartition * 6) {
-                    ledConfig = 0xFC;
-                    LEDS_SET(ledConfig);
-                }
-                if (ovenData.cooking_remaining_time == timePartition * 7) {
-                    ledConfig = 0xFE;
-                    LEDS_SET(ledConfig);
-                }
+                time++;
 
                 ovenData.cooking_remaining_time--;
 
@@ -354,35 +347,15 @@ void runOvenSM(void)
 
         case RESET_PENDING: //BTN_4UP check to cancel, TIMER check: if (long_press): reset.
             if (TickEvent) {
-                //update LED bar countdown still.
-                if (ovenData.cooking_remaining_time == timePartition * 1) {
-                    ledConfig = 0x80;
-                    LEDS_SET(ledConfig);
+                //update LED bar countdown.
+                if (time == timePartition) {
+                    ledConfig = LEDS_GET();
+                    LEDS_SET(ledConfig << 1);
+                    time = 0;
+                    lightsOn--;
+
                 }
-                if (ovenData.cooking_remaining_time == timePartition * 2) {
-                    ledConfig = 0xC0;
-                    LEDS_SET(ledConfig);
-                }
-                if (ovenData.cooking_remaining_time == timePartition * 3) {
-                    ledConfig = 0xE0;
-                    LEDS_SET(ledConfig);
-                }
-                if (ovenData.cooking_remaining_time == timePartition * 4) {
-                    ledConfig = 0xF0;
-                    LEDS_SET(ledConfig);
-                }
-                if (ovenData.cooking_remaining_time == timePartition * 5) {
-                    ledConfig = 0xF8;
-                    LEDS_SET(ledConfig);
-                }
-                if (ovenData.cooking_remaining_time == timePartition * 6) {
-                    ledConfig = 0xFC;
-                    LEDS_SET(ledConfig);
-                }
-                if (ovenData.cooking_remaining_time == timePartition * 7) {
-                    ledConfig = 0xFE;
-                    LEDS_SET(ledConfig);
-                }
+                time++;
 
                 ovenData.cooking_remaining_time--;
                 updateOvenOLED(ovenData);
@@ -549,7 +522,7 @@ void __ISR(_TIMER_2_VECTOR, ipl4auto) TimerInterrupt100Hz(void)
     //The 100Hz timer should be used exclusively to check for button events and ADC events.  
     //This ensures the system is very responsive to button presses.  
 
-    ovenData.event = TRUE;
+    ovenData.event = TRUE; //this is enabled because otherwise, the polling speed is very low.
     bEvent = ButtonsCheckEvents();
 
     if (AdcChanged()) {
