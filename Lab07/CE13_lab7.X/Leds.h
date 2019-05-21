@@ -34,8 +34,8 @@
  * 
  * LEDS_SET should not change any LED pins to inputs.
  */
-#define LEDS_SET(newPattern) \
-    LATE = (newPattern);     \
+#define LEDS_SET(newPattern)   \
+    LATE = (newPattern)                                     
 
 /**
  * LEDS_GET() evaluates to the current state of the LED bar.  "Return" values are 8-bit patterns,
@@ -46,10 +46,6 @@
  * 
  * LEDS_GET() should not change the state of the LEDS, or any SFRs.
  */
-#define LEDS_GET(void) {       \
-    static char returnPattern; \
-    returnPattern = LATE;      \
-    return returnPattern;      \
-}
+#define LEDS_GET(void) LATE                        
 
 #endif // LEDS_H
