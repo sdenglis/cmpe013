@@ -5,6 +5,7 @@
 //CMPE13 Support Library
 #include "BOARD.h"
 #include "Oled.h"
+#include "OledDriver.h"
 #include "Leds.h"
 #include "Ascii.h"
 #include "Adc.h"
@@ -25,7 +26,7 @@
 
 //set default values for OLED display.
 #define DEFAULT_TEMP  300
-#define DEFAULT_TIME  1
+#define DEFAULT_TIME  5
 #define STARTING_TEMP 350
 
 //comparison values for boolean expressions.
@@ -46,7 +47,7 @@
 // **** Set any local typedefs here ****
 
 typedef enum {
-    SETUP, SELECTOR_CHANGE_PENDING, COOKING, RESET_PENDING //total of four states.
+    SETUP, SELECTOR_CHANGE_PENDING, COOKING, RESET_PENDING, BLINK_INVERT //total of four states + Extra Credit.
 } OvenState;
 
 typedef enum {
@@ -61,10 +62,6 @@ typedef struct {
     OvenState state; //holds the current state of the FSM [const].
     OvenSelect temperature; //stores temperature value in degrees F [Fahr].
     OvenMode cooking_mode; //which mode: broil, bake, or toast [const].
-
-    OvenState broil_mode; //how many states are there supposed to be???
-    OvenState bake_mode; //these might be taken care of by the enum now!?
-    OvenState toast_mode;
 
     OvenState button_press_time; //how long button has been held [ticks->seconds].
     OvenState cooking_initial_time; //user-defined value for cook time [seconds->ticks].
@@ -92,6 +89,10 @@ static unsigned int timeStart; //variable used to determine elapsed time.
 
 static unsigned int time_minutes; //used when printing to the OLED display.
 static unsigned int time_seconds;
+static unsigned int time_converted; //converted into actual things from ticks
+
+static unsigned int blinkWait;
+static unsigned int delay;
 
 static uint16_t freeRunningCounter; //declare free-running counter for use in FSM.
 
@@ -99,30 +100,48 @@ uint8_t ButtonsEvent; //allows use of an event flag [bool].
 uint8_t ADCEvent; //allows use of an event flag [bool].
 uint8_t TickEvent; //allows use of an event flag [bool].
 
+uint8_t bEvent; //used to collect ButtonsCheckEvents() state.
+
 // **** Put any helper functions here ****
+
+void blinkOLED(void)
+{
+    blinkWait = freeRunningCounter;
+    while (blinkWait - freeRunningCounter <= delay) {
+        //do nothing
+    }
+    OledSetDisplayInverted();
+
+    blinkWait = freeRunningCounter;
+    while (blinkWait - freeRunningCounter <= delay) {
+        //do nothing
+    }
+    OledSetDisplayNormal();
+}
 
 /*This function will update your OLED to reflect the state .*/
 void updateOvenOLED(OvenData ovenData)
 {
     OledClear(0); //clear current OLED configuration.
 
-    time_minutes = (ovenData.cooking_remaining_time / 60); //convert cooking_remaining_time to minutes.
-    time_seconds = (ovenData.cooking_remaining_time % 60); //convert cooking_remaining_time to seconds.
+    time_converted = (ovenData.cooking_remaining_time / 5);
+    time_minutes = (time_converted / 60); //convert cooking_remaining_time to minutes.
+    time_seconds = (time_converted % 60); //convert cooking_remaining_time to seconds.
 
     if (ovenData.cooking_mode == BAKE) {
-        if (ovenData.state == COOKING) {
+        if (ovenData.state == COOKING || ovenData.state == RESET_PENDING) {
             switch (ovenData.input_selector) {
             case TIME:
-                sprintf(printAssist, "|\x1\x1\x1\x1\x1|   Mode: Bake\n"
-                        "|     |  >Time: %d:%d\n"
-                        "|-----|   Temp: %d\xF8 F\n"
+                sprintf(printAssist, "|\x1\x1\x1\x1\x1|  Mode: Bake\n"
+                        "|     | >Time: %d:%02d\n"
+                        "|-----|  Temp: %d\xF8 F\n"
                         "|\x3\x3\x3\x3\x3|   \n", time_minutes, time_seconds, ovenData.temperature);
                 //create a formatted string using the function input.
                 break;
             case TEMP:
-                sprintf(printAssist, "|\x1\x1\x1\x1\x1|   Mode: Bake\n"
-                        "|     |   Time: %d:%d\n"
-                        "|-----|  >Temp: %d\xF8 F\n"
+                sprintf(printAssist, "|\x1\x1\x1\x1\x1|  Mode: Bake\n"
+                        "|     |  Time: %d:%02d\n"
+                        "|-----| >Temp: %d\xF8 F\n"
                         "|\x3\x3\x3\x3\x3|   \n", time_minutes, time_seconds, ovenData.temperature);
                 break;
             default:
@@ -132,16 +151,16 @@ void updateOvenOLED(OvenData ovenData)
         } else {
             switch (ovenData.input_selector) {
             case TIME:
-                sprintf(printAssist, "|\x2\x2\x2\x2\x2|   Mode: Bake\n"
-                        "|     |  >Time: %d:%d\n"
-                        "|-----|   Temp: %d\xF8 F\n"
+                sprintf(printAssist, "|\x2\x2\x2\x2\x2|  Mode: Bake\n"
+                        "|     | >Time: %d:%02d\n"
+                        "|-----|  Temp: %d\xF8 F\n"
                         "|\x4\x4\x4\x4\x4|   \n", time_minutes, time_seconds, ovenData.temperature);
                 //create a formatted string using the function input.
                 break;
             case TEMP:
-                sprintf(printAssist, "|\x2\x2\x2\x2\x2|   Mode: Bake\n"
-                        "|     |   Time: %d:%d\n"
-                        "|-----|  >Temp: %d\xF8 F\n"
+                sprintf(printAssist, "|\x2\x2\x2\x2\x2|  Mode: Bake\n"
+                        "|     |  Time: %d:%02d\n"
+                        "|-----| >Temp: %d\xF8 F\n"
                         "|\x4\x4\x4\x4\x4|   \n", time_minutes, time_seconds, ovenData.temperature);
                 break;
             default:
@@ -151,37 +170,36 @@ void updateOvenOLED(OvenData ovenData)
         }
     }
     if (ovenData.cooking_mode == BROIL) {
-        if (ovenData.state == COOKING) {
-            sprintf(printAssist, "|\x1\x1\x1\x1\x1|   Mode: Broil\n"
-                    "|     |   Time: %d:%d\n"
-                    "|-----|   Temp: 500\xF8 F\n"
-                    "|     |   \n", time_minutes, time_seconds);
+        if (ovenData.state == COOKING || ovenData.state == RESET_PENDING) {
+            sprintf(printAssist, "|\x1\x1\x1\x1\x1|  Mode: Broil\n"
+                    "|     |  Time: %d:%02d\n"
+                    "|-----|  Temp: 500\xF8 F\n"
+                    "|\x4\x4\x4\x4\x4|   \n", time_minutes, time_seconds);
             //create a formatted string using the function input.
         } else {
-            sprintf(printAssist, "|\x2\x2\x2\x2\x2|   Mode: Broil\n"
-                    "|     |   Time: %d:%d\n"
-                    "|-----|   Temp: 500\xF8 F\n"
-                    "|     |   \n", time_minutes, time_seconds);
+            sprintf(printAssist, "|\x2\x2\x2\x2\x2|  Mode: Broil\n"
+                    "|     |  Time: %d:%02d\n"
+                    "|-----|  Temp: 500\xF8 F\n"
+                    "|\x4\x4\x4\x4\x4|   \n", time_minutes, time_seconds);
         }
     }
     if (ovenData.cooking_mode == TOAST) {
-        if (ovenData.state == COOKING) {
-            sprintf(printAssist, "|     |   Mode: Toast\n"
-                    "|     |   Time: %d:%d\n"
+        if (ovenData.state == COOKING || ovenData.state == RESET_PENDING) {
+            sprintf(printAssist, "|\x2\x2\x2\x2\x2|  Mode: Toast\n"
+                    "|     |  Time: %d:%02d\n"
                     "|-----|   \n"
                     "|\x1\x1\x1\x1\x1|   \n", time_minutes, time_seconds);
             //create a formatted string using the function input.
         } else {
-            sprintf(printAssist, "|     |   Mode: Toast\n"
-                    "|     |   Time: %d:%d\n"
+            sprintf(printAssist, "|\x2\x2\x2\x2\x2|  Mode: Toast\n"
+                    "|     |  Time: %d:%02d\n"
                     "|-----|   \n"
                     "|\x4\x4\x4\x4\x4|   \n", time_minutes, time_seconds);
         }
     }
+    OledDrawString(printAssist); //transfer ovenData input to OLED string.
+    OledUpdate(); //update actual OLED display.
 }
-
-OledDrawString(printAssist); //transfer ovenData input to OLED string.
-OledUpdate(); //update actual OLED display.
 
 /*This function will execute your state machine.  
  * It should ONLY run if an event flag has been set.*/
@@ -194,21 +212,21 @@ void runOvenSM(void)
         case SETUP: //ADC check, BTN_3DOWN check.
             if (ADCEvent) {
                 if (ovenData.input_selector == TEMP) {
-                    ovenData.temperature = AdcRead() + DEFAULT_TEMP;
+                    ovenData.temperature = (AdcRead() >> 2) + DEFAULT_TEMP;
                 } //additionally, we want to isolate the top 8 bits from the ADC values.
                 if (ovenData.input_selector == TIME) {
-                    ovenData.cooking_remaining_time = AdcRead() + DEFAULT_TIME;
+                    ovenData.cooking_remaining_time = (AdcRead() >> 0) + DEFAULT_TIME;
                 }
                 //update time/temp.
                 //update OLED display.
                 updateOvenOLED(ovenData);
             }
-            if (ButtonsCheckEvents() == BUTTON_EVENT_3DOWN) {
+            if (bEvent == BUTTON_EVENT_3DOWN) {
                 //store free-running time.
                 //change state to SELECTOR_CHANGE_PENDING.
                 ovenData.state = SELECTOR_CHANGE_PENDING;
             }
-            if (ButtonsCheckEvents() == BUTTON_EVENT_4DOWN) {
+            if (bEvent == BUTTON_EVENT_4DOWN) {
                 //store free-running time.
                 //update OLED display.
                 //change state to COOKING.
@@ -220,18 +238,20 @@ void runOvenSM(void)
             break;
 
         case SELECTOR_CHANGE_PENDING: //BTN_3UP check: if (long_press): next mode.
-            if (ButtonsCheckEvents() == BUTTON_EVENT_3UP) {
+            if (bEvent == BUTTON_EVENT_3UP) {
                 if (ovenData.button_press_time < LONG_PRESS) {
                     //switch to next oven mode.
                     switch (ovenData.cooking_mode) {
                     case BAKE:
                         ovenData.cooking_mode = BROIL;
                         ovenData.state = SETUP;
+                        ovenData.input_selector = TIME;
                         updateOvenOLED(ovenData);
                         break;
                     case BROIL:
                         ovenData.cooking_mode = TOAST;
                         ovenData.state = SETUP;
+                        ovenData.input_selector = TIME;
                         updateOvenOLED(ovenData);
                         break;
                     case TOAST:
@@ -243,19 +263,22 @@ void runOvenSM(void)
                     //update OLED display.
                     //set state to SETUP.
                 }
-                if (ovenData.button_press_time >= LONG_PRESS) { //else:
+                if (ovenData.button_press_time >= LONG_PRESS && ovenData.cooking_mode == BAKE) { //else:
                     // change settings selector. 
+                    printf("hello!\n");
                     if (ovenData.input_selector == TIME) { //swap the input_selector.
                         ovenData.input_selector = TEMP;
 
-                        ovenData.state = SETUP;
                         updateOvenOLED(ovenData);
+                        ovenData.state = SETUP;
+                        break;
                     }
                     if (ovenData.input_selector == TEMP) {
                         ovenData.input_selector = TIME;
 
-                        ovenData.state = SETUP;
                         updateOvenOLED(ovenData);
+                        ovenData.state = SETUP;
+                        break;
                     }
                     //update OLED display.
                     //set state to SETUP.
@@ -271,12 +294,13 @@ void runOvenSM(void)
                 updateOvenOLED(ovenData);
                 //update OLED display with cook_remaining_time.
                 if (ovenData.cooking_remaining_time == 0) {
+
                     ovenData.state = SETUP;
                     ovenData.cooking_remaining_time = ovenData.cooking_initial_time;
-                    updateOvenOLED(ovenData);
+                    ovenData.state = BLINK_INVERT;
                 }
             }
-            if (ButtonsCheckEvents() == BUTTON_EVENT_4DOWN) {
+            if (bEvent == BUTTON_EVENT_4DOWN) {
                 //store free-running time.
                 //switch state to RESET_PENDING.
                 ovenData.state = RESET_PENDING;
@@ -285,37 +309,46 @@ void runOvenSM(void)
 
         case RESET_PENDING: //BTN_4UP check to cancel, TIMER check: if (long_press): reset.
             if (TickEvent) {
-                if (ButtonsCheckEvents() == BUTTON_EVENT_4UP) {
-                    //return to COOKING state.
-                    if (ovenData.button_press_time >= LONG_PRESS) {
-                        //end cooking.
-                        //reset settings.
-                        //update OLED display.
-                        //go to SETUP state.
-                        ovenData.state = SETUP;
-                        ovenData.cooking_remaining_time = ovenData.cooking_initial_time;
-                        updateOvenOLED(ovenData);
-                    }
-                    if (ovenData.button_press_time < LONG_PRESS) {
-                        ovenData.state = COOKING;
-                    }
-
-                } else {
-                    //update LED bar countdown still.
-                    ovenData.cooking_remaining_time--;
-                    updateOvenOLED(ovenData);
-                    //update OLED display still.
-                    if (ovenData.cooking_remaining_time == 0) {
-                        ovenData.state = SETUP;
-                        ovenData.cooking_remaining_time = ovenData.cooking_initial_time;
-                        updateOvenOLED(ovenData);
-                        //reset settings
-                        //update OLED display.
-                    }
+                //update LED bar countdown still.
+                ovenData.cooking_remaining_time--;
+                updateOvenOLED(ovenData);
+                //update OLED display still.
+                if (ovenData.cooking_remaining_time == 0) {
+                    ovenData.state = SETUP;
+                    ovenData.cooking_remaining_time = ovenData.cooking_initial_time;
+                    ovenData.state = BLINK_INVERT;
+                    //reset settings
+                    //update OLED display.
                 }
             }
-            break;
+            if (bEvent == BUTTON_EVENT_4UP) {
+                //return to COOKING state.
+                if (ovenData.button_press_time >= LONG_PRESS) {
+                    //end cooking.
+                    //reset settings.
+                    //update OLED display.
+                    //go to SETUP state.
+                    ovenData.state = SETUP;
+                    ovenData.cooking_remaining_time = ovenData.cooking_initial_time;
+                    updateOvenOLED(ovenData);
+                }
+                if (ovenData.button_press_time < LONG_PRESS) {
+                    ovenData.state = COOKING;
+                }
 
+            }
+            break;
+        case BLINK_INVERT:
+            blinkOLED();
+            blinkOLED();
+            blinkOLED();
+            blinkOLED();
+            blinkOLED();
+
+            ovenData.state = SETUP;
+            updateOvenOLED(ovenData);
+
+            updateOvenOLED(ovenData); //finally update RESET!
         }
     }
 
@@ -376,7 +409,7 @@ int main()
     ovenData.cooking_mode = BAKE;
     ovenData.temperature = STARTING_TEMP;
     ovenData.cooking_remaining_time = DEFAULT_TIME;
-    ovenData.input_selector = TEMP;
+    ovenData.input_selector = TIME;
     updateOvenOLED(ovenData);
     //initialize state machine (and anything else you need to init) here
 
@@ -434,37 +467,40 @@ void __ISR(_TIMER_2_VECTOR, ipl4auto) TimerInterrupt100Hz(void)
     //add event-checking code here
     //The 100Hz timer should be used exclusively to check for button events and ADC events.  
     //This ensures the system is very responsive to button presses.  
+
+    bEvent = ButtonsCheckEvents();
+
     if (AdcChanged()) {
         //set adc event flag
         ADCEvent = TRUE;
     }
-    if (ButtonsCheckEvents() == BUTTON_EVENT_4UP) {
+    if (bEvent & BUTTON_EVENT_4UP) {
         //set buttons event flag
         ovenData.button_press_time = freeRunningCounter - timeStart; //current counter minus recorded start.
         ovenData.button_press_time /= TICKS_PER_SECOND; //convert the tick value to seconds.
-        ButtonsEvent = TRUE;
+        ButtonsEvent = BUTTON_EVENT_4UP;
 
         ovenData.event = TRUE;
     }
-    if (ButtonsCheckEvents() == BUTTON_EVENT_4DOWN) {
+    if (bEvent & BUTTON_EVENT_4DOWN) {
         //set buttons event flag
         timeStart = freeRunningCounter;
-        ButtonsEvent = TRUE;
+        ButtonsEvent = BUTTON_EVENT_4DOWN;
 
         ovenData.event = TRUE;
     }
-    if (ButtonsCheckEvents() == BUTTON_EVENT_3UP) {
+    if (bEvent & BUTTON_EVENT_3UP) {
         //set buttons event flag
         ovenData.button_press_time = freeRunningCounter - timeStart;
         ovenData.button_press_time /= TICKS_PER_SECOND;
-        ButtonsEvent = TRUE;
+        ButtonsEvent = BUTTON_EVENT_3UP;
 
         ovenData.event = TRUE;
     }
-    if (ButtonsCheckEvents() == BUTTON_EVENT_3DOWN) {
+    if (bEvent & BUTTON_EVENT_3DOWN) {
         //set buttons event flag
         timeStart = freeRunningCounter; //initialize value on the first event.
-        ButtonsEvent = TRUE;
+        ButtonsEvent = BUTTON_EVENT_3DOWN;
 
         ovenData.event = TRUE;
     }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<project>                                  
+  <executable name="dist/default/debug/CE13_lab7.X.debug.elf">                 
+    <memory name="program">                 
+      <units>bytes</units>                 
+      <length>138752</length>                 
+      <used>22324</used>                     
+      <free>116428</free>                     
+    </memory>                              
+    <memory name="data">              
+      <units>bytes</units>                 
+      <length>16896</length>                 
+      <used>1964</used>                     
+      <free>14932</free>                     
+    </memory>                              
+  </executable>                            
+</project>                                 
