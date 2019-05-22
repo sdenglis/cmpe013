@@ -118,6 +118,8 @@ static unsigned int lightsOn;
 static unsigned char ledConfig;
 static unsigned int timePartition;
 
+static unsigned int elapsedTime;
+
 static uint16_t freeRunningCounter; //declare free-running counter for use in FSM.
 
 uint8_t ButtonsEvent; //allows use of an event flag [bool].
@@ -259,6 +261,7 @@ void runOvenSM(void)
                 ovenData.state = COOKING;
                 LEDS_SET(0xFF);
                 lightsOn = 8;
+                //time = timePartition;
                 updateOvenOLED(ovenData);
             }
             break;
@@ -291,7 +294,6 @@ void runOvenSM(void)
                 }
                 if (ovenData.button_press_time >= LONG_PRESS && ovenData.cooking_mode == BAKE) { //else:
                     // change settings selector. 
-                    printf("hello!\n");
                     if (ovenData.input_selector == TIME) { //swap the input_selector.
                         ovenData.input_selector = TEMP;
 
@@ -342,6 +344,7 @@ void runOvenSM(void)
                 //store free-running time.
                 //switch state to RESET_PENDING.
                 ovenData.state = RESET_PENDING;
+                elapsedTime = 0;
             }
             break;
 
@@ -371,19 +374,20 @@ void runOvenSM(void)
                     //update OLED display.
                 }
             }
+            if (elapsedTime >= LONG_PRESS) {
+                //end cooking.
+                //reset settings.
+                //update OLED display.
+                //go to SETUP state.
+                ledConfig = 0x00; //set last light off when finished.
+                LEDS_SET(ledConfig);
+                ovenData.state = SETUP;
+                ovenData.cooking_remaining_time = ovenData.cooking_initial_time;
+                updateOvenOLED(ovenData);
+                elapsedTime = 0;
+            }
             if (bEvent == BUTTON_EVENT_4UP) {
                 //return to COOKING state.
-                if (ovenData.button_press_time >= LONG_PRESS) {
-                    //end cooking.
-                    //reset settings.
-                    //update OLED display.
-                    //go to SETUP state.
-                    ledConfig = 0x00; //set last light off when finished.
-                    LEDS_SET(ledConfig);
-                    ovenData.state = SETUP;
-                    ovenData.cooking_remaining_time = ovenData.cooking_initial_time;
-                    updateOvenOLED(ovenData);
-                }
                 if (ovenData.button_press_time < LONG_PRESS) {
                     ovenData.state = COOKING;
                 }
@@ -496,6 +500,8 @@ void __ISR(_TIMER_3_VECTOR, ipl4auto) TimerInterrupt5Hz(void)
     //Sets a TIMER_TICK event flag ? Increment the free-running timer.  
     TickEvent = TRUE; //not setup yet!
     ovenData.event = TRUE;
+
+    elapsedTime = freeRunningCounter - timeStart;
 
     freeRunningCounter++;
 
