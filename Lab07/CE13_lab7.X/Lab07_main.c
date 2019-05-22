@@ -261,7 +261,9 @@ void runOvenSM(void)
 
                 ovenData.state = COOKING;
                 LEDS_SET(0xFF);
+                ledConfig = 0xFF;
                 lightsOn = 8;
+                timePartition = (ovenData.cooking_initial_time * 10 / 80);
                 //time = timePartition;
                 updateOvenOLED(ovenData);
             }
@@ -317,7 +319,6 @@ void runOvenSM(void)
             break;
 
         case COOKING: //TIMER check, update cook_remaining_time, BTN_4DOWN check.
-            timePartition = (ovenData.cooking_initial_time / 8);
             if (TickEvent) { //not yet defined!
                 //update LED bar countdown.
                 if (time == timePartition) {
@@ -325,7 +326,7 @@ void runOvenSM(void)
                     LEDS_SET(ledConfig << 1);
                     time = 0;
                     lightsOn--;
-
+                    TickEvent = FALSE;
                 }
                 time++;
 
@@ -358,7 +359,7 @@ void runOvenSM(void)
                     LEDS_SET(ledConfig << 1);
                     time = 0;
                     lightsOn--;
-
+                    TickEvent = FALSE;
                 }
                 time++;
 
