@@ -251,6 +251,7 @@ void runOvenSM(void)
                 //store free-running time.
                 //change state to SELECTOR_CHANGE_PENDING.
                 ovenData.state = SELECTOR_CHANGE_PENDING;
+                elapsedTime = 0;
             }
             if (bEvent == BUTTON_EVENT_4DOWN) {
                 //store free-running time.
@@ -292,25 +293,26 @@ void runOvenSM(void)
                     //update OLED display.
                     //set state to SETUP.
                 }
-                if (ovenData.button_press_time >= LONG_PRESS && ovenData.cooking_mode == BAKE) { //else:
-                    // change settings selector. 
-                    if (ovenData.input_selector == TIME) { //swap the input_selector.
-                        ovenData.input_selector = TEMP;
+            }
+            if (elapsedTime >= LONG_PRESS && ovenData.cooking_mode == BAKE) { //else:
+                // change settings selector. 
+                elapsedTime = 0;
+                if (ovenData.input_selector == TIME) { //swap the input_selector.
+                    ovenData.input_selector = TEMP;
 
-                        updateOvenOLED(ovenData);
-                        ovenData.state = SETUP;
-                        break;
-                    }
-                    if (ovenData.input_selector == TEMP) {
-                        ovenData.input_selector = TIME;
-
-                        updateOvenOLED(ovenData);
-                        ovenData.state = SETUP;
-                        break;
-                    }
-                    //update OLED display.
-                    //set state to SETUP.
+                    updateOvenOLED(ovenData);
+                    ovenData.state = SETUP;
+                    break;
                 }
+                if (ovenData.input_selector == TEMP) {
+                    ovenData.input_selector = TIME;
+
+                    updateOvenOLED(ovenData);
+                    ovenData.state = SETUP;
+                    break;
+                }
+                //update OLED display.
+                //set state to SETUP.
             }
             break;
 
