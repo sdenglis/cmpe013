@@ -12,6 +12,15 @@
 >> I would have gotten a second opinion from a TA to ensure that this was the case,
 >> but, unfortunately, all lab sections I attended were completely filled...
 
+0.) Extra Credit Implementation: 
+
+>> Was actually fairly straightforward. I basically added in another state to the state
+>> machine, utilizing the given header files for the OLED display. I set a delay between
+>> the normalize and invert screen functions. Then, I simply called these functions
+>> inside of the BLINK_INVERT state in order to execute this set of commands. The lab
+>> manual didn't explicitly state any requirements for this part, except that it should
+>> "enter an 'alert' mode, blinking its screen at invertals."
+
 1.) Summary:
 
 >> To summarize, this lab was a culmination of all previously-learned concepts applied to what
