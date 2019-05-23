@@ -1,3 +1,9 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 07         *
+ *5/22/2019      *
+ *****************/
 // **** Include libraries here ****
 // Standard libraries
 #include <stdio.h>
@@ -26,7 +32,7 @@
 
 //set default values for OLED display.
 #define DEFAULT_TEMP  300
-#define DEFAULT_TIME  5
+#define DEFAULT_TIME  1
 #define STARTING_TEMP 350
 
 //comparison values for boolean expressions.
@@ -37,30 +43,17 @@
 #define TICKS_PER_SECOND 5
 
 //define hexadecimal values for sprintf() use.
+//useful for user reference.
 #define TOP_OVEN_ON      0x01
 #define TOP_OVEN_OFF     0x02
 #define BOTTOM_OVEN_ON   0x03
 #define BOTTOM_OVEN_OFF  0x04
-
 #define DEGREE           0xF8
 
-#define TOGGLE_LED1 0x01
-#define TOGGLE_LED2 0x02
-#define TOGGLE_LED3 0x04
-#define TOGGLE_LED4 0x08
-#define TOGGLE_LED5 0x10
-#define TOGGLE_LED6 0x20
-#define TOGGLE_LED7 0x40
-#define TOGGLE_LED8 0x80
-
-#define ONE 1 //don't judge me
-#define TWO 2
-#define THREE 3
-#define FOUR 4
-#define FIVE 5
-#define SIX 6
-#define SEVEN 7
-#define EIGHT 8
+//values helpful with conversion:
+#define TIME_CONV 60
+#define TICK_CONV 5
+#define LED_CONV  8
 
 // **** Set any local typedefs here ****
 
@@ -80,57 +73,44 @@ typedef struct {
     OvenState state; //holds the current state of the FSM [const].
     OvenSelect temperature; //stores temperature value in degrees F [Fahr].
     OvenMode cooking_mode; //which mode: broil, bake, or toast [const].
-
     OvenState button_press_time; //how long button has been held [ticks->seconds].
     OvenState cooking_initial_time; //user-defined value for cook time [seconds->ticks].
     OvenState cooking_remaining_time; //time remaining.
-
     OvenState input_selector; //which variable the ADC should affect [const].
-
     uint8_t event; //allows use of an event flag [bool].
 
 } OvenData;
 
 // **** Declare any datatypes here ****
-//OvenData.cooking_mode.BAKE
-//OvenData.state.COOKING etc.
-
 
 // **** Define any module-level, global, or external variables here ****
-static OvenState ovenState; //declare module-level instance of OvenState.
 static OvenData ovenData; //declare module-level instance of ovenData.
 
 static char printAssist[100]; //used for sprintf() calls.
-//is const okay here?
 
 static unsigned int timeStart; //variable used to determine elapsed time.
-
 static unsigned int time_minutes; //used when printing to the OLED display.
 static unsigned int time_seconds;
 static unsigned int time_converted; //converted into actual things from ticks
-
+static unsigned int elapsedTime;
+static unsigned int timePartition;
 static unsigned int blinkWait;
 static unsigned int delay;
-
 static unsigned int time;
 static unsigned int lightsOn;
 
 static unsigned char ledConfig;
-static unsigned int timePartition;
-
-static unsigned int elapsedTime;
 
 static uint16_t freeRunningCounter; //declare free-running counter for use in FSM.
 
 uint8_t ButtonsEvent; //allows use of an event flag [bool].
 uint8_t ADCEvent; //allows use of an event flag [bool].
 uint8_t TickEvent; //allows use of an event flag [bool].
-
 uint8_t bEvent; //used to collect ButtonsCheckEvents() state.
 
 // **** Put any helper functions here ****
 
-void blinkOLED(void)
+void blinkOLED(void) //inverts the display with a set delay timer.
 {
     blinkWait = freeRunningCounter;
     while (blinkWait - freeRunningCounter <= delay) {
@@ -150,12 +130,15 @@ void updateOvenOLED(OvenData ovenData)
 {
     OledClear(0); //clear current OLED configuration.
 
-    time_converted = (ovenData.cooking_remaining_time / 5);
-    time_minutes = (time_converted / 60); //convert cooking_remaining_time to minutes.
-    time_seconds = (time_converted % 60); //convert cooking_remaining_time to seconds.
+    if (ovenData.state == COOKING || ovenData.state == RESET_PENDING) {
+        ovenData.cooking_remaining_time /= TICK_CONV; //manage the speed shown when COOKING
+    }
+    time_converted = ovenData.cooking_remaining_time;
+    time_minutes = (time_converted / TIME_CONV); //convert cooking_remaining_time to minutes.
+    time_seconds = (time_converted % TIME_CONV); //convert cooking_remaining_time to seconds.
 
-    if (ovenData.cooking_mode == BAKE) {
-        if (ovenData.state == COOKING || ovenData.state == RESET_PENDING) {
+    if (ovenData.cooking_mode == BAKE) { //BAKE mode
+        if (ovenData.state == COOKING || ovenData.state == RESET_PENDING) { //when COOKING
             switch (ovenData.input_selector) {
             case TIME:
                 sprintf(printAssist, "|\x1\x1\x1\x1\x1|  Mode: Bake\n"
@@ -174,7 +157,7 @@ void updateOvenOLED(OvenData ovenData)
                 sprintf(printAssist, "FATAL ERROR!");
                 break;
             }
-        } else {
+        } else { //ELSE
             switch (ovenData.input_selector) {
             case TIME:
                 sprintf(printAssist, "|\x2\x2\x2\x2\x2|  Mode: Bake\n"
@@ -195,28 +178,28 @@ void updateOvenOLED(OvenData ovenData)
             }
         }
     }
-    if (ovenData.cooking_mode == BROIL) {
-        if (ovenData.state == COOKING || ovenData.state == RESET_PENDING) {
+    if (ovenData.cooking_mode == BROIL) { //BROIL mode
+        if (ovenData.state == COOKING || ovenData.state == RESET_PENDING) { //when COOKING
             sprintf(printAssist, "|\x1\x1\x1\x1\x1|  Mode: Broil\n"
                     "|     |  Time: %d:%02d\n"
                     "|-----|  Temp: 500\xF8 F\n"
                     "|\x4\x4\x4\x4\x4|   \n", time_minutes, time_seconds);
             //create a formatted string using the function input.
-        } else {
+        } else { //ELSE
             sprintf(printAssist, "|\x2\x2\x2\x2\x2|  Mode: Broil\n"
                     "|     |  Time: %d:%02d\n"
                     "|-----|  Temp: 500\xF8 F\n"
                     "|\x4\x4\x4\x4\x4|   \n", time_minutes, time_seconds);
         }
     }
-    if (ovenData.cooking_mode == TOAST) {
-        if (ovenData.state == COOKING || ovenData.state == RESET_PENDING) {
+    if (ovenData.cooking_mode == TOAST) { //TOAST mode
+        if (ovenData.state == COOKING || ovenData.state == RESET_PENDING) { //when COOKING
             sprintf(printAssist, "|\x2\x2\x2\x2\x2|  Mode: Toast\n"
                     "|     |  Time: %d:%02d\n"
                     "|-----|   \n"
                     "|\x1\x1\x1\x1\x1|   \n", time_minutes, time_seconds);
             //create a formatted string using the function input.
-        } else {
+        } else { //ELSE
             sprintf(printAssist, "|\x2\x2\x2\x2\x2|  Mode: Toast\n"
                     "|     |  Time: %d:%02d\n"
                     "|-----|   \n"
@@ -241,7 +224,7 @@ void runOvenSM(void)
                     ovenData.temperature = (AdcRead() >> 2) + DEFAULT_TEMP;
                 } //additionally, we want to isolate the top 8 bits from the ADC values.
                 if (ovenData.input_selector == TIME) {
-                    ovenData.cooking_remaining_time = (AdcRead() >> 0) + DEFAULT_TIME;
+                    ovenData.cooking_remaining_time = (AdcRead() >> 2) + DEFAULT_TIME;
                 }
                 //update time/temp.
                 //update OLED display.
@@ -262,8 +245,9 @@ void runOvenSM(void)
                 ovenData.state = COOKING;
                 LEDS_SET(0xFF);
                 ledConfig = 0xFF;
-                lightsOn = 8;
-                timePartition = (ovenData.cooking_initial_time * 10 / 80);
+                lightsOn = LED_CONV;
+                timePartition = (ovenData.cooking_initial_time * TICK_CONV / LED_CONV);
+                ovenData.cooking_remaining_time *= TICK_CONV;
                 //time = timePartition;
                 updateOvenOLED(ovenData);
             }
@@ -319,7 +303,7 @@ void runOvenSM(void)
             break;
 
         case COOKING: //TIMER check, update cook_remaining_time, BTN_4DOWN check.
-            if (TickEvent) { //not yet defined!
+            if (TickEvent) {
                 //update LED bar countdown.
                 if (time == timePartition) {
                     ledConfig = LEDS_GET();

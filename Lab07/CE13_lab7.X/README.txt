@@ -7,6 +7,11 @@
 
 >> No collaboration occured for this lab.
 
+>> NOTE: One comment I have would be, unfortunately, the lack of feedback.
+>> As far as I am aware, I have completed the lab in full, per standards set in the manual.
+>> I would have gotten a second opinion from a TA to ensure that this was the case,
+>> but, unfortunately, all lab sections I attended were completely filled...
+
 1.) Summary:
 
 >> To summarize, this lab was a culmination of all previously-learned concepts applied to what
