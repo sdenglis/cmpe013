@@ -18,7 +18,7 @@ int main()
     BOARD_Init();
 
 
-    printf("Welcome to CRUZID's Lab8 Morse.h tester!  Compiled on %s %s\n",__DATE__,__TIME__);
+    printf("Welcome to sdenglis's Lab8 Morse.h tester!  Compiled on %s %s\n",__DATE__,__TIME__);
 
     printf("Beginning automatic portion of Morse.h tester:\n");
     //test MorseInit()

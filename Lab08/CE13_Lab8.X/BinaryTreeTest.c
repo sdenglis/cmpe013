@@ -57,8 +57,13 @@ int main()
     Node *bigTree = TreeCreate(4, "ABDHIEJKCFLMGNO");
     TreePrint(bigTree, 0);
 
-    Node *nullTree = TreeCreate(0, "\0");
+    Node *nullTree = TreeCreate(0, "\0"); //??????
     TreePrint(nullTree, 0);
+
+    printf("\n_____________\n");
+
+    Node *morseTree = TreeCreate(6, "#EISH54V#3UF####2ARL#####WP##J#1TNDB6#X##KC##Y##MGZ7#Q##O#8##90"); //full morse tree.
+    TreePrint(morseTree, 0);
 
 
     while (1);

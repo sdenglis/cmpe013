@@ -100,8 +100,6 @@ int MorseInit(void)
     } else {
         return STANDARD_ERROR;
     }
-
-
 }
 
 /**
@@ -134,11 +132,25 @@ int MorseInit(void)
  */
 MorseEvent MorseDecode(MorseEvent input_event)
 {
-    if (input_event == MORSE_EVENT_DOT || MORSE_EVENT_DASH) {
-
+    if (input_event.type == MORSE_EVENT_DOT || MORSE_EVENT_DASH) {
+        if () { //an invalid sequence! exits lowest level, or enters a nonexistent node.
+            MorseEvent.type = MORSE_EVENT_ERROR;
+            return MorseEvent;
+        } else { //sequence is valid
+            MorseEvent.type = MORSE_EVENT_NONE;
+            return MorseEvent;
+        }
     }
-    if (input_event == MORSE_EVENT_NEW_LETTER) {
+    if (input_event.type == MORSE_EVENT_NEW_LETTER) { //reset internal state?
+        if () { //if previous of morse sequence is invalid,
+            MorseEvent.type = MORSE_EVENT_ERROR;
+            return MorseEvent;
+        } else { //complete decoding.
+            MorseEvent.type = MORSE_EVENT_CHAR_DECODED;
+            //MorseEvent.parameter = 'C';
+            return MorseEvent;
 
+        }
     }
 
 
@@ -152,7 +164,7 @@ MorseEvent MorseDecode(MorseEvent input_event)
  *		MORSE_EVENT_DASH or MORSE_EVENT_DOT if a pulse has been completed,
  *		MORSE_EVENT_NEW_LETTER if MORSE_LETTER_TIMEOUT has elapsed since the last pulse, or 
  *		MORSE_EVENT_NEW_WORD if MORSE_WORD_TIMEOUT has elapsed since the last pulse. 
- *
+ * 
  * Pulses are entered using BTN4. 
  * 
  * @return The MorseEvent that occurred.
@@ -170,7 +182,7 @@ MorseEvent MorseCheckEvents(void)
             MorseEvent.state = DOT; //switch to DOT.
         } else {
             MorseEvent.type = MORSE_EVENT_NONE;
-            return MorseEvent.type; //ELSE, return NOTHING.
+            return MorseEvent; //ELSE, return NOTHING.
         }
         break;
 
@@ -181,7 +193,7 @@ MorseEvent MorseCheckEvents(void)
             MorseEvent.type = MORSE_EVENT_NEW_WORD; //generate new_word event.
 
             MorseEvent.state = WAITING_FOR_WORD; //switch to WAITING_FOR_WORD.
-            return MorseEvent.type;
+            return MorseEvent;
 
         } else if (ButtonsEvent == BUTTON_EVENT_4DOWN) {
             //set dot countdown.
@@ -190,7 +202,7 @@ MorseEvent MorseCheckEvents(void)
             MorseEvent.state = DOT; //switch to DOT.
         } else {
             MorseEvent.type = MORSE_EVENT_NONE;
-            return MorseEvent.type; //ELSE, return NOTHING.
+            return MorseEvent; //ELSE, return NOTHING.
         }
         break;
 
@@ -201,7 +213,7 @@ MorseEvent MorseCheckEvents(void)
             MorseEvent.type = MORSE_EVENT_NEW_LETTER; //generate new_letter event.
 
             MorseEvent.state = WAITING_FOR_LETTER; //switch to WAITING_FOR_LETTER.
-            return MorseEvent.type;
+            return MorseEvent;
 
         } else if (bEvent & BUTTON_EVENT_4DOWN) {
             //set dot countdown.
@@ -210,7 +222,7 @@ MorseEvent MorseCheckEvents(void)
             MorseEvent.state = DOT; //switch to DOT.
         } else {
             MorseEvent.type = MORSE_EVENT_NONE;
-            return MorseEvent.type; //ELSE, return NOTHING.
+            return MorseEvent; //ELSE, return NOTHING.
         }
         break;
 
@@ -228,11 +240,11 @@ MorseEvent MorseCheckEvents(void)
             MorseEvent.type = MORSE_EVENT_DOT; //generate DOT event.
 
             MorseEvent.state = WAITING_FOR_PULSE; //switch to WAITING_FOR_PULSE.
-            return MorseEvent.type;
+            return MorseEvent;
 
         } else {
             MorseEvent.type = MORSE_EVENT_NONE;
-            return MorseEvent.type; //ELSE, return NOTHING.
+            return MorseEvent; //ELSE, return NOTHING.
         }
 
         break;
@@ -247,11 +259,11 @@ MorseEvent MorseCheckEvents(void)
             MorseEvent.type = MORSE_EVENT_DASH; //generate DASH event.
 
             MorseEvent.state = WAITING_FOR_PULSE; //switch to WAITING_FOR_PULSE.
-            return MorseEvent.type;
+            return MorseEvent;
 
         } else {
             MorseEvent.type = MORSE_EVENT_NONE;
-            return MorseEvent.type; //ELSE, return NOTHING.
+            return MorseEvent; //ELSE, return NOTHING.
         }
         break;
 

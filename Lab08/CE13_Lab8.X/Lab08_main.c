@@ -87,15 +87,20 @@ void __ISR(_TIMER_2_VECTOR, ipl4auto) TimerInterrupt100Hz(void)
 
 void OledAddToTopLine(MorseEvent event)
 {
-
+    //when MORSE_DOT || MORSE_DASH
+    //print corresponding symbol onto top line.
 }
 
 void OledClearTopLine(MorseEvent event)
 {
-
+    // when new_letter || new_word || error
+    //clear top line.
 }
 
 void OledAddToBottomLine(MorseEvent event)
 {
-
+    // appends new characters onto the bottom line.
+    //when CHAR_DECODED append decoded char to line 2.
+    //when NEW_WORD, append space char and then decoded char.
+    //when ERROR, append BAD_CHAR char.
 }
