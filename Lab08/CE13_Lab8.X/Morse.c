@@ -71,6 +71,13 @@ typedef enum {
     MORSE_WORD_TIMEOUT = 200
 } MorseEventLength;
 
+#define SUCCESS 1
+#define TRUE 1
+#define STANDARD_ERROR 0 
+#define FALSE 0
+#define STRING_LENGTH_MAX 25
+//really, nothing over 25 characters will be displayed on the top line of the OLED.
+
 static uint8_t bEvent; //used to collect ButtonsCheckEvents() state.
 static uint8_t ButtonsEvent;
 static MorseEvent morseEvent;
@@ -78,10 +85,11 @@ static int wordTimer;
 static int letterTimer;
 static int dashTimer;
 
-#define SUCCESS 1
-#define TRUE 1
-#define STANDARD_ERROR 0 
-#define FALSE 0
+static int i; //holds the array location of our morseCode string.
+static char morseCode[STRING_LENGTH_MAX] = "";
+
+Node *morseTree;
+Node *morseHolder;
 
 /**
  * This function initializes the Morse code decoder. This is primarily the generation of the
@@ -95,7 +103,11 @@ static int dashTimer;
 int MorseInit(void)
 {
     ButtonsInit();
-    Node *morseTree = TreeCreate(6, "#EISH54V#3UF####2ARL#####WP##J#1TNDB6#X##KC##Y##MGZ7#Q##O#8##90"); //full morse tree.
+
+    morseHolder = TreeCreate(1, "");
+    morseTree = TreeCreate(6, "#EISH54V#3UF####2ARL#####WP##J#1TNDB6#X##KC##Y##MGZ7#Q##O#8##90"); //full morse tree.
+
+    morseHolder = morseTree; //initialize to first node of Tree.
     morseEvent.state = WAITING_FOR_PULSE; //initialize state of FSM.
     if (morseTree) {
         return SUCCESS;
@@ -134,8 +146,20 @@ int MorseInit(void)
  */
 MorseEvent MorseDecode(MorseEvent input_event)
 {
+    if (input_event.type == MORSE_EVENT_DOT) {
+        morseHolder = GetLeftChild(morseTree); //set temp to left child of main.
+        morseCode[i] = ".";
+        i++;
+
+    }
+    if (input_event.type == MORSE_EVENT_DASH) {
+        morseHolder = GetRightChild(morseTree); //set temp to right child of main.
+        morseCode[i] = "-";
+        i++;
+    }
+
     if (input_event.type == MORSE_EVENT_DOT || MORSE_EVENT_DASH) {
-        if () { //an invalid sequence! exits lowest level, or enters a nonexistent node.
+        if (!morseHolder) { //an invalid sequence! exits lowest level, or enters a nonexistent node.
             input_event.type = MORSE_EVENT_ERROR;
             return input_event;
         } else { //sequence is valid
@@ -149,7 +173,7 @@ MorseEvent MorseDecode(MorseEvent input_event)
             return input_event;
         } else { //complete decoding.
             input_event.type = MORSE_EVENT_CHAR_DECODED;
-            //input_event.parameter = 'C';
+            input_event.parameter = morseHolder->data; //whatever data char is stored here, return it.
             return input_event;
 
         }
