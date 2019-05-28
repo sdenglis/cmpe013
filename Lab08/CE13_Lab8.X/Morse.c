@@ -147,19 +147,19 @@ int MorseInit(void)
 MorseEvent MorseDecode(MorseEvent input_event)
 {
     if (input_event.type == MORSE_EVENT_DOT) {
-        morseHolder = GetLeftChild(morseTree); //set temp to left child of main.
+        morseHolder = GetLeftChild(morseHolder); //set temp to left child of main.
         morseCode[i] = ".";
         i++;
 
     }
     if (input_event.type == MORSE_EVENT_DASH) {
-        morseHolder = GetRightChild(morseTree); //set temp to right child of main.
+        morseHolder = GetRightChild(morseHolder); //set temp to right child of main.
         morseCode[i] = "-";
         i++;
     }
 
     if (input_event.type == MORSE_EVENT_DOT || MORSE_EVENT_DASH) {
-        if (!morseHolder) { //an invalid sequence! exits lowest level, or enters a nonexistent node.
+        if (morseHolder == NULL) { //an invalid sequence! exits lowest level, or enters a nonexistent node.
             input_event.type = MORSE_EVENT_ERROR;
             return input_event;
         } else { //sequence is valid
@@ -168,20 +168,23 @@ MorseEvent MorseDecode(MorseEvent input_event)
         }
     }
     if (input_event.type == MORSE_EVENT_NEW_LETTER) { //reset internal state?
-        if () { //if previous of morse sequence is invalid,
+
+        if (morseHolder->data == MORSE_CHAR_BAD_CHAR) { //if sequence is invalid,
             input_event.type = MORSE_EVENT_ERROR;
+
+            morseHolder = morseTree; //initialize to first node of Tree.
+
             return input_event;
         } else { //complete decoding.
             input_event.type = MORSE_EVENT_CHAR_DECODED;
             input_event.parameter = morseHolder->data; //whatever data char is stored here, return it.
+
+            morseHolder = morseTree; //initialize to first node of Tree.
+
             return input_event;
 
         }
     }
-
-
-
-
 }
 
 /**
