@@ -13,19 +13,21 @@
 //------don't include BinaryTree.h or Morse.h!-----
 #include "Morse.h"
 
+MorseEvent morseEvent;
+
 int main()
 {
     BOARD_Init();
 
 
-    printf("Welcome to sdenglis's Lab8 Morse.h tester!  Compiled on %s %s\n",__DATE__,__TIME__);
+    printf("Welcome to sdenglis's Lab8 Morse.h tester!  Compiled on %s %s\n", __DATE__, __TIME__);
 
     printf("Beginning automatic portion of Morse.h tester:\n");
     //test MorseInit()
     //test MorseDecode()
-        
-    
-    
+
+
+
     printf("Beginning interactive portion of Morse.h tester:\n");
 
     // <editor-fold defaultstate="collapsed" desc="Configure Timer">
@@ -44,15 +46,20 @@ int main()
     IPC2bits.T2IP = 4; // priority of  4
     IPC2bits.T2IS = 0; // subpriority of 0 arbitrarily 
     IEC0bits.T2IE = 1; // turn the interrupt on
-    
+
     // </editor-fold>
 
-    while (1){
-		//poll for MorseEvents and print them when detected
-		
-	};
-}
+    while (1) {
+        if (morseEvent.type == MORSE_EVENT_DOT) {
+            printf(".");
+        }
+        if (morseEvent.type == MORSE_EVENT_DASH) {
+            printf("-");
+        }
+        //poll for MorseEvents and print them when detected
 
+    };
+}
 
 /* Timer2 is used to check for Morse events.
  * 
@@ -62,7 +69,7 @@ void __ISR(_TIMER_2_VECTOR, ipl4auto) TimerInterrupt100Hz(void)
 {
     // Clear the interrupt flag.
     IFS0CLR = 1 << 8;
-    
-	morseEvent = MorseCheckEvents();
+
+    morseEvent = MorseCheckEvents();
 }
 

@@ -28,48 +28,6 @@
 /**
  * This enum declares constants for all of the possible event types that this module can trigger.
  */
-typedef enum {
-    MORSE_EVENT_NONE,
-    MORSE_EVENT_DOT,
-    MORSE_EVENT_DASH,
-    MORSE_EVENT_NEW_LETTER,
-    MORSE_EVENT_NEW_WORD,
-    MORSE_EVENT_CHAR_DECODED,
-    MORSE_EVENT_ERROR,
-} MorseEventType;
-
-typedef enum {
-    WAITING_FOR_WORD,
-    WAITING_FOR_LETTER,
-    WAITING_FOR_PULSE,
-    DOT,
-    DASH,
-} MorseState;
-
-typedef struct {
-    MorseEventType type;
-    MorseState state; //allows for storage of current state.
-    char parameter; //only used for CHAR_DECODED events
-} MorseEvent;
-
-/**
- * This enum specifies the characters that should be used to print to the OLED
- */
-typedef enum {
-    MORSE_CHAR_DOT = '.', /// A Morse DOT.
-    MORSE_CHAR_DASH = '-', /// A Morse DASH.
-    MORSE_CHAR_BAD_CHAR = '#', /// If the morse string does not correspond to any character, or is empty, use this char to signify an error 
-} MorseChar;
-
-/**
- * Define the length of time, in units of .01s, that either button-presses or time between button
- * presses should be.
- */
-typedef enum {
-    MORSE_DOT_TIMEOUT = 25,
-    MORSE_LETTER_TIMEOUT = 100,
-    MORSE_WORD_TIMEOUT = 200
-} MorseEventLength;
 
 #define SUCCESS 1
 #define TRUE 1
@@ -148,13 +106,13 @@ MorseEvent MorseDecode(MorseEvent input_event)
 {
     if (input_event.type == MORSE_EVENT_DOT) {
         morseHolder = GetLeftChild(morseHolder); //set temp to left child of main.
-        morseCode[i] = ".";
+        morseCode[i] = '.';
         i++;
 
     }
     if (input_event.type == MORSE_EVENT_DASH) {
         morseHolder = GetRightChild(morseHolder); //set temp to right child of main.
-        morseCode[i] = "-";
+        morseCode[i] = '-';
         i++;
     }
 
@@ -297,4 +255,5 @@ MorseEvent MorseCheckEvents(void)
         break;
 
     }
+    return morseEvent;
 }
