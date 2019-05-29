@@ -23,9 +23,10 @@
 #include "Oled.h"
 #include "OledDriver.h"
 
-#define STRING_LENGTH_MAX 25
+#define STRING_LENGTH_MAX 15
 
 static int initCheck;
+//used to ensure MORSE_EVENT_NEW_WORD doesn't trigger more than once.
 static int reset;
 static MorseEvent morseEvent;
 
@@ -83,7 +84,7 @@ int main()
                 if (morseEvent.type == MORSE_EVENT_DOT || morseEvent.type == MORSE_EVENT_DASH) {
                     OledAddToTopLine(morseEvent);
                     morseEvent = MorseDecode(morseEvent);
-                    reset = 0;
+                    reset = 1;
                 }
                 if (morseEvent.type == MORSE_EVENT_NEW_LETTER || morseEvent.type == MORSE_EVENT_ERROR) {
                     morseEvent = MorseDecode(morseEvent);
@@ -139,7 +140,7 @@ void OledAddToTopLine(MorseEvent event)
         morseCode[i] = MORSE_CHAR_DASH; //set current char to '-'
         i++;
     }
-    sprintf(printAssist, "%s \n %s", morseCode, morseDecrypt); //combine the two strings into one printable format.
+    sprintf(printAssist, "%s\n%s", morseCode, morseDecrypt); //combine the two strings into one printable format.
     OledDrawString(printAssist); //draw string onto OLED display.
     OledUpdate(); //update the display.
 
@@ -170,13 +171,14 @@ void OledAddToBottomLine(MorseEvent event)
         morseDecrypt[j] = '#'; //set current char to '#'
         j++;
     }
-    if (event.type == MORSE_EVENT_NEW_WORD && reset == 1) {
+    if (event.type == MORSE_EVENT_NEW_WORD && reset == 0) {
         morseDecrypt[j] = ' '; //add a space after the new word.
         j++; //update array location!
+        reset = 1;
+        event.type = MORSE_EVENT_NONE;
     }
 
-    reset = 0;
-    sprintf(printAssist, "%s \n %s", morseCode, morseDecrypt);
+    sprintf(printAssist, "%s\n%s", morseCode, morseDecrypt);
     OledDrawString(printAssist);
     OledUpdate();
     // appends new characters onto the bottom line.
