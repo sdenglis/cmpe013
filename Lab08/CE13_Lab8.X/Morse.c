@@ -1,3 +1,9 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 08         *
+ *5/28/2019      *
+ *****************/
 // Heap size 2048 required!
 
 // **** Include libraries here ****
@@ -69,7 +75,6 @@ int MorseInit(void)
 
     morseHolder = TreeCreate(1, ""); //create a temporary pointer to edit during function calls.
     morseTree = TreeCreate(6, "#EISH54V#3UF####2ARL#####WP##J#1TNDB6#X##KC##Y##MGZ7#Q##O#8##90"); //full morse tree key.
-
     morseHolder = morseTree; //initialize to first node of Tree. Does this work??
     state = WAITING_FOR_PULSE; //initialize state of FSM.
     if (morseTree && morseHolder) { //if TreeCreate was successful...

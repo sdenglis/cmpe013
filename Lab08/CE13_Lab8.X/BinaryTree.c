@@ -1,3 +1,9 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 08         *
+ *5/28/2019      *
+ *****************/
 // Heap size 2048 required!
 
 // **** Include libraries here ****

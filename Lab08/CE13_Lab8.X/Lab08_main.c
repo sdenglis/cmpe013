@@ -1,5 +1,12 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 08         *
+ *5/28/2019      *
+ *****************/
 // **** Include libraries here ****
-// Standard C libraries
+// Standard libraries
+#include <stdio.h>
 
 
 //CMPE13 Support Library
@@ -63,6 +70,7 @@ int main()
     BOARD_Init();
     OledInit(); //initialize the OLED display.
     initCheck = MorseInit();
+    reset = 0;
 
     if (initCheck) {
 
@@ -165,9 +173,9 @@ void OledAddToBottomLine(MorseEvent event)
     if (event.type == MORSE_EVENT_NEW_WORD && reset == 1) {
         morseDecrypt[j] = ' '; //add a space after the new word.
         j++; //update array location!
-        reset = 0;
     }
 
+    reset = 0;
     sprintf(printAssist, "%s \n %s", morseCode, morseDecrypt);
     OledDrawString(printAssist);
     OledUpdate();

@@ -1,3 +1,9 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 08         *
+ *5/28/2019      *
+ *****************/
 // **** Include libraries here ****
 // Standard libraries
 #include <stdio.h>
