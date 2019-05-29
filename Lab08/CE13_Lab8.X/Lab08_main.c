@@ -24,16 +24,19 @@
 #include "OledDriver.h"
 
 #define STRING_LENGTH_MAX 15
+#define DECRYPT_LENGTH 50 
+//just so that if it wraps to the third line, things don't break.
 
 static int initCheck;
 //used to ensure MORSE_EVENT_NEW_WORD doesn't trigger more than once.
 static int reset;
+static int once;
 static MorseEvent morseEvent;
 
 static int i; //holds the array location of our morseCode string.
 static char morseCode[STRING_LENGTH_MAX] = "";
 static int j; //holds converted/decrypted string array location.
-static char morseDecrypt[STRING_LENGTH_MAX] = "";
+static char morseDecrypt[DECRYPT_LENGTH] = "";
 
 static char printAssist[100]; //used for sprintf() calls.
 
@@ -85,17 +88,20 @@ int main()
                     OledAddToTopLine(morseEvent);
                     morseEvent = MorseDecode(morseEvent);
                     reset = 1;
+                    once = 0;
                 }
                 if (morseEvent.type == MORSE_EVENT_NEW_LETTER || morseEvent.type == MORSE_EVENT_ERROR) {
                     morseEvent = MorseDecode(morseEvent);
                     OledClearTopLine(morseEvent);
                     OledAddToBottomLine(morseEvent);
                     reset = 0;
+                    once = 1;
                 }
                 if (morseEvent.type == MORSE_EVENT_NEW_WORD) {
                     OledClearTopLine(morseEvent);
                     OledAddToBottomLine(morseEvent);
                     reset = 1;
+                    once = 0;
                 }
                 //update OLED, if appropriate
                 //decode morseEvent
@@ -167,9 +173,11 @@ void OledAddToBottomLine(MorseEvent event)
         j++; //update array location!
     }
 
-    if (event.type == MORSE_EVENT_ERROR) {
+    if (event.type == MORSE_EVENT_ERROR && once == 0) {
         morseDecrypt[j] = '#'; //set current char to '#'
         j++;
+        once = 1;
+        event.type = MORSE_EVENT_NONE;
     }
     if (event.type == MORSE_EVENT_NEW_WORD && reset == 0) {
         morseDecrypt[j] = ' '; //add a space after the new word.

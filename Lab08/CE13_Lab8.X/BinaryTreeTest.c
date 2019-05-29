@@ -82,7 +82,14 @@ int main()
 
     printf("\n_______________________\n");
 
-    printf("Points collected: %d out of 4!", points);
+
+    Node *nullTree = TreeCreate(0, NULL); //create NULL tree
+    TreePrint(nullTree, 0); //test if things crash or die when using NULL tree.
+    if (1) { //program makes it this far, and doesn't dereference the null pointer...
+        points++;
+    }
+
+    printf("Points collected: %d out of 5!", points);
 
     while (1);
 }

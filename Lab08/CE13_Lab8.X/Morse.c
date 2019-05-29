@@ -73,9 +73,8 @@ int MorseInit(void)
 {
     ButtonsInit();
 
-    morseHolder = TreeCreate(1, ""); //create a temporary pointer to edit during function calls.
     morseTree = TreeCreate(6, "#EISH54V#3UF####2ARL#####WP##J#1TNDB6#X##KC##Y##MGZ7#Q##O#8##90"); //full morse tree key.
-    morseHolder = morseTree; //initialize to first node of Tree. Does this work??
+    morseHolder = morseTree; //initialize to first node of Tree.
     state = WAITING_FOR_PULSE; //initialize state of FSM.
     if (morseTree && morseHolder) { //if TreeCreate was successful...
         return SUCCESS;
@@ -114,6 +113,10 @@ int MorseInit(void)
  */
 MorseEvent MorseDecode(MorseEvent input_event)
 {
+    if (input_event.type == MORSE_EVENT_ERROR) {
+
+        return input_event;
+    }
     if (input_event.type == MORSE_EVENT_DOT) {
         if (morseHolder->leftChild == NULL) {
             input_event.type = MORSE_EVENT_ERROR;
