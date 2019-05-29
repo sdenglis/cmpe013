@@ -1,9 +1,10 @@
 // **** Include libraries here ****
-// Standard C libraries
-
+// Standard libraries
+#include <stdio.h>
 
 //CMPE13 Support Library
 #include "BOARD.h"
+#include "Oled.h"
 
 // Microchip libraries
 #include <xc.h>
@@ -13,22 +14,88 @@
 //------don't include BinaryTree.h or Morse.h!-----
 #include "Morse.h"
 
-MorseEvent morseEvent;
+static MorseEvent morseEvent;
+static int initCheck;
+
+static int points;
 
 int main()
 {
     BOARD_Init();
+    OledInit(); //initialize the OLED display.
 
 
-    printf("Welcome to sdenglis's Lab8 Morse.h tester!  Compiled on %s %s\n", __DATE__, __TIME__);
+    printf("\n\nWelcome to sdenglis's Lab8 Morse.h tester!  Compiled on %s %s\n\n", __DATE__, __TIME__);
 
     printf("Beginning automatic portion of Morse.h tester:\n");
     //test MorseInit()
+    initCheck = MorseInit();
+    if (initCheck) {
+        printf("Initialization was a success!\n");
+        points++;
+
+    } else {
+        printf("Initialization ERROR.\n");
+    }
     //test MorseDecode()
+    morseEvent.type = MORSE_EVENT_DOT;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_DOT;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_DOT;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_NEW_LETTER;
+    morseEvent = MorseDecode(morseEvent);
+    printf("we made it, here's the decoded char: %c\n", morseEvent.parameter);
+    if (morseEvent.parameter == 'S') { // 'S' == "..."
+        points++;
+    }
+
+    morseEvent.type = MORSE_EVENT_DASH;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_DASH;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_DASH;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_NEW_LETTER;
+    morseEvent = MorseDecode(morseEvent);
+    printf("and the next: %c\n", morseEvent.parameter);
+    if (morseEvent.parameter == 'O') { // 'O' == "---"
+        points++;
+    }
+
+    morseEvent.type = MORSE_EVENT_DOT;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_DOT;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_DOT;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_NEW_LETTER;
+    morseEvent = MorseDecode(morseEvent);
+    printf("and lastly: %c\n", morseEvent.parameter);
+    if (morseEvent.parameter == 'S') { // 'S' == "..."
+        points++;
+    }
+
+    morseEvent.type = MORSE_EVENT_DASH;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_DASH;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_DASH;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_DASH;
+    MorseDecode(morseEvent);
+    morseEvent.type = MORSE_EVENT_NEW_LETTER;
+    morseEvent = MorseDecode(morseEvent);
+    printf("this should be invalid: %c\n", morseEvent.parameter);
+    if (morseEvent.parameter == '#') { // '#' == "invalid sequence!"
+        points++;
+    }
+    printf("passed %d out of 5 tests!\n", points);
 
 
-
-    printf("Beginning interactive portion of Morse.h tester:\n");
+    printf("\nBeginning interactive portion of Morse.h tester:\n");
+    printf("Press BTN4 please!\n");
 
     // <editor-fold defaultstate="collapsed" desc="Configure Timer">
 
@@ -50,14 +117,17 @@ int main()
     // </editor-fold>
 
     while (1) {
-        if (morseEvent.type == MORSE_EVENT_DOT) {
-            printf(".");
+        if (morseEvent.type) {
+            if (morseEvent.type == MORSE_EVENT_DOT) {
+                printf(".");
+                morseEvent = MorseDecode(morseEvent);
+            }
+            if (morseEvent.type == MORSE_EVENT_DASH) {
+                printf("-");
+                morseEvent = MorseDecode(morseEvent);
+            }
+            //poll for MorseEvents and print them when detected
         }
-        if (morseEvent.type == MORSE_EVENT_DASH) {
-            printf("-");
-        }
-        //poll for MorseEvents and print them when detected
-
     };
 }
 
@@ -72,4 +142,3 @@ void __ISR(_TIMER_2_VECTOR, ipl4auto) TimerInterrupt100Hz(void)
 
     morseEvent = MorseCheckEvents();
 }
-

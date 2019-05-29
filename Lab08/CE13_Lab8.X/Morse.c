@@ -33,18 +33,12 @@
 #define TRUE 1
 #define STANDARD_ERROR 0 
 #define FALSE 0
-#define STRING_LENGTH_MAX 25
-//really, nothing over 25 characters will be displayed on the top line of the OLED.
 
 static uint8_t bEvent; //used to collect ButtonsCheckEvents() state.
-static uint8_t ButtonsEvent;
 static MorseEvent morseEvent;
 static int wordTimer;
 static int letterTimer;
 static int dashTimer;
-
-static int i; //holds the array location of our morseCode string.
-static char morseCode[STRING_LENGTH_MAX] = "";
 
 Node *morseTree;
 Node *morseHolder;
@@ -62,12 +56,12 @@ int MorseInit(void)
 {
     ButtonsInit();
 
-    morseHolder = TreeCreate(1, "");
-    morseTree = TreeCreate(6, "#EISH54V#3UF####2ARL#####WP##J#1TNDB6#X##KC##Y##MGZ7#Q##O#8##90"); //full morse tree.
+    morseHolder = TreeCreate(1, ""); //create a temporary pointer to edit during function calls.
+    morseTree = TreeCreate(6, "#EISH54V#3UF####2ARL#####WP##J#1TNDB6#X##KC##Y##MGZ7#Q##O#8##90"); //full morse tree key.
 
-    morseHolder = morseTree; //initialize to first node of Tree.
+    morseHolder = morseTree; //initialize to first node of Tree. Does this work??
     morseEvent.state = WAITING_FOR_PULSE; //initialize state of FSM.
-    if (morseTree) {
+    if (morseTree && morseHolder) { //if TreeCreate was successful...
         return SUCCESS;
     } else {
         return STANDARD_ERROR;
@@ -105,30 +99,34 @@ int MorseInit(void)
 MorseEvent MorseDecode(MorseEvent input_event)
 {
     if (input_event.type == MORSE_EVENT_DOT) {
-        morseHolder = GetLeftChild(morseHolder); //set temp to left child of main.
-        morseCode[i] = '.';
-        i++;
+        if (morseHolder->leftChild == NULL) {
+            input_event.type = MORSE_EVENT_ERROR;
+            input_event.parameter = '#';
 
+            morseHolder = morseTree; //initialize to first node of Tree.
+
+            return input_event;
+        } else {
+            morseHolder = GetLeftChild(morseHolder); //set temp to left child of main.
+        }
     }
     if (input_event.type == MORSE_EVENT_DASH) {
-        morseHolder = GetRightChild(morseHolder); //set temp to right child of main.
-        morseCode[i] = '-';
-        i++;
-    }
-
-    if (input_event.type == MORSE_EVENT_DOT || MORSE_EVENT_DASH) {
-        if (morseHolder == NULL) { //an invalid sequence! exits lowest level, or enters a nonexistent node.
+        if (morseHolder->rightChild == NULL) {
             input_event.type = MORSE_EVENT_ERROR;
+            input_event.parameter = '#';
+
+            morseHolder = morseTree; //initialize to first node of Tree.
+
             return input_event;
-        } else { //sequence is valid
-            input_event.type = MORSE_EVENT_NONE;
-            return input_event;
+        } else {
+            morseHolder = GetRightChild(morseHolder); //set temp to right child of main.
         }
     }
     if (input_event.type == MORSE_EVENT_NEW_LETTER) { //reset internal state?
 
         if (morseHolder->data == MORSE_CHAR_BAD_CHAR) { //if sequence is invalid,
             input_event.type = MORSE_EVENT_ERROR;
+            input_event.parameter = morseHolder->data;
 
             morseHolder = morseTree; //initialize to first node of Tree.
 
@@ -140,7 +138,15 @@ MorseEvent MorseDecode(MorseEvent input_event)
             morseHolder = morseTree; //initialize to first node of Tree.
 
             return input_event;
-
+        }
+    }
+    if (input_event.type == MORSE_EVENT_DOT || MORSE_EVENT_DASH) {
+        if (morseHolder->data == NULL || morseHolder == NULL) { //an invalid sequence! exits lowest level, or enters a nonexistent node.
+            input_event.type = MORSE_EVENT_ERROR;
+            return input_event;
+        } else { //sequence is valid
+            input_event.type = MORSE_EVENT_NONE;
+            return input_event;
         }
     }
 }
@@ -178,11 +184,10 @@ MorseEvent MorseCheckEvents(void)
         if (wordTimer == 0) {
             //once word_timeout,
             morseEvent.type = MORSE_EVENT_NEW_WORD; //generate new_word event.
-
             morseEvent.state = WAITING_FOR_WORD; //switch to WAITING_FOR_WORD.
             return morseEvent;
 
-        } else if (ButtonsEvent == BUTTON_EVENT_4DOWN) {
+        } else if (bEvent & BUTTON_EVENT_4DOWN) {
             //set dot countdown.
             dashTimer = MORSE_DOT_TIMEOUT;
 
@@ -198,7 +203,6 @@ MorseEvent MorseCheckEvents(void)
         if (letterTimer == 0) {
             //once letter_timeout,
             morseEvent.type = MORSE_EVENT_NEW_LETTER; //generate new_letter event.
-
             morseEvent.state = WAITING_FOR_LETTER; //switch to WAITING_FOR_LETTER.
             return morseEvent;
 

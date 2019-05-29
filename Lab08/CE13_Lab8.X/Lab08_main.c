@@ -12,9 +12,21 @@
 // User libraries
 //------don't include BinaryTree.h or Morse.h!-----
 #include "Morse.h"
+#include "Oled.h"
+#include "OledDriver.h"
+
+#define STRING_LENGTH_MAX 25
 
 static int initCheck;
+static int reset;
 static MorseEvent morseEvent;
+
+static int i; //holds the array location of our morseCode string.
+static char morseCode[STRING_LENGTH_MAX] = "";
+static int j; //holds converted/decrypted string array location.
+static char morseDecrypt[STRING_LENGTH_MAX] = "";
+
+static char printAssist[100]; //used for sprintf() calls.
 
 //Helper functions:
 void OledAddToTopLine(MorseEvent event);
@@ -44,7 +56,7 @@ int main()
 
     // </editor-fold>
 
-    printf("\nWelcome to CRUZID's Lab8 Morse decoder!  Compiled on %s %s\n", __DATE__, __TIME__);
+    printf("\nWelcome to sdenglis's Lab8 Morse decoder!  Compiled on %s %s\n", __DATE__, __TIME__);
 
     //initialization code
     BOARD_Init();
@@ -53,9 +65,28 @@ int main()
 
     if (initCheck) {
 
+        //OledDrawString("Please enter a morse sequence:");
+        //OledUpdate();
+
         while (1) {
             //poll for morse events:
-            if (morseEvent) {
+            if (morseEvent.type) {
+                if (morseEvent.type == MORSE_EVENT_DOT || morseEvent.type == MORSE_EVENT_DASH) {
+                    OledAddToTopLine(morseEvent);
+                    morseEvent = MorseDecode(morseEvent);
+                    reset = 0;
+                }
+                if (morseEvent.type == MORSE_EVENT_NEW_LETTER || morseEvent.type == MORSE_EVENT_ERROR) {
+                    morseEvent = MorseDecode(morseEvent);
+                    OledClearTopLine(morseEvent);
+                    OledAddToBottomLine(morseEvent);
+                    reset = 0;
+                }
+                if (morseEvent.type == MORSE_EVENT_NEW_WORD) {
+                    OledClearTopLine(morseEvent);
+                    OledAddToBottomLine(morseEvent);
+                    reset = 1;
+                }
                 //update OLED, if appropriate
                 //decode morseEvent
                 //update OLED, if appropriate
@@ -88,17 +119,57 @@ void __ISR(_TIMER_2_VECTOR, ipl4auto) TimerInterrupt100Hz(void)
 void OledAddToTopLine(MorseEvent event)
 {
     //when MORSE_DOT || MORSE_DASH
+    if (event.type == MORSE_EVENT_DOT) {
+
+        morseCode[i] = MORSE_CHAR_DOT; //set current location in array to '.'
+        i++;
+
+    }
+    if (event.type == MORSE_EVENT_DASH) {
+
+        morseCode[i] = MORSE_CHAR_DASH; //set current char to '-'
+        i++;
+    }
+    sprintf(printAssist, "%s \n %s", morseCode, morseDecrypt); //combine the two strings into one printable format.
+    OledDrawString(printAssist); //draw string onto OLED display.
+    OledUpdate(); //update the display.
+
     //print corresponding symbol onto top line.
 }
 
 void OledClearTopLine(MorseEvent event)
 {
+    static int x;
+    for (x = 0; x < STRING_LENGTH_MAX; x++) { //clear the entire array!
+        morseCode[x] = ' ';
+    }
+
+    i = 0; //reset i counter outside of function as well.
+
     // when new_letter || new_word || error
     //clear top line.
 }
 
 void OledAddToBottomLine(MorseEvent event)
 {
+    if (event.type == MORSE_EVENT_CHAR_DECODED) {
+        morseDecrypt[j] = event.parameter;
+        j++; //update array location!
+    }
+
+    if (event.type == MORSE_EVENT_ERROR) {
+        morseDecrypt[j] = '#'; //set current char to '#'
+        j++;
+    }
+    if (event.type == MORSE_EVENT_NEW_WORD && reset == 1) {
+        morseDecrypt[j] = ' '; //add a space after the new word.
+        j++; //update array location!
+        reset = 0;
+    }
+
+    sprintf(printAssist, "%s \n %s", morseCode, morseDecrypt);
+    OledDrawString(printAssist);
+    OledUpdate();
     // appends new characters onto the bottom line.
     //when CHAR_DECODED append decoded char to line 2.
     //when NEW_WORD, append space char and then decoded char.
