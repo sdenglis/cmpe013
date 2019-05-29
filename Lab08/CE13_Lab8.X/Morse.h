@@ -23,17 +23,9 @@ typedef enum {
     MORSE_EVENT_ERROR,
 } MorseEventType;
 
-typedef enum {
-    WAITING_FOR_WORD,
-    WAITING_FOR_LETTER,
-    WAITING_FOR_PULSE,
-    DOT,
-    DASH,
-} MorseState;
 
 typedef struct {
     MorseEventType type;
-    MorseState state; //allows for storage of current state.
     char parameter; //only used for CHAR_DECODED events
 } MorseEvent;
 

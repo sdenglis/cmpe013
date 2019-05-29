@@ -34,14 +34,25 @@
 #define STANDARD_ERROR 0 
 #define FALSE 0
 
+unsigned int state; //allows for storage of current state.
+
+enum {
+    WAITING_FOR_WORD,
+    WAITING_FOR_LETTER,
+    WAITING_FOR_PULSE,
+    DOT,
+    DASH,
+};
+
+
 static uint8_t bEvent; //used to collect ButtonsCheckEvents() state.
 static MorseEvent morseEvent;
 static int wordTimer;
 static int letterTimer;
 static int dashTimer;
 
-Node *morseTree;
-Node *morseHolder;
+static Node *morseTree;
+static Node *morseHolder;
 
 /**
  * This function initializes the Morse code decoder. This is primarily the generation of the
@@ -60,7 +71,7 @@ int MorseInit(void)
     morseTree = TreeCreate(6, "#EISH54V#3UF####2ARL#####WP##J#1TNDB6#X##KC##Y##MGZ7#Q##O#8##90"); //full morse tree key.
 
     morseHolder = morseTree; //initialize to first node of Tree. Does this work??
-    morseEvent.state = WAITING_FOR_PULSE; //initialize state of FSM.
+    state = WAITING_FOR_PULSE; //initialize state of FSM.
     if (morseTree && morseHolder) { //if TreeCreate was successful...
         return SUCCESS;
     } else {
@@ -166,13 +177,13 @@ MorseEvent MorseCheckEvents(void)
 {
     bEvent = ButtonsCheckEvents(); //constantly poll for button changes.
 
-    switch (morseEvent.state) { //run state machine, TIMEOUT's included within.
+    switch (state) { //run state machine, TIMEOUT's included within.
     case WAITING_FOR_WORD:
         if (bEvent & BUTTON_EVENT_4DOWN) {
             //set dot countdown.
             dashTimer = MORSE_DOT_TIMEOUT;
 
-            morseEvent.state = DOT; //switch to DOT.
+            state = DOT; //switch to DOT.
         } else {
             morseEvent.type = MORSE_EVENT_NONE;
             return morseEvent; //ELSE, return NOTHING.
@@ -184,14 +195,14 @@ MorseEvent MorseCheckEvents(void)
         if (wordTimer == 0) {
             //once word_timeout,
             morseEvent.type = MORSE_EVENT_NEW_WORD; //generate new_word event.
-            morseEvent.state = WAITING_FOR_WORD; //switch to WAITING_FOR_WORD.
+            state = WAITING_FOR_WORD; //switch to WAITING_FOR_WORD.
             return morseEvent;
 
         } else if (bEvent & BUTTON_EVENT_4DOWN) {
             //set dot countdown.
             dashTimer = MORSE_DOT_TIMEOUT;
 
-            morseEvent.state = DOT; //switch to DOT.
+            state = DOT; //switch to DOT.
         } else {
             morseEvent.type = MORSE_EVENT_NONE;
             return morseEvent; //ELSE, return NOTHING.
@@ -203,14 +214,14 @@ MorseEvent MorseCheckEvents(void)
         if (letterTimer == 0) {
             //once letter_timeout,
             morseEvent.type = MORSE_EVENT_NEW_LETTER; //generate new_letter event.
-            morseEvent.state = WAITING_FOR_LETTER; //switch to WAITING_FOR_LETTER.
+            state = WAITING_FOR_LETTER; //switch to WAITING_FOR_LETTER.
             return morseEvent;
 
         } else if (bEvent & BUTTON_EVENT_4DOWN) {
             //set dot countdown.
             dashTimer = MORSE_DOT_TIMEOUT;
 
-            morseEvent.state = DOT; //switch to DOT.
+            state = DOT; //switch to DOT.
         } else {
             morseEvent.type = MORSE_EVENT_NONE;
             return morseEvent; //ELSE, return NOTHING.
@@ -221,7 +232,7 @@ MorseEvent MorseCheckEvents(void)
         dashTimer--;
         if (dashTimer == 0) {
             //once dot_timeout,
-            morseEvent.state = DASH; //switch to DASH.
+            state = DASH; //switch to DASH.
         } else if (bEvent & BUTTON_EVENT_4UP) {
             //set word countdown.
             wordTimer = MORSE_WORD_TIMEOUT;
@@ -230,7 +241,7 @@ MorseEvent MorseCheckEvents(void)
 
             morseEvent.type = MORSE_EVENT_DOT; //generate DOT event.
 
-            morseEvent.state = WAITING_FOR_PULSE; //switch to WAITING_FOR_PULSE.
+            state = WAITING_FOR_PULSE; //switch to WAITING_FOR_PULSE.
             return morseEvent;
 
         } else {
@@ -249,7 +260,7 @@ MorseEvent MorseCheckEvents(void)
 
             morseEvent.type = MORSE_EVENT_DASH; //generate DASH event.
 
-            morseEvent.state = WAITING_FOR_PULSE; //switch to WAITING_FOR_PULSE.
+            state = WAITING_FOR_PULSE; //switch to WAITING_FOR_PULSE.
             return morseEvent;
 
         } else {
