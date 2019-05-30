@@ -120,7 +120,7 @@ MorseEvent MorseDecode(MorseEvent input_event)
     if (input_event.type == MORSE_EVENT_DOT) {
         if (morseHolder->leftChild == NULL) {
             input_event.type = MORSE_EVENT_ERROR;
-            input_event.parameter = '#';
+            //input_event.parameter = '#';
 
             morseHolder = morseTree; //initialize to first node of Tree.
 
@@ -132,7 +132,7 @@ MorseEvent MorseDecode(MorseEvent input_event)
     if (input_event.type == MORSE_EVENT_DASH) {
         if (morseHolder->rightChild == NULL) {
             input_event.type = MORSE_EVENT_ERROR;
-            input_event.parameter = '#';
+            //input_event.parameter = '#';
 
             morseHolder = morseTree; //initialize to first node of Tree.
 

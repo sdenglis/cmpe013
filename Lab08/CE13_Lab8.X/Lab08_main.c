@@ -78,8 +78,10 @@ int main()
 
     if (initCheck) {
 
-        //OledDrawString("Please enter a morse sequence:");
-        //OledUpdate();
+        OledDrawString("Please enter a morse sequence:");
+        OledUpdate();
+        OledClear(0);
+        
 
         while (1) {
             //poll for morse events:

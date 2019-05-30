@@ -24,6 +24,7 @@ static MorseEvent morseEvent;
 static int initCheck;
 
 static int points;
+static int once;
 
 int main()
 {
@@ -127,11 +128,29 @@ int main()
             if (morseEvent.type == MORSE_EVENT_DOT) {
                 printf(".");
                 morseEvent = MorseDecode(morseEvent);
+                once = 1;
             }
             if (morseEvent.type == MORSE_EVENT_DASH) {
                 printf("-");
                 morseEvent = MorseDecode(morseEvent);
+                once = 1;
             }
+            if (morseEvent.type == MORSE_EVENT_NEW_LETTER && morseEvent.parameter != '#') {
+                morseEvent = MorseDecode(morseEvent);
+                printf("\n New Letter: %c\n", morseEvent.parameter);
+                once = 0;
+            }
+
+            if (morseEvent.type == MORSE_EVENT_NEW_WORD) {
+                morseEvent = MorseDecode(morseEvent);
+                printf("New Word!\n");
+            }
+            if (morseEvent.type == MORSE_EVENT_ERROR && once == 0){
+                morseEvent = MorseDecode(morseEvent);
+                printf("Invalid Character: #\n");
+                once = 1;
+            }
+
             //poll for MorseEvents and print them when detected
         }
     };

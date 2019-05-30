@@ -219,7 +219,7 @@
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
-      <item path="Lab08_main.c" ex="false" overriding="false">
+      <item path="Lab08_main.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -233,7 +233,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="MorseTest.c" ex="true" overriding="false">
+      <item path="MorseTest.c" ex="false" overriding="false">
         <C32>
         </C32>
         <C32-AR>
