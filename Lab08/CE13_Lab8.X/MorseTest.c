@@ -103,6 +103,8 @@ int main()
 
     printf("\nBeginning interactive portion of Morse.h tester:\n");
     printf("Press BTN4 please!\n");
+    morseEvent.type = MORSE_EVENT_NONE;
+    morseEvent.parameter = NULL;
 
     // <editor-fold defaultstate="collapsed" desc="Configure Timer">
 
@@ -128,26 +130,29 @@ int main()
             if (morseEvent.type == MORSE_EVENT_DOT) {
                 printf(".");
                 morseEvent = MorseDecode(morseEvent);
-                once = 1;
+                once = 0;
             }
             if (morseEvent.type == MORSE_EVENT_DASH) {
                 printf("-");
                 morseEvent = MorseDecode(morseEvent);
-                once = 1;
-            }
-            if (morseEvent.type == MORSE_EVENT_NEW_LETTER && morseEvent.parameter != '#') {
-                morseEvent = MorseDecode(morseEvent);
-                printf("\n New Letter: %c\n", morseEvent.parameter);
                 once = 0;
+            }
+            if (morseEvent.type == MORSE_EVENT_NEW_LETTER) {
+                morseEvent = MorseDecode(morseEvent);
+                if (morseEvent.parameter != '#') {
+                    printf("\n New Letter: %c\n", morseEvent.parameter);
+                    once = 0;
+                }
             }
 
             if (morseEvent.type == MORSE_EVENT_NEW_WORD) {
                 morseEvent = MorseDecode(morseEvent);
-                printf("New Word!\n");
+                printf(" New Word!\n");
+                once = 1;
             }
-            if (morseEvent.type == MORSE_EVENT_ERROR && once == 0){
+            if (morseEvent.type == MORSE_EVENT_ERROR && once == 0) {
                 morseEvent = MorseDecode(morseEvent);
-                printf("Invalid Character: #\n");
+                printf("\n Invalid Character: #\n");
                 once = 1;
             }
 
