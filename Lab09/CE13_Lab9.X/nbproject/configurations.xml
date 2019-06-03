@@ -41,6 +41,9 @@
       <itemPath>HumanAgent.o</itemPath>
       <itemPath>Message_correct.o</itemPath>
       <itemPath>Negotiation_correct.o</itemPath>
+      <itemPath>AgentTest.c</itemPath>
+      <itemPath>NegotiationTest.c</itemPath>
+      <itemPath>MessageTest.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -71,6 +74,10 @@
         <linkerTool>
           <linkerLibItems>
             <linkerLibFileItem>Lab9SupportLib.a</linkerLibFileItem>
+            <linkerLibFileItem>Field_correct.o</linkerLibFileItem>
+            <linkerLibFileItem>HumanAgent.o</linkerLibFileItem>
+            <linkerLibFileItem>Negotiation_correct.o</linkerLibFileItem>
+            <linkerLibFileItem>Message_correct.o</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
         <archiverTool>
@@ -235,6 +242,12 @@
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
+      <item path="Field.c" ex="true" overriding="false">
+      </item>
+      <item path="Lab09_main.c" ex="true" overriding="false">
+      </item>
+      <item path="Message.c" ex="true" overriding="false">
+      </item>
       <item path="Negotiation.c" ex="true" overriding="false">
         <C32>
         </C32>

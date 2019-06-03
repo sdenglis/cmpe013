@@ -35,6 +35,13 @@
 #define SHO_CHECKSUM_STRING "54"
 #define RES_CHECKSUM_STRING "58"
 
+#define LENGTH_OF_ACC_TEST_STRING 10
+#define LENGTH_OF_RES_TEST_STRING 14
+#define LENGTH_OF_NONE_TEST_STRING 0
+
+#define PARAM1 1
+#define PARAM2 2
+#define PARAM3 3
 
 
 static int passed, tried;
@@ -44,7 +51,7 @@ static Message message_to_encode;
 int main()
 {
     BOARD_Init();
-    
+
     printf("Welcome to adymont and sdenglis' Message Test Harness. %s; %s\n", __DATE__, __TIME__);
 
     //Message_CalculateChecksum tests
@@ -232,21 +239,150 @@ int main()
     //Message_Encode
     static char test_string[MESSAGE_MAX_PAYLOAD_LEN] = "INITIALIZED_MESSAGE";
 
-    
+    //CHA
+    tried++;
     message_to_encode.type = MESSAGE_CHA;
-    message_to_encode.param0 = 0; 
+    message_to_encode.param0 = 0;
     message_to_encode.param1 = 0;
     message_to_encode.param2 = 0;
 
-//    printf("%p, %p, %d", test_string, &message_to_encode, message_to_encode.type);
-    Message_Encode(test_string, message_to_encode);   
-    
+    Message_Encode(test_string, message_to_encode);
+
     if (strncmp(test_string, "$CHA,0*56\n", MESSAGE_MAX_LEN) == 0) {
         passed++;
         printf("Encode CHA message test: Passed.\n");
     } else {
         printf("Encode CHA message test test: failed.\n");
     }
+
+    //ACC
+    tried++;
+    message_to_encode.type = MESSAGE_ACC;
+    message_to_encode.param0 = 0;
+    message_to_encode.param1 = 0;
+    message_to_encode.param2 = 0;
+
+    static int testACCLength;
+    testACCLength = Message_Encode(test_string, message_to_encode);
+
+    if (strncmp(test_string, "$ACC,0*5D\n", MESSAGE_MAX_LEN) == 0) {
+        if (testACCLength == LENGTH_OF_ACC_TEST_STRING) {
+            passed++;
+            printf("Encode ACC message test: Passed.\n");
+        } else {
+            printf("Encode ACC message test test: failed.\n");
+        }
+    } else {
+        printf("Encode ACC message test test: failed.\n");
+    }
+
+    tried++;
+    message_to_encode.type = MESSAGE_RES;
+    message_to_encode.param0 = 1;
+    message_to_encode.param1 = 2;
+    message_to_encode.param2 = 3;
+
+    static int testRESLength;
+    testRESLength = Message_Encode(test_string, message_to_encode);
+
+    if (strncmp(test_string, "$RES,1,2,3*58\n", MESSAGE_MAX_LEN) == 0) {
+        if (testRESLength == LENGTH_OF_RES_TEST_STRING) {
+            passed++;
+            printf("Encode RES message test: Passed.\n");
+        } else {
+            printf("Encode RES message test test: failed.\n");
+        }
+    } else {
+        printf("Encode RES message test test: failed.\n");
+    }
+
+    tried++;
+    message_to_encode.type = MESSAGE_NONE;
+
+    static int testNONELength;
+    testNONELength = Message_Encode(test_string, message_to_encode);
+
+
+    if (testNONELength == LENGTH_OF_NONE_TEST_STRING) {
+        passed++;
+        printf("Encode NONE message test: Passed.\n");
+    } else {
+        printf("Encode NONE message test test: failed.\n");
+        printf("Note: does not work with _correct.o\n");
+    }
+
+
+    //Message Decode
+
+    tried++;
+    message_event = malloc(sizeof (BB_Event));
+
+    message_to_encode.type = MESSAGE_RES;
+    message_to_encode.param0 = PARAM1;
+    message_to_encode.param1 = PARAM2;
+    message_to_encode.param2 = PARAM3;
+
+    Message_Encode(test_string, message_to_encode);
+
+    int i = 0;
+    for (i = 0; i < LENGTH_OF_RES_TEST_STRING; i++) {
+        Message_Decode(test_string[i], message_event);
+    }
+
+    if (message_event->type == BB_EVENT_RES_RECEIVED && message_event->param0 == PARAM1 &&
+            message_event->param1 == PARAM2 && message_event->param2 == PARAM3) {
+        passed++;
+        printf("Decode RES message test: Passed.\n");
+    } else {
+        printf("Decode RES message test test: failed.\n");
+    }
+
+    //test2 incomplete
+    message_to_encode.type = MESSAGE_RES;
+    message_to_encode.param0 = PARAM1;
+    message_to_encode.param1 = PARAM2;
+    message_to_encode.param2 = PARAM3;
+
+    Message_Encode(test_string, message_to_encode);
+
+    for (i = 0; i < LENGTH_OF_RES_TEST_STRING - 2; i++) {
+        Message_Decode(test_string[i], message_event);
+    }
+
+    if (message_event->type == BB_EVENT_NO_EVENT && message_event->param0 == PARAM1 &&
+            message_event->param1 == PARAM2 && message_event->param2 == PARAM3) {
+        passed++;
+        printf("Decode INCOMPLETE message test: Passed.\n");
+    } else {
+        printf("Decode INCOMPLETE message test test: failed.\n");
+    }
+    
+    
+    //Bad String
+    tried++;
+    static unsigned int truthVariable = SUCCESS;
+    
+    message_to_encode.type = MESSAGE_RES;
+    message_to_encode.param0 = PARAM1;
+    message_to_encode.param1 = PARAM2;
+    message_to_encode.param2 = PARAM3;
+
+    Message_Encode(test_string, message_to_encode);
+    
+    test_string[3] = '\0';
+
+    for (i = 0; i < LENGTH_OF_RES_TEST_STRING && (truthVariable == SUCCESS); i++) {
+        truthVariable = Message_Decode(test_string[i], message_event);
+    }
+    
+    if(truthVariable == STANDARD_ERROR){
+        passed++;
+        printf("Decode BAD STRING message test: Passed.\n");
+    } else {
+        printf("Decode BAD STRING message test test: failed.\n");
+    }
+
+
 
 
 

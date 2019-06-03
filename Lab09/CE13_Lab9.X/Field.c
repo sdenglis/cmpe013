@@ -466,7 +466,7 @@ uint8_t FieldGetBoatStates(const Field *f)
  */
 uint8_t FieldAIPlaceAllBoats(Field *f)
 {
-    srand(__TIME__); //set seed to random, time-variant.
+    //srand(__TIME__); //set seed to random, time-variant.
     static uint8_t addBoat_status;
     static unsigned int success_counter;
     static uint8_t row;
@@ -543,7 +543,7 @@ uint8_t FieldAIPlaceAllBoats(Field *f)
  */
 GuessData FieldAIDecideGuess(const Field * f)
 {
-    srand(__TIME__); //set seed to random, time-variant.
+    //srand(__TIME__); //set seed to random, time-variant.
     static unsigned int i; //used to randomly generate row value.
     static unsigned int j; //used to randomly generate column value.
     static GuessData *gData;
