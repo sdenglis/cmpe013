@@ -457,7 +457,8 @@ int main()
             //shot message.
             break;
         default: //MESSAGE_NONE:
-            printf("\nMESSAGE_NONE ||INVALID||\n");
+            printf("\nMESSAGE_NONE ||HumanAgent.o||\n");
+            points_correct++;
             break;
         }
         agent_get = AgentGetState();
@@ -483,7 +484,8 @@ int main()
             printf("AGENT_STATE_DEFENDING ||INVALID||\n");
             break;
         case 5:
-            printf("AGENT_STATE_WAITING_TO_SEND ||INVALID||\n");
+            printf("AGENT_STATE_WAITING_TO_SEND ||HumanAgent.o||\n");
+            points_correct++;
             break;
         case 6:
             printf("AGENT_STATE_END_SCREEN ||BOATS NEVER PLACES (HumanAgent.o)||\n");
@@ -577,6 +579,7 @@ int main()
      *****************************************************************************/
 
     printf("\n\nTotal number of points scored: %d out of 12", points_correct);
+    printf("\nNOTE: Oled should display 'SHOULDN'T PRINT THIS!'\n");
 
 
 
