@@ -21,6 +21,10 @@
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
                    projectFiles="true">
+      <itemPath>Agent.c</itemPath>
+      <itemPath>AgentTest.c</itemPath>
+      <itemPath>Negotiation.c</itemPath>
+      <itemPath>NegotiationTest.c</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -33,17 +37,14 @@
       <itemPath>Oled.c</itemPath>
       <itemPath>OledDriver.c</itemPath>
       <itemPath>Uart1.c</itemPath>
-      <itemPath>Agent.c</itemPath>
       <itemPath>Message.c</itemPath>
-      <itemPath>Negotiation.c</itemPath>
-      <itemPath>Field.c</itemPath>
       <itemPath>Field_correct.o</itemPath>
       <itemPath>HumanAgent.o</itemPath>
       <itemPath>Message_correct.o</itemPath>
       <itemPath>Negotiation_correct.o</itemPath>
-      <itemPath>AgentTest.c</itemPath>
-      <itemPath>NegotiationTest.c</itemPath>
       <itemPath>MessageTest.c</itemPath>
+      <itemPath>FieldTest.c</itemPath>
+      <itemPath>Field.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -74,9 +75,8 @@
         <linkerTool>
           <linkerLibItems>
             <linkerLibFileItem>Lab9SupportLib.a</linkerLibFileItem>
-            <linkerLibFileItem>Field_correct.o</linkerLibFileItem>
-            <linkerLibFileItem>HumanAgent.o</linkerLibFileItem>
             <linkerLibFileItem>Negotiation_correct.o</linkerLibFileItem>
+            <linkerLibFileItem>HumanAgent.o</linkerLibFileItem>
             <linkerLibFileItem>Message_correct.o</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
@@ -114,6 +114,18 @@
         </C32Global>
       </item>
       <item path="AgentTest.c" ex="true" overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
       </item>
       <C32>
         <property key="additional-warnings" value="true"/>
@@ -244,7 +256,7 @@
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
-      <item path="Field.c" ex="true" overriding="false">
+      <item path="Field.c" ex="false" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -257,6 +269,22 @@
         </C32CPP>
         <C32Global>
         </C32Global>
+      </item>
+      <item path="FieldTest.c" ex="false" overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="Field_correct.o" ex="true" overriding="false">
       </item>
       <item path="Lab09_main.c" ex="true" overriding="false">
         <C32>
@@ -314,7 +342,21 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="NegotiationTest.c" ex="false" overriding="false">
+      <item path="NegotiationTest.c" ex="true" overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="Negotiation_correct.o" ex="false" overriding="false">
         <C32>
         </C32>
         <C32-AR>

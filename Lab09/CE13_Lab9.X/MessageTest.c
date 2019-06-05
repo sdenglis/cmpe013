@@ -356,26 +356,26 @@ int main()
     } else {
         printf("Decode INCOMPLETE message test test: failed.\n");
     }
-    
-    
+
+
     //Bad String
     tried++;
     static unsigned int truthVariable = SUCCESS;
-    
+
     message_to_encode.type = MESSAGE_RES;
     message_to_encode.param0 = PARAM1;
     message_to_encode.param1 = PARAM2;
     message_to_encode.param2 = PARAM3;
 
     Message_Encode(test_string, message_to_encode);
-    
+
     test_string[3] = '\0';
 
     for (i = 0; i < LENGTH_OF_RES_TEST_STRING && (truthVariable == SUCCESS); i++) {
         truthVariable = Message_Decode(test_string[i], message_event);
     }
-    
-    if(truthVariable == STANDARD_ERROR){
+
+    if (truthVariable == STANDARD_ERROR) {
         passed++;
         printf("Decode BAD STRING message test: Passed.\n");
     } else {

@@ -18,6 +18,11 @@
  * MESSAGE - Preprocessor / Definitions / Variables
  *****************************************************************************/
 
+#define STANDARD_ERROR 0
+#define SUCCESS 1
+
+
+
 #define ZERO_ASCII '0'
 #define NINE_ASCII '9'
 #define A_ASCII 'A'
@@ -28,11 +33,11 @@
 #define HEX_BASE 16
 #define DEC_BASE 10
 
-#define CHA_DELIMITER 2
-#define ACC_DELIMITER 2
-#define REV_DELIMITER 2
-#define SHO_DELIMITER 3
-#define RES_DELIMITER 4
+#define CHA_DELIMITER 1
+#define ACC_DELIMITER 1
+#define REV_DELIMITER 1
+#define SHO_DELIMITER 2
+#define RES_DELIMITER 3
 
 typedef enum {
     WAITING_FOR_DELIMITER, //states for message module state machine.
@@ -51,8 +56,6 @@ static char checksum_string[MESSAGE_CHECKSUM_LEN];
 
 static int error_check; //used to store return value of parse function.
 
-
-
 /******************************************************************************
  * MESSAGE - Calculate Checksum
  *****************************************************************************/
@@ -67,7 +70,11 @@ static int error_check; //used to store return value of parse function.
 uint8_t Message_CalculateChecksum(const char* payload)
 {
     static uint8_t checksum;
+    checksum = 0;
+    //initialize to zero when entering function.
     static int i; //some arbitrary counter for XOR process.
+
+
 
     for (i = 0; i < strlen(payload); i++) { //iterate through payload string,
         checksum ^= payload[i]; //store XOR result in checksum uint8_t variable.
@@ -106,6 +113,8 @@ uint8_t Message_CalculateChecksum(const char* payload)
 int Message_ParseMessage(const char* payload,
         const char* checksum_string, BB_Event * message_event)
 {
+    static char *string_duplicate;
+    static char *checksum_duplicate;
     static uint8_t checksum_verify;
     static uint8_t checksum_converted;
     static char *token;
@@ -117,63 +126,78 @@ int Message_ParseMessage(const char* payload,
     static char param_2[MESSAGE_MAX_LEN];
     static unsigned int param2;
     static unsigned int format_check;
+    static char *convert;
+    static char *terminator = "\0";
+
+    format_check = 0;
+
+    //printf("%s\n", payload);
+    string_duplicate = strdup(payload); //don't edit the constant char!
+    strcat(string_duplicate, terminator);
+    checksum_duplicate = strdup(checksum_string);
+    //printf("%s\n", string_duplicate);
 
     checksum_verify = Message_CalculateChecksum(payload); //calculate checksum for ourselves.
-    checksum_converted = strtol(checksum_string, NULL, HEX_BASE); //convert hexadecimal value to a string.
+    //printf("%X\n", checksum_verify);
+    checksum_converted = strtol(checksum_duplicate, &convert, HEX_BASE); //convert hexadecimal value to a string.
+    //printf("%X\n", checksum_converted);
 
     if (strlen(checksum_string) != CHECKSUM_STRING_LENGTH) { //if checksum length not two characters long:
-        return STANDARD_ERROR; //checksum string is not two characters long.
         message_event->type = BB_EVENT_ERROR;
+        return STANDARD_ERROR; //checksum string is not two characters long.
     }
 
     if (checksum_verify == checksum_converted) { //check against the received checksum value.
         //parse the message.
-        token = strtok(payload, ","); //get MESSAGE ID, stored in *token.
+        token = strtok(string_duplicate, ","); //get MESSAGE ID, stored in *token.
         sprintf(token_string, "%s", token);
 
         if (strcmp(token_string, "CHA") == 0) { // CHALLENGE message:
-            while (token != NULL) {
-                token = strtok(NULL, ",");
-                sprintf(param_0, "%s", token);
-                format_check++;
-            }
+            token = strtok(NULL, ",");
+            sprintf(param_0, "%s", token);
+            format_check++;
+
             if (format_check == CHA_DELIMITER) { //one for ID, one for single comma.
+
                 param0 = strtoul(param_0, NULL, DEC_BASE); //convert parameter string to unsigned integer.
                 message_event->param0 = param0; //store unsigned integer value inside message_event.
                 message_event->type = BB_EVENT_CHA_RECEIVED;
+
+                return SUCCESS;
             } else {
-                return STANDARD_ERROR; //invalid string formatting!
                 message_event->type = BB_EVENT_ERROR;
+                return STANDARD_ERROR; //invalid string formatting!
             }
         }
         if (strcmp(token_string, "ACC") == 0) { // ACCEPT message:	 
-            while (token != NULL) {
-                token = strtok(NULL, ",");
-                sprintf(param_0, "%s", token);
-                format_check++;
-            }
+            token = strtok(NULL, ",");
+            sprintf(param_0, "%s", token);
+
+            format_check++;
             if (format_check == ACC_DELIMITER) { //one for ID, one for single comma.
                 param0 = strtoul(param_0, NULL, DEC_BASE);
                 message_event->param0 = param0;
                 message_event->type = BB_EVENT_ACC_RECEIVED;
+                return SUCCESS;
             } else {
-                return STANDARD_ERROR; //invalid string formatting!
                 message_event->type = BB_EVENT_ERROR;
+                return STANDARD_ERROR; //invalid string formatting!
+
             }
         }
         if (strcmp(token_string, "REV") == 0) { // REVEAL message: 	
-            while (token != NULL) {
-                token = strtok(NULL, ",");
-                sprintf(param_0, "%s", token);
-                format_check++;
-            }
+            token = strtok(NULL, ",");
+            sprintf(param_0, "%s", token);
+            format_check++;
+
             if (format_check == REV_DELIMITER) { //one for ID, one for single comma.
                 param0 = strtoul(param_0, NULL, DEC_BASE);
                 message_event->param0 = param0;
                 message_event->type = BB_EVENT_REV_RECEIVED;
+                return SUCCESS;
             } else {
-                return STANDARD_ERROR; //invalid string formatting!
                 message_event->type = BB_EVENT_ERROR;
+                return STANDARD_ERROR; //invalid string formatting!
             }
         }
         if (strcmp(token_string, "SHO") == 0) { // SHOT (guess) message: 
@@ -182,20 +206,20 @@ int Message_ParseMessage(const char* payload,
             sprintf(param_0, "%s", token);
             format_check++;
 
-            while (token != NULL) { //obtain the second parameter.
-                token = strtok(NULL, ",");
-                sprintf(param_1, "%s", token);
-                format_check++;
-            }
+            token = strtok(NULL, ",");
+            sprintf(param_1, "%s", token);
+            format_check++;
+
             if (format_check == SHO_DELIMITER) { //one for ID, one for first and last comma.
                 param0 = strtoul(param_0, NULL, DEC_BASE);
                 message_event->param0 = param0;
                 param1 = strtoul(param_1, NULL, DEC_BASE);
                 message_event->param1 = param1;
                 message_event->type = BB_EVENT_SHO_RECEIVED;
+                return SUCCESS;
             } else {
-                return STANDARD_ERROR; //invalid string formatting!
                 message_event->type = BB_EVENT_ERROR;
+                return STANDARD_ERROR; //invalid string formatting!
             }
         }
         if (strcmp(token_string, "RES") == 0) { // RESULT message: 
@@ -208,11 +232,10 @@ int Message_ParseMessage(const char* payload,
             sprintf(param_1, "%s", token);
             format_check++;
 
-            while (token != NULL) { //obtain the third parameter.
-                token = strtok(NULL, ",");
-                sprintf(param_2, "%s", token);
-                format_check++;
-            }
+            token = strtok(NULL, ",");
+            sprintf(param_2, "%s", token);
+            format_check++;
+
             if (format_check == RES_DELIMITER) { //one for ID, first comma, next and last comma.
                 param0 = strtoul(param_0, NULL, DEC_BASE);
                 message_event->param0 = param0;
@@ -221,18 +244,19 @@ int Message_ParseMessage(const char* payload,
                 param2 = strtoul(param_2, NULL, DEC_BASE);
                 message_event->param2 = param2;
                 message_event->type = BB_EVENT_RES_RECEIVED;
+                return SUCCESS;
             } else {
-                return STANDARD_ERROR; //invalid string formatting!
                 message_event->type = BB_EVENT_ERROR;
+                return STANDARD_ERROR; //invalid string formatting!
             }
         } else { //invalid MESSAGE ID!
-            return STANDARD_ERROR;
             message_event->type = BB_EVENT_ERROR;
+            return STANDARD_ERROR;
         }
 
     } else { //something has gone awry!
-        return STANDARD_ERROR; //payload does not match checksum.
         message_event->type = BB_EVENT_ERROR;
+        return STANDARD_ERROR; //payload does not match checksum.
     }
 }
 

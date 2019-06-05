@@ -30,7 +30,8 @@
 #define FIELD_ROWS 6
 #endif
 
-
+#define STANDARD_ERROR 0
+#define SUCCESS 1
 
 /******************************************************************************
  * FIELD - Field Print
@@ -79,7 +80,7 @@ void FieldInit(Field *own_field, Field * opp_field)
 
     opp_field->hugeBoatLives = FIELD_BOAT_SIZE_HUGE; //set and keep track of opponent's max boat lives.
     opp_field->largeBoatLives = FIELD_BOAT_SIZE_LARGE;
-    opp_field->mediumBoatLives = FIELD_BOAT_SIZE_LARGE;
+    opp_field->mediumBoatLives = FIELD_BOAT_SIZE_MEDIUM;
     opp_field->smallBoatLives = FIELD_BOAT_SIZE_SMALL;
 
 }
@@ -189,92 +190,102 @@ SquareStatus FieldSetSquareStatus(Field *f, uint8_t row, uint8_t col, SquareStat
 uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, BoatType boat_type)
 {
     static unsigned int j; //used to increment through boats.
-    //bounds are different here?????
 
+
+
+    f->smallBoatLives = FIELD_BOAT_SIZE_SMALL;
 
     if ((row >= 0 && row < FIELD_ROWS) && (col >= 0 && col < FIELD_COLS)) { //check if bounds are valid:
         if (boat_type == FIELD_BOAT_TYPE_HUGE) { //HUGE boat case:
             if (dir == FIELD_DIR_EAST) { //EAST facing:
                 for (j = 0; j < FIELD_BOAT_SIZE_HUGE; j++) { //iterate through each grid location:
-                    if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
+                    if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
                         return STANDARD_ERROR; //exit immediately and return an error.
                     } else {
-                        f->grid[row + j][col] = FIELD_SQUARE_HUGE_BOAT; //else, set the square to HUGE boat.
+                        f->grid[row][col + j] = FIELD_SQUARE_HUGE_BOAT; //else, set the square to HUGE boat.
                     }
                 }
                 return SUCCESS;
+                f->hugeBoatLives = FIELD_BOAT_SIZE_HUGE;
             } else { //direction == FIELD_DIR_SOUTH
                 for (j = 0; j < FIELD_BOAT_SIZE_HUGE; j++) {
-                    if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) {
+                    if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
                         return STANDARD_ERROR;
                     } else {
-                        f->grid[row][col + j] = FIELD_SQUARE_HUGE_BOAT;
+                        f->grid[row + j][col] = FIELD_SQUARE_HUGE_BOAT;
                     }
                 }
                 return SUCCESS;
+                f->hugeBoatLives = FIELD_BOAT_SIZE_HUGE;
             }
         }
         if (boat_type == FIELD_BOAT_TYPE_LARGE) { //LARGE boat case:
             if (dir == FIELD_DIR_EAST) { //EAST facing:
                 for (j = 0; j < FIELD_BOAT_SIZE_LARGE; j++) { //iterate through each grid location:
-                    if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
+                    if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
                         return STANDARD_ERROR; //exit immediately and return an error.
                     } else {
-                        f->grid[row + j][col] = FIELD_SQUARE_LARGE_BOAT; //else, set the square to LARGE boat.
+                        f->grid[row][col + j] = FIELD_SQUARE_LARGE_BOAT; //else, set the square to LARGE boat.
                     }
                 }
                 return SUCCESS;
+                f->largeBoatLives = FIELD_BOAT_SIZE_LARGE;
             } else { //direction == FIELD_DIR_SOUTH
                 for (j = 0; j < FIELD_BOAT_SIZE_LARGE; j++) {
-                    if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) {
+                    if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
                         return STANDARD_ERROR;
                     } else {
-                        f->grid[row][col + j] = FIELD_SQUARE_LARGE_BOAT;
+                        f->grid[row + j][col] = FIELD_SQUARE_LARGE_BOAT;
                     }
                 }
                 return SUCCESS;
+                f->largeBoatLives = FIELD_BOAT_SIZE_LARGE;
             }
         }
         if (boat_type == FIELD_BOAT_TYPE_MEDIUM) { //MEDIUM boat case:
             if (dir == FIELD_DIR_EAST) { //EAST facing:
                 for (j = 0; j < FIELD_BOAT_SIZE_MEDIUM; j++) { //iterate through each grid location:
-                    if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
+                    if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
                         return STANDARD_ERROR; //exit immediately and return an error.
                     } else {
-                        f->grid[row + j][col] = FIELD_SQUARE_MEDIUM_BOAT; //else, set the square to MEDIUM boat.
+                        f->grid[row][col + j] = FIELD_SQUARE_MEDIUM_BOAT; //else, set the square to MEDIUM boat.
                     }
                 }
                 return SUCCESS;
+                f->smallBoatLives = FIELD_BOAT_SIZE_MEDIUM;
             } else { //direction == FIELD_DIR_SOUTH
                 for (j = 0; j < FIELD_BOAT_SIZE_MEDIUM; j++) {
-                    if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) {
+                    if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
                         return STANDARD_ERROR;
                     } else {
-                        f->grid[row][col + j] = FIELD_SQUARE_MEDIUM_BOAT;
+                        f->grid[row + j][col] = FIELD_SQUARE_MEDIUM_BOAT;
                     }
                 }
                 return SUCCESS;
+                f->smallBoatLives = FIELD_BOAT_SIZE_MEDIUM;
             }
         }
         if (boat_type == FIELD_BOAT_TYPE_SMALL) { //SMALL boat case:
             if (dir == FIELD_DIR_EAST) { //EAST facing:
                 for (j = 0; j < FIELD_BOAT_SIZE_SMALL; j++) { //iterate through each grid location:
-                    if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
+                    if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
                         return STANDARD_ERROR; //exit immediately and return an error.
                     } else {
-                        f->grid[row + j][col] = FIELD_SQUARE_SMALL_BOAT; //else, set the square to SMALL boat.
+                        f->grid[row][col + j] = FIELD_SQUARE_SMALL_BOAT; //else, set the square to SMALL boat.
                     }
                 }
                 return SUCCESS;
+                f->smallBoatLives = FIELD_BOAT_SIZE_SMALL;
             } else { //direction == FIELD_DIR_SOUTH
                 for (j = 0; j < FIELD_BOAT_SIZE_SMALL; j++) {
-                    if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) {
+                    if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
                         return STANDARD_ERROR;
                     } else {
-                        f->grid[row][col + j] = FIELD_SQUARE_SMALL_BOAT;
+                        f->grid[row + j][col] = FIELD_SQUARE_SMALL_BOAT;
                     }
                 }
                 return SUCCESS;
+                f->smallBoatLives = FIELD_BOAT_SIZE_SMALL;
             }
         }
 
@@ -473,42 +484,46 @@ uint8_t FieldAIPlaceAllBoats(Field *f)
     static uint8_t col;
     BoatDirection dir;
 
-    row = rand() % (FIELD_ROWS - 1); //generate random row value from 0 to rows-1.
-    col = rand() % (FIELD_COLS - 1); //generate random column value from 0 to columns-1.
+    static unsigned int row_modulus;
+    static unsigned int col_modulus;
+
+    row_modulus = FIELD_ROWS;
+    col_modulus = FIELD_COLS;
+
+    row = rand() % (row_modulus); //generate random row value from 0 to rows-1.
+    col = rand() % (col_modulus); //generate random column value from 0 to columns-1.
     dir = rand() % 1; //generate random direction from 0(south) to 1(east).
-
-
 
     //need to randomly generate the input coordinates, and boat direction?
     //places in order of largest to smallest.
     while (addBoat_status != SUCCESS) {
         addBoat_status = FieldAddBoat(f, row, col, dir, FIELD_BOAT_TYPE_HUGE);
-        row = rand() % (FIELD_ROWS - 1); //generate random row value from 0 to rows-1.
-        col = rand() % (FIELD_COLS - 1); //generate random column value from 0 to columns-1.
+        row = rand() % (row_modulus); //generate random row value from 0 to rows-1.
+        col = rand() % (col_modulus); //generate random column value from 0 to columns-1.
         dir = rand() % 1; //generate random direction from 0(south) to 1(east).
     }
     success_counter++;
     addBoat_status = 0; //reset to zero.
     while (addBoat_status != SUCCESS) {
-        addBoat_status = FieldAddBoat(f, uint8_t row, uint8_t col, BoatDirection dir, FIELD_BOAT_TYPE_LARGE);
-        row = rand() % (FIELD_ROWS - 1); //generate random row value from 0 to rows-1.
-        col = rand() % (FIELD_COLS - 1); //generate random column value from 0 to columns-1.
+        addBoat_status = FieldAddBoat(f, row, col, dir, FIELD_BOAT_TYPE_LARGE);
+        row = rand() % (row_modulus); //generate random row value from 0 to rows-1.
+        col = rand() % (col_modulus); //generate random column value from 0 to columns-1.
         dir = rand() % 1; //generate random direction from 0(south) to 1(east).
     }
     success_counter++;
     addBoat_status = 0; //reset to zero.
     while (addBoat_status != SUCCESS) {
-        addBoat_status = FieldAddBoat(f, uint8_t row, uint8_t col, BoatDirection dir, FIELD_BOAT_TYPE_MEDIUM);
-        row = rand() % (FIELD_ROWS - 1); //generate random row value from 0 to rows-1.
-        col = rand() % (FIELD_COLS - 1); //generate random column value from 0 to columns-1.
+        addBoat_status = FieldAddBoat(f, row, col, dir, FIELD_BOAT_TYPE_MEDIUM);
+        row = rand() % (row_modulus); //generate random row value from 0 to rows-1.
+        col = rand() % (col_modulus); //generate random column value from 0 to columns-1.
         dir = rand() % 1; //generate random direction from 0(south) to 1(east).
     }
     success_counter++;
     addBoat_status = 0; //reset to zero.
     while (addBoat_status != SUCCESS) {
-        addBoat_status = FieldAddBoat(f, uint8_t row, uint8_t col, BoatDirection dir, FIELD_BOAT_TYPE_SMALL);
-        row = rand() % (FIELD_ROWS - 1); //generate random row value from 0 to rows-1.
-        col = rand() % (FIELD_COLS - 1); //generate random column value from 0 to columns-1.
+        addBoat_status = FieldAddBoat(f, row, col, dir, FIELD_BOAT_TYPE_SMALL);
+        row = rand() % (row_modulus); //generate random row value from 0 to rows-1.
+        col = rand() % (col_modulus); //generate random column value from 0 to columns-1.
         dir = rand() % 1; //generate random direction from 0(south) to 1(east).
     }
     success_counter++;
@@ -546,15 +561,21 @@ GuessData FieldAIDecideGuess(const Field * f)
     //srand(__TIME__); //set seed to random, time-variant.
     static unsigned int i; //used to randomly generate row value.
     static unsigned int j; //used to randomly generate column value.
-    static GuessData *gData;
+    static GuessData gData;
+    static unsigned int row_modulus;
+    static unsigned int col_modulus;
 
-    i = rand() % (FIELD_ROWS - 1); //generate random row value from 0 to rows-1.
-    j = rand() % (FIELD_COLS - 1); //generate random column value from 0 to columns-1.
+    row_modulus = FIELD_ROWS;
+    col_modulus = FIELD_COLS;
+
+    i = rand() % (row_modulus); //generate random row value from 0 to rows-1.
+    j = rand() % (col_modulus); //generate random column value from 0 to columns-1.
     //guess random within bounds of row and column.
-    while (f->grid[i][j] != FIELD_SQUARE_UNKNOWN) { //while square is not a valid target:
+    while (f->grid[i][j] != FIELD_SQUARE_UNKNOWN || f->grid[i][j] == FIELD_SQUARE_INVALID) { //while square is not a valid target:
+        printf("not unkown!");
         //generate a new random number for [i] and [j].
-        i = rand() % (FIELD_ROWS - 1);
-        j = rand() % (FIELD_COLS - 1);
+        i = rand() % (row_modulus);
+        j = rand() % (col_modulus);
     }
 
     gData.row = i; //return row.
