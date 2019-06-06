@@ -118,8 +118,8 @@ uint8_t Message_CalculateChecksum(const char* payload)
 int Message_ParseMessage(const char* payload,
         const char* checksum_string, BB_Event * message_event)
 {
-    static char *string_duplicate;
-    static char *checksum_duplicate;
+    static char string_duplicate[MESSAGE_MAX_LEN];
+    static char checksum_duplicate[MESSAGE_MAX_LEN];
     static uint8_t checksum_verify;
     static uint8_t checksum_converted;
     static char *token;
@@ -137,9 +137,9 @@ int Message_ParseMessage(const char* payload,
     format_check = 0;
 
     //printf("%s\n", payload);
-    string_duplicate = strdup(payload); //don't edit the constant char!
-    strcat(string_duplicate, terminator);
-    checksum_duplicate = strdup(checksum_string);
+    strcpy(string_duplicate, payload); //don't edit the constant char!
+    //strcat(string_duplicate, terminator);
+    strcpy(checksum_duplicate, checksum_string);
     //printf("%s\n", string_duplicate);
 
     checksum_verify = Message_CalculateChecksum(payload); //calculate checksum for ourselves.

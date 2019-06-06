@@ -21,10 +21,6 @@
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
                    projectFiles="true">
-      <itemPath>Agent.c</itemPath>
-      <itemPath>AgentTest.c</itemPath>
-      <itemPath>Negotiation.c</itemPath>
-      <itemPath>NegotiationTest.c</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -40,11 +36,13 @@
       <itemPath>Message.c</itemPath>
       <itemPath>Field_correct.o</itemPath>
       <itemPath>HumanAgent.o</itemPath>
-      <itemPath>Message_correct.o</itemPath>
-      <itemPath>Negotiation_correct.o</itemPath>
       <itemPath>MessageTest.c</itemPath>
       <itemPath>FieldTest.c</itemPath>
       <itemPath>Field.c</itemPath>
+      <itemPath>Message_correct.o</itemPath>
+      <itemPath>Negotiation_correct.o</itemPath>
+      <itemPath>Agent.c</itemPath>
+      <itemPath>Negotiation.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -75,8 +73,6 @@
         <linkerTool>
           <linkerLibItems>
             <linkerLibFileItem>Lab9SupportLib.a</linkerLibFileItem>
-            <linkerLibFileItem>Negotiation_correct.o</linkerLibFileItem>
-            <linkerLibFileItem>HumanAgent.o</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
         <archiverTool>
@@ -98,34 +94,6 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="Agent.c" ex="true" overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
-      <item path="AgentTest.c" ex="true" overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
       <C32>
         <property key="additional-warnings" value="true"/>
         <property key="addresss-attribute-use" value="false"/>
@@ -195,7 +163,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="5012"/>
+        <property key="heap-size" value="0"/>
         <property key="input-libraries" value=""/>
         <property key="kseg-length" value=""/>
         <property key="kseg-origin" value=""/>
@@ -269,7 +237,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="FieldTest.c" ex="false" overriding="false">
+      <item path="FieldTest.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -296,6 +264,8 @@
         </C32CPP>
         <C32Global>
         </C32Global>
+      </item>
+      <item path="HumanAgent.o" ex="true" overriding="false">
       </item>
       <item path="Lab09_main.c" ex="true" overriding="false">
         <C32>
@@ -325,7 +295,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="MessageTest.c" ex="true" overriding="false">
+      <item path="MessageTest.c" ex="false" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -340,60 +310,8 @@
         </C32Global>
       </item>
       <item path="Message_correct.o" ex="true" overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
       </item>
-      <item path="Negotiation.c" ex="true" overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
-      <item path="NegotiationTest.c" ex="true" overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
-      <item path="Negotiation_correct.o" ex="false" overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
+      <item path="Negotiation_correct.o" ex="true" overriding="false">
       </item>
       <PICkit3PlatformTool>
         <property key="ADC 1" value="true"/>
