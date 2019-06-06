@@ -20,6 +20,8 @@
  * MESSAGE - Preprocessor / Definitions / Variables
  *****************************************************************************/
 
+#define EXTRA_CREDIT_MODE
+
 /**
  * Define the dimensions of the game field. They can be overridden by compile-time specifications.
  * All references to the dimensions of the field should use these constants instead of hard-coding
@@ -574,18 +576,21 @@ GuessData FieldAIDecideGuess(const Field * f)
     static GuessData gData;
     static unsigned int row_modulus;
     static unsigned int col_modulus;
+
+    row_modulus = FIELD_ROWS;
+    col_modulus = FIELD_COLS;
+
+#ifdef EXTRA_CREDIT_MODE
+
     static GuessState guess_state;
     static GuessData previous_guess;
     static unsigned int exit_check;
-
     static unsigned south_counter;
     static unsigned north_counter;
     static unsigned east_counter;
     static unsigned west_counter;
 
     previous_guess = gData;
-    row_modulus = FIELD_ROWS;
-    col_modulus = FIELD_COLS;
 
     if (f->grid[previous_guess.row][previous_guess.col] == FIELD_SQUARE_HIT) {
         //if random number guess resulted in a HIT:
@@ -696,10 +701,28 @@ GuessData FieldAIDecideGuess(const Field * f)
     gData.row = i; //return row.
     gData.col = j; //return column.
     return gData; //return variable with stored guess values.
+
+
+#else
+
+    i = rand() % (row_modulus); //generate random row value from 0 to rows-1.
+    j = rand() % (col_modulus); //generate random column value from 0 to columns-1.
+    //guess random within bounds of row and column.
+    while (f->grid[i][j] != FIELD_SQUARE_UNKNOWN || f->grid[i][j] == FIELD_SQUARE_INVALID) { //while square is not a valid target:
+        //generate a new random number for [i] and [j].
+        i = rand() % (row_modulus);
+        j = rand() % (col_modulus);
+    }
+
+    gData.row = i; //return row.
+    gData.col = j; //return column.
+    return gData; //return variable with stored guess values.
+
+    /** 
+     * For Extra Credit:  Make the two "AI" functions above 
+     * smart enough to beat our AI in more than 55% of games.
+     */
+
+#endif
+
 }
-
-/** 
- * For Extra Credit:  Make the two "AI" functions above 
- * smart enough to beat our AI in more than 55% of games.
- */
-
