@@ -44,6 +44,7 @@
       <itemPath>Agent.c</itemPath>
       <itemPath>Negotiation.c</itemPath>
       <itemPath>NegotiationTest.c</itemPath>
+      <itemPath>AgentTest.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -238,7 +239,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="FieldTest.c" ex="false" overriding="false">
+      <item path="FieldTest.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -337,6 +338,18 @@
         </C32Global>
       </item>
       <item path="NegotiationTest.c" ex="true" overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
       </item>
       <item path="Negotiation_correct.o" ex="true" overriding="false">
         <C32>
