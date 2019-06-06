@@ -6,6 +6,7 @@
  *****************/
 // Standard libraries:
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -13,6 +14,10 @@
 #include "BattleBoats.h"
 #include "Field.h"
 #include "Message.h"
+
+// Microchip libraries
+#include <xc.h>
+#include <sys/attribs.h>
 
 /******************************************************************************
  * MESSAGE - Preprocessor / Definitions / Variables
@@ -355,14 +360,14 @@ int Message_Decode(unsigned char char_in, BB_Event * decoded_message_event)
             messageState = RECORDING_PAYLOAD; //switch state to RECORDING_PAYLOAD.
             decoded_message_event->type = BB_EVENT_NO_EVENT;
         } else {
-            decoded_message_event->type = BB_EVENT_ERROR;
+            decoded_message_event->type = BB_EVENT_NO_EVENT;
             return STANDARD_ERROR;
         }
         break;
     case RECORDING_PAYLOAD:
         if (char_in == '$' || char_in == '\n' || payloadLength > MESSAGE_MAX_PAYLOAD_LEN) { //if unexpected delimiter || max_length exceeded.
             //return ERROR stuff.
-            decoded_message_event->type = BB_EVENT_ERROR;
+            decoded_message_event->type = BB_EVENT_NO_EVENT;
             return STANDARD_ERROR;
         }
         if (char_in == '*') { //checksum delimiter
@@ -378,7 +383,7 @@ int Message_Decode(unsigned char char_in, BB_Event * decoded_message_event)
     case RECORDING_CHECKSUM:
         if (checksumLength > CHECKSUM_MAX_LENGTH) { //if checksum length exceeds maximum value.
             //return ERROR stuff.
-            decoded_message_event->type = BB_EVENT_ERROR;
+            decoded_message_event->type = BB_EVENT_NO_EVENT;
             return STANDARD_ERROR;
         }
         if ((char_in >= ZERO_ASCII && char_in <= NINE_ASCII) || (char_in >= A_ASCII && char_in <= F_ASCII)) { //check if in bounds of hexadecimal character.
@@ -392,7 +397,7 @@ int Message_Decode(unsigned char char_in, BB_Event * decoded_message_event)
             error_check = Message_ParseMessage(payload_string, checksum_string, decoded_message_event); //call parse function.
             if (error_check == STANDARD_ERROR) {
                 //ERROR DETECTED!
-                decoded_message_event->type = BB_EVENT_ERROR;
+                decoded_message_event->type = BB_EVENT_NO_EVENT;
                 return STANDARD_ERROR;
             } else {
                 //decoded_message_event should be updated from the function call.
@@ -402,12 +407,12 @@ int Message_Decode(unsigned char char_in, BB_Event * decoded_message_event)
         } else {
             //any other character,
             //return ERROR stuff.
-            decoded_message_event->type = BB_EVENT_ERROR;
+            decoded_message_event->type = BB_EVENT_NO_EVENT;
             return STANDARD_ERROR;
         }
         break;
     default: //default if other cases don't trigger.
-        decoded_message_event->type = BB_EVENT_ERROR;
+        decoded_message_event->type = BB_EVENT_NO_EVENT;
         return STANDARD_ERROR;
     }
     return SUCCESS; //NO ERROR detected.
