@@ -138,7 +138,7 @@ int Message_ParseMessage(const char* payload,
 
     //printf("%s\n", payload);
     strcpy(string_duplicate, payload); //don't edit the constant char!
-    //strcat(string_duplicate, terminator);
+    strcat(string_duplicate, terminator);
     strcpy(checksum_duplicate, checksum_string);
     //printf("%s\n", string_duplicate);
 

@@ -203,8 +203,9 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
 {
     static unsigned int j; //used to increment through boats.
 
-
-
+    f->hugeBoatLives = FIELD_BOAT_SIZE_HUGE;
+    f->largeBoatLives = FIELD_BOAT_SIZE_LARGE;
+    f->mediumBoatLives = FIELD_BOAT_SIZE_MEDIUM;
     f->smallBoatLives = FIELD_BOAT_SIZE_SMALL;
 
     if ((row >= 0 && row < FIELD_ROWS) && (col >= 0 && col < FIELD_COLS)) { //check if bounds are valid:
@@ -218,7 +219,6 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     }
                 }
                 return SUCCESS;
-                f->hugeBoatLives = FIELD_BOAT_SIZE_HUGE;
             } else { //direction == FIELD_DIR_SOUTH
                 for (j = 0; j < FIELD_BOAT_SIZE_HUGE; j++) {
                     if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
@@ -228,7 +228,6 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     }
                 }
                 return SUCCESS;
-                f->hugeBoatLives = FIELD_BOAT_SIZE_HUGE;
             }
         }
         if (boat_type == FIELD_BOAT_TYPE_LARGE) { //LARGE boat case:
@@ -241,7 +240,6 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     }
                 }
                 return SUCCESS;
-                f->largeBoatLives = FIELD_BOAT_SIZE_LARGE;
             } else { //direction == FIELD_DIR_SOUTH
                 for (j = 0; j < FIELD_BOAT_SIZE_LARGE; j++) {
                     if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
@@ -251,7 +249,6 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     }
                 }
                 return SUCCESS;
-                f->largeBoatLives = FIELD_BOAT_SIZE_LARGE;
             }
         }
         if (boat_type == FIELD_BOAT_TYPE_MEDIUM) { //MEDIUM boat case:
@@ -264,7 +261,6 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     }
                 }
                 return SUCCESS;
-                f->smallBoatLives = FIELD_BOAT_SIZE_MEDIUM;
             } else { //direction == FIELD_DIR_SOUTH
                 for (j = 0; j < FIELD_BOAT_SIZE_MEDIUM; j++) {
                     if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
@@ -274,7 +270,6 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     }
                 }
                 return SUCCESS;
-                f->smallBoatLives = FIELD_BOAT_SIZE_MEDIUM;
             }
         }
         if (boat_type == FIELD_BOAT_TYPE_SMALL) { //SMALL boat case:
@@ -287,7 +282,6 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     }
                 }
                 return SUCCESS;
-                f->smallBoatLives = FIELD_BOAT_SIZE_SMALL;
             } else { //direction == FIELD_DIR_SOUTH
                 for (j = 0; j < FIELD_BOAT_SIZE_SMALL; j++) {
                     if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
@@ -297,7 +291,6 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     }
                 }
                 return SUCCESS;
-                f->smallBoatLives = FIELD_BOAT_SIZE_SMALL;
             }
         }
 
