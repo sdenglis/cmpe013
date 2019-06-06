@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <xc.h>
 
 //CMPE13 Support Library
 #include "BOARD.h"

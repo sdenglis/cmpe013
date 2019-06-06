@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <xc.h>
+#include <sys/attribs.h>
 
 // User libraries:
 #include "BattleBoats.h"
@@ -32,6 +34,14 @@
 
 #define STANDARD_ERROR 0
 #define SUCCESS 1
+
+typedef enum {
+    GET_FIRST_HIT = 1, //states for message module state machine.
+    GO_SOUTH,
+    GO_NORTH,
+    GO_EAST,
+    GO_WEST,
+} GuessState;
 
 /******************************************************************************
  * FIELD - Field Print
@@ -289,9 +299,9 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
             }
         }
 
-    } else {
-        return STANDARD_ERROR; //bounds are invalid!
-    }
+    } //else {
+    return STANDARD_ERROR; //bounds are invalid!
+
 }
 
 
@@ -564,15 +574,120 @@ GuessData FieldAIDecideGuess(const Field * f)
     static GuessData gData;
     static unsigned int row_modulus;
     static unsigned int col_modulus;
+    static GuessState guess_state;
+    static GuessData previous_guess;
+    static unsigned int exit_check;
 
+    static unsigned south_counter;
+    static unsigned north_counter;
+    static unsigned east_counter;
+    static unsigned west_counter;
+
+    previous_guess = gData;
     row_modulus = FIELD_ROWS;
     col_modulus = FIELD_COLS;
+
+    if (f->grid[previous_guess.row][previous_guess.col] == FIELD_SQUARE_HIT) {
+        //if random number guess resulted in a HIT:
+        guess_state = GO_SOUTH;
+
+    }
+
+    switch (guess_state) {
+    case GET_FIRST_HIT:
+        i = rand() % (row_modulus); //generate random row value from 0 to rows-1.
+        j = rand() % (col_modulus); //generate random column value from 0 to columns-1.
+        //guess random within bounds of row and column.
+        while (f->grid[i][j] != FIELD_SQUARE_UNKNOWN || f->grid[i][j] == FIELD_SQUARE_INVALID) { //while square is not a valid target:
+            //generate a new random number for [i] and [j].
+            i = rand() % (row_modulus);
+            j = rand() % (col_modulus);
+        }
+
+        gData.row = i; //return row.
+        gData.col = j; //return column.
+        return gData; //return variable with stored guess values.
+
+        break;
+    case GO_SOUTH:
+        if (f->grid[previous_guess.row][previous_guess.col] == FIELD_SQUARE_MISS) {
+            guess_state = GO_NORTH;
+            gData.row = gData.row - south_counter;
+            gData.row = gData.row + 1;
+            gData.col = gData.col;
+            south_counter = 0;
+            return gData;
+        }
+        if (f->grid[i + south_counter][j] != FIELD_SQUARE_INVALID) {
+            south_counter++;
+            gData.row = i + south_counter;
+            gData.col = j;
+            return gData;
+        }
+        break;
+    case GO_NORTH:
+        if (f->grid[previous_guess.row][previous_guess.col] == FIELD_SQUARE_MISS) {
+            guess_state = GO_EAST;
+            gData.row = gData.row + north_counter;
+            gData.col = gData.col + 1;
+            south_counter = 0;
+            return gData;
+        }
+        if (f->grid[i - north_counter][j] != FIELD_SQUARE_INVALID) {
+            north_counter++;
+            gData.row = i - north_counter;
+            gData.col = j;
+            return gData;
+        }
+        break;
+    case GO_EAST:
+        if (f->grid[previous_guess.row][previous_guess.col] == FIELD_SQUARE_MISS) {
+            guess_state = GO_WEST;
+            gData.col = gData.col - east_counter;
+            gData.col = gData.col - 1;
+            east_counter = 0;
+            return gData;
+        }
+        if (f->grid[i][j + east_counter] != FIELD_SQUARE_INVALID) {
+            east_counter++;
+            gData.row = i;
+            gData.col = j + east_counter;
+            return gData;
+        }
+        break;
+    case GO_WEST:
+        if (f->grid[previous_guess.row][previous_guess.col] == FIELD_SQUARE_MISS) {
+            guess_state = GET_FIRST_HIT;
+            west_counter = 0;
+            //exit switch statement.
+            exit_check = 1;
+        }
+        if (f->grid[i][j + west_counter] != FIELD_SQUARE_INVALID && exit_check != 1) {
+            west_counter++;
+            gData.row = i - west_counter;
+            gData.col = j;
+            return gData;
+        }
+        break;
+    default: //GET_FIRST_HIT
+        i = rand() % (row_modulus); //generate random row value from 0 to rows-1.
+        j = rand() % (col_modulus); //generate random column value from 0 to columns-1.
+        //guess random within bounds of row and column.
+        while (f->grid[i][j] != FIELD_SQUARE_UNKNOWN || f->grid[i][j] == FIELD_SQUARE_INVALID) { //while square is not a valid target:
+            //generate a new random number for [i] and [j].
+            i = rand() % (row_modulus);
+            j = rand() % (col_modulus);
+        }
+
+        gData.row = i; //return row.
+        gData.col = j; //return column.
+        return gData; //return variable with stored guess values.
+    }
 
     i = rand() % (row_modulus); //generate random row value from 0 to rows-1.
     j = rand() % (col_modulus); //generate random column value from 0 to columns-1.
     //guess random within bounds of row and column.
     while (f->grid[i][j] != FIELD_SQUARE_UNKNOWN || f->grid[i][j] == FIELD_SQUARE_INVALID) { //while square is not a valid target:
-        printf("not unkown!");
         //generate a new random number for [i] and [j].
         i = rand() % (row_modulus);
         j = rand() % (col_modulus);
