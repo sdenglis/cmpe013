@@ -277,6 +277,10 @@ int main(void)
         printf("Add half boat: failed.\n");
     }
 
+    printf("\n");
+    FieldPrint_UART(f1, f2);
+    printf("\n");
+
     tried++;
     if (FieldAddBoat(f1, FIELD_ROWS, FIELD_COLS, dir, boat_type) == STANDARD_ERROR) {
         passed++;
@@ -382,8 +386,8 @@ int main(void)
 
     gData_var = FieldAIDecideGuess(f2);
     gData2_var = FieldAIDecideGuess(f2);
-    printf("testing!!!");
-    if (gData2_var.row != gData_var.row && gData2_var.col != gData_var.col) {
+
+    if (gData2_var.row != gData_var.row || gData2_var.col != gData_var.col) {
         passed++;
         printf("AI guess: Passed.\n");
     } else {
@@ -399,6 +403,9 @@ int main(void)
         printf("%d of %d tests passed (%.2f%%)\n", passed, tried,
                 ((double) passed / (double) tried) * 100.0);
     }
+    printf("\n");
+    FieldPrint_UART(f1, f2);
+
     while (1);
 
 }
