@@ -20,7 +20,7 @@
  * MESSAGE - Preprocessor / Definitions / Variables
  *****************************************************************************/
 
-#define EXTRA_CREDIT_MODE
+//#define EXTRA_CREDIT_MODE
 
 /**
  * Define the dimensions of the game field. They can be overridden by compile-time specifications.
@@ -203,10 +203,6 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
 {
     static unsigned int j; //used to increment through boats.
 
-    f->hugeBoatLives = FIELD_BOAT_SIZE_HUGE;
-    f->largeBoatLives = FIELD_BOAT_SIZE_LARGE;
-    f->mediumBoatLives = FIELD_BOAT_SIZE_MEDIUM;
-    f->smallBoatLives = FIELD_BOAT_SIZE_SMALL;
 
     if ((row >= 0 && row < FIELD_ROWS) && (col >= 0 && col < FIELD_COLS)) { //check if bounds are valid:
         if (boat_type == FIELD_BOAT_TYPE_HUGE) { //HUGE boat case:
@@ -215,6 +211,7 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
                         return STANDARD_ERROR; //exit immediately and return an error.
                     } else {
+                        f->hugeBoatLives = FIELD_BOAT_SIZE_HUGE;
                         f->grid[row][col + j] = FIELD_SQUARE_HUGE_BOAT; //else, set the square to HUGE boat.
                     }
                 }
@@ -224,6 +221,7 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
                         return STANDARD_ERROR;
                     } else {
+                        f->hugeBoatLives = FIELD_BOAT_SIZE_HUGE;
                         f->grid[row + j][col] = FIELD_SQUARE_HUGE_BOAT;
                     }
                 }
@@ -236,6 +234,7 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
                         return STANDARD_ERROR; //exit immediately and return an error.
                     } else {
+                        f->largeBoatLives = FIELD_BOAT_SIZE_LARGE;
                         f->grid[row][col + j] = FIELD_SQUARE_LARGE_BOAT; //else, set the square to LARGE boat.
                     }
                 }
@@ -245,6 +244,7 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
                         return STANDARD_ERROR;
                     } else {
+                        f->largeBoatLives = FIELD_BOAT_SIZE_LARGE;
                         f->grid[row + j][col] = FIELD_SQUARE_LARGE_BOAT;
                     }
                 }
@@ -257,6 +257,7 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
                         return STANDARD_ERROR; //exit immediately and return an error.
                     } else {
+                        f->mediumBoatLives = FIELD_BOAT_SIZE_MEDIUM;
                         f->grid[row][col + j] = FIELD_SQUARE_MEDIUM_BOAT; //else, set the square to MEDIUM boat.
                     }
                 }
@@ -266,6 +267,7 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
                         return STANDARD_ERROR;
                     } else {
+                        f->mediumBoatLives = FIELD_BOAT_SIZE_MEDIUM;
                         f->grid[row + j][col] = FIELD_SQUARE_MEDIUM_BOAT;
                     }
                 }
@@ -278,6 +280,7 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     if (FieldGetSquareStatus(f, row, col + j) != FIELD_SQUARE_EMPTY) { //if we ever encounter an invalid grid location:
                         return STANDARD_ERROR; //exit immediately and return an error.
                     } else {
+                        f->smallBoatLives = FIELD_BOAT_SIZE_SMALL;
                         f->grid[row][col + j] = FIELD_SQUARE_SMALL_BOAT; //else, set the square to SMALL boat.
                     }
                 }
@@ -287,6 +290,7 @@ uint8_t FieldAddBoat(Field *f, uint8_t row, uint8_t col, BoatDirection dir, Boat
                     if (FieldGetSquareStatus(f, row + j, col) != FIELD_SQUARE_EMPTY) {
                         return STANDARD_ERROR;
                     } else {
+                        f->smallBoatLives = FIELD_BOAT_SIZE_SMALL;
                         f->grid[row + j][col] = FIELD_SQUARE_SMALL_BOAT;
                     }
                 }
@@ -492,8 +496,8 @@ uint8_t FieldAIPlaceAllBoats(Field *f)
     static unsigned int row_modulus;
     static unsigned int col_modulus;
 
-    row_modulus = FIELD_ROWS;
-    col_modulus = FIELD_COLS;
+    row_modulus = FIELD_ROWS - 1;
+    col_modulus = FIELD_COLS - 1;
 
     row = rand() % (row_modulus); //generate random row value from 0 to rows-1.
     col = rand() % (col_modulus); //generate random column value from 0 to columns-1.
@@ -501,6 +505,7 @@ uint8_t FieldAIPlaceAllBoats(Field *f)
 
     //need to randomly generate the input coordinates, and boat direction?
     //places in order of largest to smallest.
+    printf("testing!");
     while (addBoat_status != SUCCESS) {
         addBoat_status = FieldAddBoat(f, row, col, dir, FIELD_BOAT_TYPE_HUGE);
         row = rand() % (row_modulus); //generate random row value from 0 to rows-1.

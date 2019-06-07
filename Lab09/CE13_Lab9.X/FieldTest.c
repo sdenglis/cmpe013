@@ -382,7 +382,7 @@ int main(void)
 
     gData_var = FieldAIDecideGuess(f2);
     gData2_var = FieldAIDecideGuess(f2);
-
+    printf("testing!!!");
     if (gData2_var.row != gData_var.row && gData2_var.col != gData_var.col) {
         passed++;
         printf("AI guess: Passed.\n");
