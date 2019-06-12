@@ -96,6 +96,10 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
+      <item path="Agent.c" ex="true" overriding="false">
+      </item>
+      <item path="Agent.h" ex="true" overriding="false">
+      </item>
       <item path="AgentTest.c" ex="true" overriding="false">
         <C32>
         </C32>
@@ -109,6 +113,18 @@
         </C32CPP>
         <C32Global>
         </C32Global>
+      </item>
+      <item path="Ascii.c" ex="true" overriding="false">
+      </item>
+      <item path="Ascii.h" ex="true" overriding="false">
+      </item>
+      <item path="BOARD.c" ex="true" overriding="false">
+      </item>
+      <item path="BOARD.h" ex="true" overriding="false">
+      </item>
+      <item path="BattleBoats.h" ex="true" overriding="false">
+      </item>
+      <item path="Buttons.h" ex="true" overriding="false">
       </item>
       <C32>
         <property key="additional-warnings" value="true"/>
@@ -239,7 +255,11 @@
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
-      <item path="Field.c" ex="false" overriding="false">
+      <item path="CircularBuffer.c" ex="true" overriding="false">
+      </item>
+      <item path="CircularBuffer.h" ex="true" overriding="false">
+      </item>
+      <item path="Field.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -253,7 +273,13 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="FieldTest.c" ex="false" overriding="false">
+      <item path="Field.h" ex="true" overriding="false">
+      </item>
+      <item path="FieldOled.c" ex="true" overriding="false">
+      </item>
+      <item path="FieldOled.h" ex="true" overriding="false">
+      </item>
+      <item path="FieldTest.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -309,7 +335,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="Message.c" ex="false" overriding="false">
+      <item path="Message.c" ex="true" overriding="false">
         <C32>
         </C32>
         <C32-AR>
@@ -322,6 +348,8 @@
         </C32CPP>
         <C32Global>
         </C32Global>
+      </item>
+      <item path="Message.h" ex="true" overriding="false">
       </item>
       <item path="MessageTest.c" ex="true" overriding="false">
         <C32>
@@ -351,6 +379,10 @@
         <C32Global>
         </C32Global>
       </item>
+      <item path="Negotiation.c" ex="true" overriding="false">
+      </item>
+      <item path="Negotiation.h" ex="true" overriding="false">
+      </item>
       <item path="NegotiationTest.c" ex="true" overriding="false">
         <C32>
         </C32>
@@ -378,6 +410,14 @@
         </C32CPP>
         <C32Global>
         </C32Global>
+      </item>
+      <item path="Oled.c" ex="true" overriding="false">
+      </item>
+      <item path="Oled.h" ex="true" overriding="false">
+      </item>
+      <item path="OledDriver.c" ex="true" overriding="false">
+      </item>
+      <item path="OledDriver.h" ex="true" overriding="false">
       </item>
       <PICkit3PlatformTool>
         <property key="ADC 1" value="true"/>
@@ -872,6 +912,10 @@
                   value=""/>
         <property key="warningmessagebreakoptions.warningmessages" value="holdstate"/>
       </Simulator>
+      <item path="Uart1.c" ex="true" overriding="false">
+      </item>
+      <item path="Uart1.h" ex="true" overriding="false">
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>
