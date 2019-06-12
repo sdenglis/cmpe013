@@ -19,6 +19,7 @@
 // Note that they don't account for the trailing '\0' character implicit with C-style strings.
 #define GAME_MAX_ROOM_TITLE_LENGTH 21
 #define GAME_MAX_ROOM_DESC_LENGTH 255
+#define FORMATTED_STRING_LENGTH 25
 
 /**
  * This enum defines flags for checking the return values of GetCurrentRoomExits(). Usage is as
@@ -40,11 +41,17 @@ typedef enum {
 typedef struct {
     char title[GAME_MAX_ROOM_TITLE_LENGTH + 1];
     char description[GAME_MAX_ROOM_DESC_LENGTH + 1];
-    uint8_t exits;
+    uint8_t exit_north;
+    uint8_t exit_east;
+    uint8_t exit_south;
+    uint8_t exit_west;
+    uint8_t EXIT_FIELD;
 } GameRoom;
 
-static GameRoom current_room;
+GameRoom current_room; //this NEEDS to be accessible by Lab10_main.
 static FILE * file_pointer;
+
+static char open_format[FORMATTED_STRING_LENGTH];
 
 /**
  * These function transitions between rooms. Each call should return SUCCESS if the current room has
@@ -55,6 +62,28 @@ static FILE * file_pointer;
  */
 int GameGoNorth(void)
 {
+    if (current_room.exit_north) {
+
+        sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_north);
+
+        file_pointer = fopen(open_format, "rb");
+        if (file_pointer) {
+
+            GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
+            GameGetCurrentRoomDescription(current_room.description); //obtain room description.
+            current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
+
+            fclose(file_pointer);
+            return SUCCESS;
+
+        } else {
+            FATAL_ERROR();
+            return STANDARD_ERROR; //f-open() command failed!
+        }
+
+    } else {
+        return STANDARD_ERROR; //north exit DNE.
+    }
 
 }
 
@@ -63,6 +92,30 @@ int GameGoNorth(void)
  */
 int GameGoEast(void)
 {
+    if (current_room.exit_east) {
+
+        sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_east);
+
+        file_pointer = fopen(open_format, "rb");
+        if (file_pointer) {
+
+            GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
+            GameGetCurrentRoomDescription(current_room.description); //obtain room description.
+            current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
+
+            fclose(file_pointer);
+            return SUCCESS;
+
+        } else {
+            FATAL_ERROR();
+            return STANDARD_ERROR; //f-open() command failed!
+        }
+
+    } else {
+        return STANDARD_ERROR; //north exit DNE.
+    }
+
+
 
 }
 
@@ -71,6 +124,30 @@ int GameGoEast(void)
  */
 int GameGoSouth(void)
 {
+    if (current_room.exit_south) {
+
+        sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_south);
+
+        file_pointer = fopen(open_format, "rb");
+        if (file_pointer) {
+
+            GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
+            GameGetCurrentRoomDescription(current_room.description); //obtain room description.
+            current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
+
+            fclose(file_pointer);
+            return SUCCESS;
+
+        } else {
+            FATAL_ERROR();
+            return STANDARD_ERROR; //f-open() command failed!
+        }
+
+    } else {
+        return STANDARD_ERROR; //north exit DNE.
+    }
+
+
 
 }
 
@@ -79,6 +156,30 @@ int GameGoSouth(void)
  */
 int GameGoWest(void)
 {
+    if (current_room.exit_west) {
+
+        sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_west);
+
+        file_pointer = fopen(open_format, "rb");
+        if (file_pointer) {
+
+            GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
+            GameGetCurrentRoomDescription(current_room.description); //obtain room description.
+            current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
+
+            fclose(file_pointer);
+            return SUCCESS;
+
+        } else {
+            FATAL_ERROR();
+            return STANDARD_ERROR; //f-open() command failed!
+        }
+
+    } else {
+        return STANDARD_ERROR; //north exit DNE.
+    }
+
+
 
 }
 
@@ -95,10 +196,13 @@ int GameInit(void)
 
         GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
         GameGetCurrentRoomDescription(current_room.description); //obtain room description.
-        current_room.exits = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
+        current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
 
+        fclose(file_pointer);
+        return SUCCESS;
 
     } else {
+        FATAL_ERROR();
         return STANDARD_ERROR; //f-open() command failed!
     }
 }
@@ -435,18 +539,21 @@ uint8_t GameGetCurrentRoomExits(void)
 
     //NOW WE ARE AT THE POSITION OF THE EXITS:
 
+    current_room.exit_north = fgetc(file_pointer);
+    current_room.exit_east = fgetc(file_pointer);
+    current_room.exit_south = fgetc(file_pointer);
+    current_room.exit_west = fgetc(file_pointer);
 
-
-    if (fgetc(file_pointer) != 0) { //read north position.
+    if (current_room.exit_north) { //read north position.
         exit_bits |= GAME_ROOM_EXIT_NORTH_EXISTS;
     }
-    if (fgetc(file_pointer) != 0) { //read east position.
+    if (current_room.exit_east) { //read east position.
         exit_bits |= GAME_ROOM_EXIT_EAST_EXISTS;
     }
-    if (fgetc(file_pointer) != 0) { //read south position.
+    if (current_room.exit_south) { //read south position.
         exit_bits |= GAME_ROOM_EXIT_SOUTH_EXISTS;
     }
-    if (fgetc(file_pointer) != 0) { //read west position.
+    if (current_room.exit_west) { //read west position.
         exit_bits |= GAME_ROOM_EXIT_WEST_EXISTS;
     }
     return exit_bits;
