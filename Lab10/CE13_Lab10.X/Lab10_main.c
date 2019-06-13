@@ -52,7 +52,7 @@ int main()
             printf("%s\n", current_room.description); //PRINT DESCRIPTION!
 
 
-            printf("Enter next direction: ");
+            printf("\nEnter next direction: ");
             if (current_room.exit_north != 0) { //PRINT EXIT OPTIONS!
                 sprintf(formatted_directions + strlen(formatted_directions), "N ");
             }
@@ -68,7 +68,7 @@ int main()
 
             while (valid_char != 1) {
                 if (valid_char == -1) {
-                    printf("\nInvalid Character!\n");
+                    printf("\nInvalid Character!\n\nEnter next direction: ");
                 }
 
                 printf("%s\n", formatted_directions);
