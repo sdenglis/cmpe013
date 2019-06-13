@@ -1,3 +1,9 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 10         *
+ *6/13/2019      *
+ *****************/
 // **** Include libraries here ****
 // Standard libraries
 #include <string.h>
@@ -6,13 +12,10 @@
 
 //CMPE13 Support Library
 #include "UNIXBOARD.h"
-#include "Game.h"
-#include "Player.h"
-
-
 
 // User libraries
-
+#include "Game.h"
+#include "Player.h"
 
 // **** Set any macros or preprocessor directives here ****
 #define STRING_LENGTH 50

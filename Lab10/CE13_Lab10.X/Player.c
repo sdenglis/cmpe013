@@ -1,10 +1,20 @@
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 10         *
+ *6/13/2019      *
+ *****************/
+// **** Include libraries here ****
+// Standard libraries
+#include <stdint.h>
 
-
-
+//CMPE13 Support Library
 #include "UNIXBOARD.h"
+
+// User libraries
 #include "Game.h"
 #include "Player.h"
-#include <stdint.h>
+
 // Define how big the player's inventory is.
 #define INVENTORY_SIZE 4
 

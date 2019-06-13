@@ -1,20 +1,29 @@
-
-
-#include "UNIXBOARD.h"
-#include "Game.h"
-#include "Player.h"
-
+/*****************
+ *Samuel English *
+ *CMPE13/L       *
+ *Lab 10         *
+ *6/13/2019      *
+ *****************/
+// **** Include libraries here ****
+// Standard libraries
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
+
+//CMPE13 Support Library
+#include "UNIXBOARD.h"
+
+// User libraries
+#include "Game.h"
+#include "Player.h"
+
 
 // The initial room that Game should initialize to.
 #define STARTING_ROOM 32
 #define RPG_SEEK 3
 #define EXIT_SEEK 4
 #define NULL_TERMINATOR '\0'
-
 
 
 // These variable describe the maximum string length of the room title and description respectively.
@@ -54,9 +63,7 @@ typedef struct {
 
 GameRoom current_room; //this NEEDS to be accessible by Lab10_main.
 static FILE * file_pointer;
-
 static char open_format[FORMATTED_STRING_LENGTH];
-
 static GameRoom empty_struct;
 
 /**
