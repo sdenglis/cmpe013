@@ -69,12 +69,12 @@ static const GameRoom empty_struct;
 int GameGoNorth(void)
 {
     if (current_room.exit_north) {
-        current_room = empty_struct;
+
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_north);
 
         file_pointer = fopen(open_format, "rb");
         if (file_pointer) {
-
+            current_room = empty_struct;
             GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
             GameGetCurrentRoomDescription(current_room.description); //obtain room description.
             current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
@@ -99,12 +99,12 @@ int GameGoNorth(void)
 int GameGoEast(void)
 {
     if (current_room.exit_east) {
-        current_room = empty_struct;
+
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_east);
 
         file_pointer = fopen(open_format, "rb");
         if (file_pointer) {
-
+            current_room = empty_struct;
             GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
             GameGetCurrentRoomDescription(current_room.description); //obtain room description.
             current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
@@ -130,16 +130,12 @@ int GameGoEast(void)
  */
 int GameGoSouth(void)
 {
-    file_pointer = 0;
-    //open_format = 0;
-
     if (current_room.exit_south) {
-        current_room = empty_struct;
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_south);
 
         file_pointer = fopen(open_format, "rb");
         if (file_pointer) {
-
+            current_room = empty_struct;
             GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
             GameGetCurrentRoomDescription(current_room.description); //obtain room description.
             current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
@@ -166,12 +162,12 @@ int GameGoSouth(void)
 int GameGoWest(void)
 {
     if (current_room.exit_west) {
-        current_room = empty_struct;
+
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_west);
 
         file_pointer = fopen(open_format, "rb");
         if (file_pointer) {
-
+            current_room = empty_struct;
             GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
             GameGetCurrentRoomDescription(current_room.description); //obtain room description.
             current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
