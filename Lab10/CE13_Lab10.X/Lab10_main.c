@@ -33,7 +33,7 @@ typedef struct {
 static char formatted_directions[STRING_LENGTH];
 static char char_input;
 static int valid_char;
-
+static int i;
 
 extern GameRoom current_room; //this NEEDS to be accessible by Lab10_main.
 
@@ -49,6 +49,12 @@ int main()
         while (1) {
 
             valid_char = 0;
+            char_input = 0;
+
+            for (i = 0; i < strlen(formatted_directions); i++) {
+                formatted_directions[i] = 0;
+            }
+
             printf("\n%s\n", current_room.title); //PRINT TITLE!
             printf("%s\n", current_room.description); //PRINT DESCRIPTION!
 
