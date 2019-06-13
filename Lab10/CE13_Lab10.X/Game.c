@@ -70,6 +70,11 @@ int GameGoNorth(void)
 {
     if (current_room.exit_north) {
 
+        static int i;
+        for (i = 0; i < strlen(open_format); i++) {
+            open_format[i] = 0;
+        }
+
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_north);
 
         file_pointer = fopen(open_format, "rb");
@@ -99,6 +104,11 @@ int GameGoNorth(void)
 int GameGoEast(void)
 {
     if (current_room.exit_east) {
+
+        static int i;
+        for (i = 0; i < strlen(open_format); i++) {
+            open_format[i] = 0;
+        }
 
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_east);
 
@@ -131,6 +141,11 @@ int GameGoEast(void)
 int GameGoSouth(void)
 {
     if (current_room.exit_south) {
+        static int i;
+        for (i = 0; i < strlen(open_format); i++) {
+            open_format[i] = 0;
+        }
+
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_south);
 
         file_pointer = fopen(open_format, "rb");
@@ -162,6 +177,11 @@ int GameGoSouth(void)
 int GameGoWest(void)
 {
     if (current_room.exit_west) {
+
+        static int i;
+        for (i = 0; i < strlen(open_format); i++) {
+            open_format[i] = 0;
+        }
 
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_west);
 
