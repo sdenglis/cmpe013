@@ -57,7 +57,7 @@ static FILE * file_pointer;
 
 static char open_format[FORMATTED_STRING_LENGTH];
 
-static const GameRoom empty_struct;
+static GameRoom empty_struct;
 
 /**
  * These function transitions between rooms. Each call should return SUCCESS if the current room has
@@ -150,7 +150,7 @@ int GameGoSouth(void)
 
         file_pointer = fopen(open_format, "rb");
         if (file_pointer) {
-            current_room = empty_struct;
+
             GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
             GameGetCurrentRoomDescription(current_room.description); //obtain room description.
             current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
@@ -247,6 +247,11 @@ int GameGetCurrentRoomTitle(char *title)
 {
     static uint16_t byte_length; //stores ASCII value for string length.
     static unsigned int i; //skip past RPG characters.
+
+    for (i = 0; i < strlen(title); i++) {
+        title[i] = 0;
+    }
+
     if (fseek(file_pointer, RPG_SEEK, SEEK_SET) != 0) {
         return STANDARD_ERROR;
     } //checking for ERRORS!
@@ -293,6 +298,11 @@ int GameGetCurrentRoomDescription(char *desc)
     static Inventory room_items;
     static Inventory items_contained;
     static unsigned int i; //skip past RPG characters.
+
+    for (i = 0; i < strlen(desc); i++) {
+        desc[i] = 0;
+    }
+
 
     if (fseek(file_pointer, RPG_SEEK, SEEK_SET) != 0) { //skip 'RPG'
         return STANDARD_ERROR;
