@@ -57,6 +57,8 @@ static FILE * file_pointer;
 
 static char open_format[FORMATTED_STRING_LENGTH];
 
+static const GameRoom empty_struct;
+
 /**
  * These function transitions between rooms. Each call should return SUCCESS if the current room has
  * an exit in the correct direction and the new room was able to be loaded, and STANDARD_ERROR
@@ -67,7 +69,7 @@ static char open_format[FORMATTED_STRING_LENGTH];
 int GameGoNorth(void)
 {
     if (current_room.exit_north) {
-
+        current_room = empty_struct;
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_north);
 
         file_pointer = fopen(open_format, "rb");
@@ -97,7 +99,7 @@ int GameGoNorth(void)
 int GameGoEast(void)
 {
     if (current_room.exit_east) {
-
+        current_room = empty_struct;
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_east);
 
         file_pointer = fopen(open_format, "rb");
@@ -130,9 +132,9 @@ int GameGoSouth(void)
 {
     file_pointer = 0;
     //open_format = 0;
-    
-    if (current_room.exit_south) {
 
+    if (current_room.exit_south) {
+        current_room = empty_struct;
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_south);
 
         file_pointer = fopen(open_format, "rb");
@@ -164,7 +166,7 @@ int GameGoSouth(void)
 int GameGoWest(void)
 {
     if (current_room.exit_west) {
-
+        current_room = empty_struct;
         sprintf(open_format, "RoomFiles/room%d.txt", current_room.exit_west);
 
         file_pointer = fopen(open_format, "rb");
@@ -198,6 +200,7 @@ int GameGoWest(void)
  */
 int GameInit(void)
 {
+    current_room = empty_struct;
     file_pointer = fopen("RoomFiles/room32.txt", "rb");
     if (file_pointer) {
 

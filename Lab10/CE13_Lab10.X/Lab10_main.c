@@ -48,6 +48,7 @@ int main()
     if (GameInit()) {
         while (1) {
 
+            valid_char = 0;
             printf("\n%s\n", current_room.title); //PRINT TITLE!
             printf("%s\n", current_room.description); //PRINT DESCRIPTION!
 
