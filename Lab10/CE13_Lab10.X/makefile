@@ -1,11 +1,12 @@
+HEADERS = Game.h Player.h UNIXBOARD.h
+
 all: rpg
 
-rpg.o: Player.c Game.c Lab10_main.c
-	gcc -c Player.c Game.c Lab10_main.c
 
-rpg: Player.o Game.o Lab10_main.o
-	gcc -Wall Player.o Game.o Lab10_main.o -o rpg
+rpg: Player.c Game.c Lab10_main.c $(HEADERS)
+	gcc -Wall Player.c Game.c Lab10_main.c -o rpg
 	
 clean:
-	rm *.o rpg
+	-rm -f rpg.o
+	-rm -f rpg
 	
