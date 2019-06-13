@@ -6,6 +6,8 @@
 
 //CMPE13 Support Library
 #include "UNIXBOARD.h"
+#include "Game.h"
+#include "Player.h"
 
 
 
@@ -17,11 +19,23 @@
 
 // **** Declare any data types here ****
 
+typedef struct {
+    char title[GAME_MAX_ROOM_TITLE_LENGTH + 1];
+    char description[GAME_MAX_ROOM_DESC_LENGTH + 1];
+    uint8_t exit_north;
+    uint8_t exit_east;
+    uint8_t exit_south;
+    uint8_t exit_west;
+    uint8_t EXIT_FIELD;
+} GameRoom;
+
 // **** Define any global or external variables here ****
 static char formatted_directions[STRING_LENGTH];
 static char char_input;
 static int valid_char;
 static int direction_check;
+
+extern GameRoom current_room; //this NEEDS to be accessible by Lab10_main.
 
 // **** Declare any function prototypes here ****
 

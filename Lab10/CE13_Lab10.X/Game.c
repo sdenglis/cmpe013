@@ -1,6 +1,8 @@
 
 
 #include "UNIXBOARD.h"
+#include "Game.h"
+#include "Player.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -31,12 +33,14 @@
  *
  * @see GetCurrentRoomExits
  */
-typedef enum {
-    GAME_ROOM_EXIT_WEST_EXISTS = 0b0001,
-    GAME_ROOM_EXIT_SOUTH_EXISTS = 0b0010,
-    GAME_ROOM_EXIT_EAST_EXISTS = 0b0100,
-    GAME_ROOM_EXIT_NORTH_EXISTS = 0b1000
-} GameRoomExitFlags;
+
+typedef struct {
+    uint8_t item1;
+    uint8_t item2;
+    uint8_t item3;
+    uint8_t item4;
+    uint8_t inventory_count;
+} Inventory;
 
 typedef struct {
     char title[GAME_MAX_ROOM_TITLE_LENGTH + 1];
