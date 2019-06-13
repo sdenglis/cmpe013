@@ -150,7 +150,7 @@ int GameGoSouth(void)
 
         file_pointer = fopen(open_format, "rb");
         if (file_pointer) {
-
+            current_room = empty_struct;
             GameGetCurrentRoomTitle(current_room.title); //store the title to current room.
             GameGetCurrentRoomDescription(current_room.description); //obtain room description.
             current_room.EXIT_FIELD = GameGetCurrentRoomExits(); //set .exits to exit bit-field.
