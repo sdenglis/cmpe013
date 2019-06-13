@@ -497,9 +497,6 @@ uint8_t GameGetCurrentRoomExits(void)
     static uint16_t byte_length_description;
     static uint16_t byte_length_requirements;
     static uint16_t byte_length_contained;
-    static uint16_t byte_length_exits;
-
-    static unsigned int i; //skip past RPG characters.
 
     if (fseek(file_pointer, RPG_SEEK, SEEK_SET) != 0) { //skip 'RPG'
         return STANDARD_ERROR;

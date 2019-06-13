@@ -33,7 +33,7 @@ typedef struct {
 static char formatted_directions[STRING_LENGTH];
 static char char_input;
 static int valid_char;
-static int direction_check;
+
 
 extern GameRoom current_room; //this NEEDS to be accessible by Lab10_main.
 

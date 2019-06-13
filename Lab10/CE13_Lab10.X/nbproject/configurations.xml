@@ -18,12 +18,12 @@
       <itemPath>Lab10_main.c</itemPath>
       <itemPath>Player.c</itemPath>
       <itemPath>Game.c</itemPath>
-      <itemPath>makefile</itemPath>
+      <itemPath>Makefile</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false">
-      <itemPath>MakefileOld</itemPath>
+      <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
