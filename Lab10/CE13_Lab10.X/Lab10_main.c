@@ -125,6 +125,43 @@ int main()
                     valid_char = 1;
                     exit(SUCCESS); //exit using success code.
                     break;
+                case 'n':
+                    if (GameGoNorth() == SUCCESS) {
+                        valid_char = 1;
+                        break;
+                    } else {
+                        valid_char = -1;
+                        break;
+                    }
+                case 'e':
+                    if (GameGoEast() == SUCCESS) {
+                        valid_char = 1;
+                        break;
+                    } else {
+                        valid_char = -1;
+                        break;
+                    }
+                case 's':
+                    if (GameGoSouth() == SUCCESS) {
+                        valid_char = 1;
+                        break;
+                    } else {
+                        valid_char = -1;
+                        break;
+                    }
+                case 'w':
+                    if (GameGoWest() == SUCCESS) {
+                        valid_char = 1;
+                        break;
+                    } else {
+                        valid_char = -1;
+                        break;
+                    }
+                case 'q':
+                    valid_char = 1;
+                    exit(SUCCESS); //exit using success code.
+                    break;
+
                 default: //ERROR!
                     valid_char = -1;
                     break;

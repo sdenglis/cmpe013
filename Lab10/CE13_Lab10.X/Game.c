@@ -65,6 +65,7 @@ GameRoom current_room; //this NEEDS to be accessible by Lab10_main.
 static FILE * file_pointer;
 static char open_format[FORMATTED_STRING_LENGTH];
 static GameRoom empty_struct;
+static int exit_flag;
 
 /**
  * These function transitions between rooms. Each call should return SUCCESS if the current room has
@@ -306,6 +307,8 @@ int GameGetCurrentRoomDescription(char *desc)
     static Inventory items_contained;
     static unsigned int i; //skip past RPG characters.
 
+    exit_flag = 0;
+
     for (i = 0; i < strlen(desc); i++) {
         desc[i] = 0;
     }
@@ -396,6 +399,8 @@ int GameGetCurrentRoomDescription(char *desc)
 
         } //ELSE, the item requirements have NOT been met:
 
+        exit_flag = 1;
+
         byte_length_description = fgetc(file_pointer); //obtain length of description in ASCII.
         if (byte_length_description == EOF) {
             return STANDARD_ERROR;
@@ -410,7 +415,7 @@ int GameGetCurrentRoomDescription(char *desc)
             return STANDARD_ERROR;
         } //checking for ERRORS!
 
-        if (fseek(file_pointer, byte_length_contained, SEEK_CUR) != 0) { //skip over description from current position.
+        if (fseek(file_pointer, byte_length_contained, SEEK_CUR) != 0) { //skip over items contained from current position.
             return STANDARD_ERROR;
         } //check for ERRORS.
 
@@ -537,45 +542,115 @@ uint8_t GameGetCurrentRoomExits(void)
     static uint16_t byte_length_requirements;
     static uint16_t byte_length_contained;
 
-    if (fseek(file_pointer, RPG_SEEK, SEEK_SET) != 0) { //skip 'RPG'
-        return STANDARD_ERROR;
-    } //checking for ERRORS!
+    if (exit_flag) { //if the room requirements were not met:
+        if (fseek(file_pointer, RPG_SEEK, SEEK_SET) != 0) { //skip 'RPG'
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
 
-    byte_length_title = fgetc(file_pointer); //set byte_length to title length ASCII.
-    if (byte_length_title == EOF) {
-        return STANDARD_ERROR;
-    } //checking for ERRORS!
+        byte_length_title = fgetc(file_pointer); //set byte_length to title length ASCII.
+        if (byte_length_title == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
 
-    if (fseek(file_pointer, byte_length_title, SEEK_CUR) != 0) { //skip over title from current position.
-        return STANDARD_ERROR;
-    } //check for ERRORS.
+        if (fseek(file_pointer, byte_length_title, SEEK_CUR) != 0) { //skip over title from current position.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
 
-    byte_length_requirements = fgetc(file_pointer); //obtain number of requirements.
-    if (byte_length_requirements == EOF) {
-        return STANDARD_ERROR;
-    } //checking for ERRORS!
+        byte_length_requirements = fgetc(file_pointer); //obtain number of requirements.
+        if (byte_length_requirements == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
 
-    if (fseek(file_pointer, byte_length_requirements, SEEK_CUR) != 0) { //skip over title from current position.
-        return STANDARD_ERROR;
-    } //check for ERRORS.
+        if (fseek(file_pointer, byte_length_requirements, SEEK_CUR) != 0) { //skip over title from current position.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
 
-    byte_length_description = fgetc(file_pointer); //obtain number of requirements.
-    if (byte_length_description == EOF) {
-        return STANDARD_ERROR;
-    } //checking for ERRORS!
+        byte_length_description = fgetc(file_pointer); //obtain description.
+        if (byte_length_description == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
 
-    if (fseek(file_pointer, byte_length_description, SEEK_CUR) != 0) { //skip over title from current position.
-        return STANDARD_ERROR;
-    } //check for ERRORS.
+        if (fseek(file_pointer, byte_length_description, SEEK_CUR) != 0) { //skip over description from current position.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
 
-    byte_length_contained = fgetc(file_pointer); //obtain number of requirements.
-    if (byte_length_contained == EOF) {
-        return STANDARD_ERROR;
-    } //checking for ERRORS!
+        byte_length_contained = fgetc(file_pointer); //obtain number of items contained.
+        if (byte_length_contained == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
 
-    if (fseek(file_pointer, byte_length_contained, SEEK_CUR) != 0) { //skip over title from current position.
-        return STANDARD_ERROR;
-    } //check for ERRORS.
+        if (fseek(file_pointer, byte_length_contained, SEEK_CUR) != 0) { //skip over items contained.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
+
+        if (fseek(file_pointer, EXIT_SEEK, SEEK_CUR) != 0) { //skip over EXIT locations.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
+
+        byte_length_requirements = fgetc(file_pointer); //obtain number of requirements.
+        if (byte_length_requirements == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
+
+        byte_length_description = fgetc(file_pointer); //obtain length of description in ASCII.
+        if (byte_length_description == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
+
+        if (fseek(file_pointer, byte_length_description, SEEK_CUR) != 0) { //skip over description from current position.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
+
+        byte_length_contained = fgetc(file_pointer); //obtain number of items contained.
+        if (byte_length_contained == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
+
+        if (fseek(file_pointer, byte_length_contained, SEEK_CUR) != 0) { //skip over items contained.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
+
+    } else {
+        if (fseek(file_pointer, RPG_SEEK, SEEK_SET) != 0) { //skip 'RPG'
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
+
+        byte_length_title = fgetc(file_pointer); //set byte_length to title length ASCII.
+        if (byte_length_title == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
+
+        if (fseek(file_pointer, byte_length_title, SEEK_CUR) != 0) { //skip over title from current position.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
+
+        byte_length_requirements = fgetc(file_pointer); //obtain number of requirements.
+        if (byte_length_requirements == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
+
+        if (fseek(file_pointer, byte_length_requirements, SEEK_CUR) != 0) { //skip over title from current position.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
+
+        byte_length_description = fgetc(file_pointer); //obtain number of requirements.
+        if (byte_length_description == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
+
+        if (fseek(file_pointer, byte_length_description, SEEK_CUR) != 0) { //skip over title from current position.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
+
+        byte_length_contained = fgetc(file_pointer); //obtain number of items contained.
+        if (byte_length_contained == EOF) {
+            return STANDARD_ERROR;
+        } //checking for ERRORS!
+
+        if (fseek(file_pointer, byte_length_contained, SEEK_CUR) != 0) { //skip over items contained.
+            return STANDARD_ERROR;
+        } //check for ERRORS.
+    }
 
     //NOW WE ARE AT THE POSITION OF THE EXITS:
 
@@ -596,5 +671,6 @@ uint8_t GameGetCurrentRoomExits(void)
     if (current_room.exit_west) { //read west position.
         exit_bits |= GAME_ROOM_EXIT_WEST_EXISTS;
     }
+    exit_flag = 0;
     return exit_bits;
 }
