@@ -129,7 +129,7 @@ int GameGoEast(void)
 int GameGoSouth(void)
 {
     file_pointer = 0;
-    open_format = 0;
+    //open_format = 0;
     
     if (current_room.exit_south) {
 
